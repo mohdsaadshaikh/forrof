@@ -100,9 +100,12 @@ export const LoadingScreen = ({
                   ease: "easeInOut",
                 }}
               >
-                <span className="inline-block">
-                  Forrof<sup className="text-2xl">®</sup>
-                </span>
+                <div className="flex gap-6 items-center">
+                  <img src="/logo.png" alt="" />
+                  <span className="inline-block">
+                    Forrof<sup className="text-2xl">®</sup>
+                  </span>
+                </div>
               </motion.div>
 
               {/* Animated dot pulse */}
@@ -144,7 +147,7 @@ export const LoadingScreen = ({
                   ease: "easeInOut",
                 }}
               >
-                Loading Amazing Content
+                Develop to Scale, Designed to Lead
               </motion.p>
             </motion.div>
 

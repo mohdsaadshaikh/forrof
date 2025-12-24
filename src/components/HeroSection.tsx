@@ -1,7 +1,18 @@
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValue,
+} from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import starsBg from "@/assets/stars-bg.png";
-import { Magnetic, CharacterReveal, TextReveal, LineReveal } from "./AnimationComponents";
+import {
+  Magnetic,
+  CharacterReveal,
+  TextReveal,
+  LineReveal,
+} from "./AnimationComponents";
 
 const categories = [
   "Branding and Identity",
@@ -18,7 +29,10 @@ export const HeroSection = () => {
   });
 
   // Smooth spring physics for parallax
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
 
   // Parallax transforms with different speeds
   const planetY = useTransform(smoothProgress, [0, 1], [0, 300]);
@@ -80,6 +94,16 @@ export const HeroSection = () => {
         ))}
       </motion.div>
 
+      {/* Gradient Overlay - Teal gradient from black to #167070 */}
+      <motion.div
+        className="absolute inset-0 z-[1]"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(22, 112, 112, 0.6) 100%)",
+          pointerEvents: "none",
+        }}
+      />
+
       {/* Giant Planet/Sphere Element */}
       <motion.div
         className="absolute -left-[30%] md:-left-[15%] top-1/2 -translate-y-1/2 z-10 pointer-events-none"
@@ -95,8 +119,10 @@ export const HeroSection = () => {
           <motion.div
             className="absolute inset-0 rounded-full"
             style={{
-              background: "radial-gradient(circle at 70% 30%, #ffffff 0%, #888888 30%, #333333 70%, #000000 100%)",
-              boxShadow: "inset -40px -40px 100px rgba(0,0,0,0.8), 0 0 100px rgba(255,255,255,0.1)",
+              background:
+                "radial-gradient(circle at 70% 30%, #ffffff 0%, #888888 30%, #333333 70%, #000000 100%)",
+              boxShadow:
+                "inset -40px -40px 100px rgba(0,0,0,0.8), 0 0 100px rgba(255,255,255,0.1)",
             }}
             animate={{
               y: [0, -20, 0],
@@ -107,7 +133,7 @@ export const HeroSection = () => {
               ease: "easeInOut",
             }}
           />
-          
+
           {/* Horizontal line across planet */}
           <motion.div
             className="absolute top-1/2 left-0 right-0 h-px bg-foreground/20"
@@ -158,7 +184,7 @@ export const HeroSection = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <motion.span 
+            <motion.span
               className="number-label"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -166,8 +192,11 @@ export const HeroSection = () => {
             >
               /01
             </motion.span>
-            <LineReveal className="h-px bg-border flex-1 max-w-[100px]" delay={0.6} />
-            <motion.span 
+            <LineReveal
+              className="h-px bg-border flex-1 max-w-[100px]"
+              delay={0.6}
+            />
+            <motion.span
               className="text-xs text-muted-foreground uppercase tracking-widest"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -183,7 +212,11 @@ export const HeroSection = () => {
               className="text-[18vw] md:text-[14vw] font-bold leading-[0.85] tracking-tighter"
               initial={{ y: "120%" }}
               animate={{ y: 0 }}
-              transition={{ duration: 1.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+              transition={{
+                duration: 1.4,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: 0.3,
+              }}
             >
               Forrof<sup className="text-[4vw]">®</sup>
             </motion.h1>
@@ -224,9 +257,7 @@ export const HeroSection = () => {
                   transition={{ delay: 1.3 + index * 0.1 }}
                   whileHover={{ x: 10 }}
                 >
-                  <motion.span
-                    className="w-8 h-px bg-muted-foreground group-hover:w-16 group-hover:bg-foreground transition-all duration-500"
-                  />
+                  <motion.span className="w-8 h-px bg-muted-foreground group-hover:w-16 group-hover:bg-foreground transition-all duration-500" />
                   <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-500">
                     {cat}
                   </span>
@@ -262,14 +293,14 @@ export const HeroSection = () => {
           animate={{ y: [0, 10, 0] }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
         >
-          <motion.span 
+          <motion.span
             className="text-xs text-muted-foreground tracking-[0.3em] uppercase"
             animate={{ opacity: [0.5, 1, 0.5] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
             Scroll
           </motion.span>
-          <motion.div 
+          <motion.div
             className="w-px h-16 bg-gradient-to-b from-foreground via-foreground/50 to-transparent"
             initial={{ scaleY: 0 }}
             animate={{ scaleY: 1 }}
