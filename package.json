@@ -63,7 +63,11 @@
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+<<<<<<< HEAD
     "three": "^0.182.0",
+=======
+    "three": "^0.160.1",
+>>>>>>> afea65d8c10eca86595479e954c7a7dc6b5a744e
     "vaul": "^0.9.9",
     "zod": "^3.25.76"
   },
