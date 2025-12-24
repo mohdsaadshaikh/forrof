@@ -18,8 +18,8 @@ const TEXTURES = {
 // Atmospheric Scattering Shader
 const AtmosphereShader = {
   uniforms: {
-    uColor: { value: new THREE.Color('#4da6ff') },
-    uOpacity: { value: 0.25 },
+    uColor: { value: new THREE.Color('#88ccff') },
+    uOpacity: { value: 0.08 },
     uPower: { value: 3.5 },
   },
   vertexShader: `
@@ -173,25 +173,14 @@ const EarthScene: React.FC = () => {
           />
         </mesh>
 
-        {/* Atmospheric Glow */}
-        <mesh scale={1.15}>
+        {/* Subtle Atmospheric Glow */}
+        <mesh scale={1.03}>
           <sphereGeometry args={[2.5, 64, 64]} />
           <shaderMaterial 
             ref={atmosphereRef} 
             {...atmosphereConfig} 
             side={THREE.BackSide} 
             transparent 
-          />
-        </mesh>
-
-        {/* Outer Glow Ring */}
-        <mesh rotation={[Math.PI / 2, 0, 0]} scale={1.2}>
-          <ringGeometry args={[2.8, 3.2, 64]} />
-          <meshBasicMaterial 
-            color="#4da6ff" 
-            transparent 
-            opacity={0.08} 
-            side={THREE.DoubleSide} 
           />
         </mesh>
       </group>
