@@ -1,7 +1,19 @@
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+} from "framer-motion";
 import { useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { LineReveal, Magnetic, ImageReveal, ScaleReveal } from "./AnimationComponents";
+import {
+  LineReveal,
+  Magnetic,
+  ImageReveal,
+  ScaleReveal,
+} from "./AnimationComponents";
+import { useNavigate } from "react-router-dom";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -38,6 +50,7 @@ const projectFilters = [
 ];
 
 export const ProjectsSection = () => {
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
@@ -47,14 +60,17 @@ export const ProjectsSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
   const backgroundY = useTransform(smoothProgress, [0, 1], [0, -150]);
   const counterScale = useTransform(smoothProgress, [0, 0.3], [0.8, 1]);
 
   return (
-    <section 
-      id="projects" 
-      className="section-padding py-40 relative overflow-hidden" 
+    <section
+      id="projects"
+      className="section-padding py-40 relative overflow-hidden"
       ref={containerRef}
     >
       <div className="max-w-[1800px] mx-auto">
@@ -85,7 +101,11 @@ export const ProjectsSection = () => {
               className="text-[12rem] md:text-[16rem] font-bold leading-none tracking-tighter block"
               initial={{ y: 100, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
-              transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
+              transition={{
+                duration: 1.2,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: 0.4,
+              }}
             >
               75
             </motion.span>
@@ -106,7 +126,9 @@ export const ProjectsSection = () => {
                       ? "bg-foreground text-background border-foreground"
                       : "border-border text-muted-foreground hover:text-foreground hover:border-foreground"
                   }`}
-                  onClick={() => setActiveFilter(activeFilter === filter ? null : filter)}
+                  onClick={() =>
+                    setActiveFilter(activeFilter === filter ? null : filter)
+                  }
                   initial={{ opacity: 0, y: 20, scale: 0.9 }}
                   animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
                   transition={{ delay: 0.6 + index * 0.1 }}
@@ -128,10 +150,10 @@ export const ProjectsSection = () => {
               className="group cursor-pointer"
               initial={{ opacity: 0, y: 80 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ 
-                duration: 1, 
+              transition={{
+                duration: 1,
                 delay: 0.5 + index * 0.2,
-                ease: [0.25, 0.1, 0.25, 1]
+                ease: [0.25, 0.1, 0.25, 1],
               }}
             >
               {/* Image Container with Multiple Hover Effects */}
@@ -141,7 +163,7 @@ export const ProjectsSection = () => {
                   className="absolute inset-0 z-0"
                   style={{ backgroundColor: project.color }}
                 />
-                
+
                 {/* Main Image with Parallax */}
                 <motion.div
                   className="absolute inset-0"
@@ -159,9 +181,7 @@ export const ProjectsSection = () => {
                 </motion.div>
 
                 {/* Gradient Overlay */}
-                <motion.div 
-                  className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700"
-                />
+                <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
 
                 {/* Tags with Staggered Reveal */}
                 <div className="absolute top-6 left-6 flex flex-wrap gap-2 z-10">
@@ -171,7 +191,9 @@ export const ProjectsSection = () => {
                       className="px-3 py-1.5 bg-background/80 backdrop-blur-md rounded-full text-xs font-medium"
                       initial={{ opacity: 0, y: -20, scale: 0.8 }}
                       animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                      transition={{ delay: 0.8 + index * 0.2 + tagIndex * 0.05 }}
+                      transition={{
+                        delay: 0.8 + index * 0.2 + tagIndex * 0.05,
+                      }}
                     >
                       {tag}
                     </motion.span>
@@ -225,7 +247,11 @@ export const ProjectsSection = () => {
         >
           <Magnetic strength={0.15}>
             <motion.a
-              href="#"
+              href="/projects"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/projects");
+              }}
               className="inline-flex items-center gap-3 px-10 py-5 border border-border rounded-full overflow-hidden relative group"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -239,7 +265,10 @@ export const ProjectsSection = () => {
               <span className="relative z-10 font-medium group-hover:text-background transition-colors duration-300">
                 All Projects
               </span>
-              <ArrowUpRight size={18} className="relative z-10 group-hover:text-background transition-colors duration-300" />
+              <ArrowUpRight
+                size={18}
+                className="relative z-10 group-hover:text-background transition-colors duration-300"
+              />
             </motion.a>
           </Magnetic>
         </motion.div>

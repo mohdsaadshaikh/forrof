@@ -1,6 +1,12 @@
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
-import { Twitter, Instagram, Linkedin, Dribbble, ArrowUpRight } from "lucide-react";
+import {
+  Twitter,
+  Instagram,
+  Linkedin,
+  Dribbble,
+  ArrowUpRight,
+} from "lucide-react";
 import { Magnetic, LineReveal } from "./AnimationComponents";
 
 const footerLinks = {
@@ -21,21 +27,76 @@ export const Footer = () => {
     offset: ["start end", "end end"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
   const textY = useTransform(smoothProgress, [0, 1], [100, 0]);
   const opacity = useTransform(smoothProgress, [0, 0.5], [0, 1]);
 
+  // Enhanced parallax background animations - same as hero section
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, 300]);
+  const backgroundScale = useTransform(scrollYProgress, [0, 0.5], [1, 1.2]);
+
   return (
-    <footer 
-      className="section-padding py-20 border-t border-border relative overflow-hidden" 
+    <footer
+      className="section-padding py-20 border-t border-border relative overflow-hidden"
       ref={containerRef}
     >
-      <div className="max-w-[1800px] mx-auto">
-        {/* Big Logo with Parallax */}
+      {/* Animated background gradient blobs - same as hero section */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
-          className="mb-20 overflow-hidden"
-          style={{ opacity }}
-        >
+          className="absolute top-0 right-0 w-96 h-96 bg-foreground/5 rounded-full blur-3xl"
+          style={{
+            y: backgroundY,
+            scale: backgroundScale,
+          }}
+          animate={{
+            x: [0, 100, 0],
+            y: [0, -50, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute bottom-0 left-0 w-96 h-96 bg-foreground/5 rounded-full blur-3xl"
+          style={{
+            y: backgroundY,
+            scale: backgroundScale,
+          }}
+          animate={{
+            x: [0, -100, 0],
+            y: [0, 100, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-80 h-80 bg-foreground/3 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
+          style={{
+            scale: backgroundScale,
+          }}
+          animate={{
+            scale: [0.8, 1.2, 0.8],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      </div>
+
+      <div className="max-w-[1800px] mx-auto relative z-10">
+        {/* Big Logo with Parallax */}
+        <motion.div className="mb-20 overflow-hidden" style={{ opacity }}>
           <motion.h2
             className="text-[15vw] font-bold leading-none tracking-tighter text-foreground/5"
             style={{ y: textY }}
@@ -86,7 +147,10 @@ export const Footer = () => {
                       whileHover={{ y: 0 }}
                       transition={{ duration: 0.3 }}
                     />
-                    <social.icon size={18} className="relative z-10 group-hover:text-background transition-colors" />
+                    <social.icon
+                      size={18}
+                      className="relative z-10 group-hover:text-background transition-colors"
+                    />
                   </motion.a>
                 </Magnetic>
               ))}
@@ -100,7 +164,9 @@ export const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <h4 className="text-sm font-semibold uppercase tracking-widest mb-6">Services</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-widest mb-6">
+              Services
+            </h4>
             <ul className="space-y-4">
               {footerLinks.services.map((link, index) => (
                 <motion.li
@@ -116,7 +182,10 @@ export const Footer = () => {
                     whileHover={{ x: 5 }}
                   >
                     {link}
-                    <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ArrowUpRight
+                      size={12}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
                   </motion.a>
                 </motion.li>
               ))}
@@ -130,7 +199,9 @@ export const Footer = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3 }}
           >
-            <h4 className="text-sm font-semibold uppercase tracking-widest mb-6">Company</h4>
+            <h4 className="text-sm font-semibold uppercase tracking-widest mb-6">
+              Company
+            </h4>
             <ul className="space-y-4">
               {footerLinks.company.map((link, index) => (
                 <motion.li
@@ -146,7 +217,10 @@ export const Footer = () => {
                     whileHover={{ x: 5 }}
                   >
                     {link}
-                    <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ArrowUpRight
+                      size={12}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
                   </motion.a>
                 </motion.li>
               ))}
@@ -156,7 +230,7 @@ export const Footer = () => {
 
         {/* Bottom Bar with Animation */}
         <motion.div
-          className="pt-8 border-t border-border"
+          className="pt-8 border-border"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

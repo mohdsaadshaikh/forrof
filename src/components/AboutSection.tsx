@@ -1,16 +1,96 @@
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+  MotionValue,
+} from "framer-motion";
 import { useRef } from "react";
 import { LineReveal, Magnetic } from "./AnimationComponents";
 import { ArrowUpRight, Award, Users, Globe, Zap } from "lucide-react";
 
 const values = [
-  { icon: Award, title: "Excellence", description: "We pursue perfection in every pixel and every interaction." },
-  { icon: Users, title: "Collaboration", description: "Working together with clients to achieve remarkable results." },
-  { icon: Globe, title: "Innovation", description: "Pushing boundaries with cutting-edge design and technology." },
-  { icon: Zap, title: "Impact", description: "Creating work that drives measurable business growth." },
+  {
+    icon: Award,
+    title: "Excellence",
+    description: "We pursue perfection in every pixel and every interaction.",
+  },
+  {
+    icon: Users,
+    title: "Collaboration",
+    description: "Working together with clients to achieve remarkable results.",
+  },
+  {
+    icon: Globe,
+    title: "Innovation",
+    description: "Pushing boundaries with cutting-edge design and technology.",
+  },
+  {
+    icon: Zap,
+    title: "Impact",
+    description: "Creating work that drives measurable business growth.",
+  },
 ];
 
-const words = "We are a creative agency that transforms brands through strategic design and digital innovation".split(" ");
+const words =
+  "We are a creative agency that transforms brands through strategic design and digital innovation".split(
+    " "
+  );
+
+// Separate component to handle word-by-word animation with hooks
+const WordByWordReveal = ({
+  words,
+  scrollProgress,
+}: {
+  words: string[];
+  scrollProgress: MotionValue<number>;
+}) => {
+  return (
+    <motion.p className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight">
+      {words.map((word, i) => (
+        <WordItem
+          key={i}
+          word={word}
+          index={i}
+          totalWords={words.length}
+          scrollProgress={scrollProgress}
+        />
+      ))}
+    </motion.p>
+  );
+};
+
+// Individual word component with hooks at proper level
+const WordItem = ({
+  word,
+  index,
+  totalWords,
+  scrollProgress,
+}: {
+  word: string;
+  index: number;
+  totalWords: number;
+  scrollProgress: MotionValue<number>;
+}) => {
+  const start = index / totalWords;
+  const end = start + 1 / totalWords;
+
+  const opacity = useTransform(scrollProgress, [start, end], [0.2, 1]);
+  const y = useTransform(scrollProgress, [start, end], [20, 0]);
+
+  return (
+    <motion.span
+      className="inline-block mr-[0.3em]"
+      style={{
+        opacity,
+        y,
+      }}
+    >
+      {word}
+    </motion.span>
+  );
+};
 
 export const AboutSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -27,20 +107,25 @@ export const AboutSection = () => {
     offset: ["start 0.8", "end 0.2"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
   const imageX = useTransform(smoothProgress, [0, 1], [-100, 100]);
   const imageRotate = useTransform(smoothProgress, [0, 1], [-5, 5]);
   const statsY = useTransform(smoothProgress, [0, 1], [100, -50]);
 
   return (
-    <section 
-      className="section-padding py-40 relative overflow-hidden" 
+    <section
+      className="section-padding py-40 relative overflow-hidden"
       ref={containerRef}
     >
       {/* Large decorative text in background */}
       <motion.div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none"
-        style={{ scale: useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1.1, 0.8]) }}
+        style={{
+          scale: useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1.1, 0.8]),
+        }}
       >
         <span className="text-[25vw] font-bold text-foreground/[0.02] whitespace-nowrap">
           ABOUT
@@ -66,27 +151,10 @@ export const AboutSection = () => {
         <div className="grid lg:grid-cols-2 gap-20 items-center mb-32">
           {/* Left - Big statement with word-by-word animation */}
           <div ref={textRef} className="relative">
-            <motion.p
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight"
-            >
-              {words.map((word, i) => {
-                const start = i / words.length;
-                const end = start + (1 / words.length);
-                
-                return (
-                  <motion.span
-                    key={i}
-                    className="inline-block mr-[0.3em]"
-                    style={{
-                      opacity: useTransform(textScrollProgress, [start, end], [0.2, 1]),
-                      y: useTransform(textScrollProgress, [start, end], [20, 0]),
-                    }}
-                  >
-                    {word}
-                  </motion.span>
-                );
-              })}
-            </motion.p>
+            <WordByWordReveal
+              words={words}
+              scrollProgress={textScrollProgress}
+            />
 
             <motion.div
               className="mt-12"
@@ -111,7 +179,10 @@ export const AboutSection = () => {
                   <span className="relative z-10 font-medium group-hover:text-foreground transition-colors duration-300">
                     Start a Project
                   </span>
-                  <ArrowUpRight size={18} className="relative z-10 group-hover:text-foreground transition-colors" />
+                  <ArrowUpRight
+                    size={18}
+                    className="relative z-10 group-hover:text-foreground transition-colors"
+                  />
                 </motion.a>
               </Magnetic>
             </motion.div>
@@ -143,9 +214,9 @@ export const AboutSection = () => {
             {/* Foreground image */}
             <motion.div
               className="absolute bottom-0 left-0 w-2/3 h-2/3 rounded-3xl overflow-hidden border-4 border-background"
-              style={{ 
-                x: useTransform(imageX, v => -v * 0.5),
-                rotate: useTransform(imageRotate, v => -v),
+              style={{
+                x: useTransform(imageX, (v) => -v * 0.5),
+                rotate: useTransform(imageRotate, (v) => -v),
               }}
               initial={{ y: 100, opacity: 0 }}
               animate={isInView ? { y: 0, opacity: 1 } : {}}
@@ -192,10 +263,10 @@ export const AboutSection = () => {
               data-cursor={value.title}
               initial={{ opacity: 0, y: 60, rotateX: -20 }}
               animate={isInView ? { opacity: 1, y: 0, rotateX: 0 } : {}}
-              transition={{ 
-                duration: 1, 
+              transition={{
+                duration: 1,
                 delay: 0.8 + index * 0.1,
-                ease: [0.25, 0.1, 0.25, 1]
+                ease: [0.25, 0.1, 0.25, 1],
               }}
               whileHover={{ y: -10, scale: 1.02 }}
               style={{ transformStyle: "preserve-3d" }}
