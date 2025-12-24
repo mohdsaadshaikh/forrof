@@ -1,11 +1,12 @@
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, ArrowUpRight } from "lucide-react";
+import { LineReveal, Magnetic } from "./AnimationComponents";
 
 const faqs = [
   {
     question: "What services does Forrof offer?",
-    answer: "We offer a comprehensive range of creative services including brand identity design, UI/UX design, web development, social media marketing, SEO optimization, and content creation. Our team works closely with clients to deliver tailored solutions.",
+    answer: "We offer a comprehensive range of creative services including brand identity design, UI/UX design, web development, social media marketing, SEO optimization, and content creation. Our team works closely with clients to deliver tailored solutions that drive results.",
   },
   {
     question: "How long does a typical project take?",
@@ -17,103 +18,157 @@ const faqs = [
   },
   {
     question: "Do you work with international clients?",
-    answer: "Yes! We work with clients worldwide. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones.",
+    answer: "Yes! We work with clients worldwide. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones and cultures.",
   },
   {
     question: "What is your revision policy?",
-    answer: "All our packages include unlimited revisions to ensure you are completely satisfied with the final deliverables. We believe in collaborative work and value your feedback throughout the design process.",
+    answer: "All our packages include unlimited revisions to ensure you are completely satisfied with the final deliverables. We believe in collaborative work and value your feedback throughout the entire design process.",
   },
 ];
 
 export const FAQSection = () => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="section-padding py-32 relative border-t border-border" ref={containerRef}>
+    <section 
+      className="section-padding py-40 relative overflow-hidden border-t border-border" 
+      ref={containerRef}
+    >
       <div className="max-w-[1800px] mx-auto">
         {/* Header */}
         <motion.div
-          className="flex items-center gap-4 mb-16"
+          className="flex items-center gap-4 mb-20"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <span className="number-label">/07</span>
-          <div className="horizontal-line flex-1" />
-          <span className="text-xs text-muted-foreground uppercase tracking-widest">FAQ</span>
+          <motion.span className="number-label">/07</motion.span>
+          <LineReveal className="h-px bg-border flex-1" delay={0.3} />
+          <motion.span className="text-xs text-muted-foreground uppercase tracking-widest">
+            FAQ
+          </motion.span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Title Column */}
+        <div className="grid lg:grid-cols-2 gap-20">
+          {/* Left Column - Title & CTA */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <h2 className="text-5xl md:text-6xl font-bold leading-[1.1] mb-8">
-              Common questions
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              Didn't find the answer? Ask us about our services!
-            </p>
-            <motion.a
-              href="#contact"
-              className="inline-flex items-center gap-2 mt-6 text-foreground border-b border-foreground pb-1 hover:opacity-70 transition-opacity"
-              whileHover={{ x: 10 }}
+            <div className="overflow-hidden mb-8">
+              <motion.h2
+                className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95]"
+                initial={{ y: "100%" }}
+                animate={isInView ? { y: 0 } : {}}
+                transition={{ duration: 1, delay: 0.3 }}
+              >
+                Common questions
+              </motion.h2>
+            </div>
+            <motion.p
+              className="text-xl text-muted-foreground mb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.5 }}
             >
-              Ask your Question
-            </motion.a>
+              Didn't find the answer? Ask us about our services!
+            </motion.p>
+            <Magnetic strength={0.15}>
+              <motion.a
+                href="#contact"
+                className="inline-flex items-center gap-3 px-8 py-4 border border-border rounded-full overflow-hidden relative group"
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.6 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <motion.span
+                  className="absolute inset-0 bg-foreground"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: 0 }}
+                  transition={{ duration: 0.4 }}
+                />
+                <span className="relative z-10 font-medium group-hover:text-background transition-colors duration-300">
+                  Ask your Question
+                </span>
+                <ArrowUpRight size={18} className="relative z-10 group-hover:text-background transition-colors duration-300" />
+              </motion.a>
+            </Magnetic>
           </motion.div>
 
-          {/* FAQ Accordion */}
+          {/* Right Column - FAQ Accordion */}
           <motion.div
             className="space-y-0"
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: 60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, delay: 0.3 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
           >
             {faqs.map((faq, index) => (
               <motion.div
                 key={index}
                 className="border-t border-border"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: 0.4 + index * 0.1 }}
               >
-                <button
+                <motion.button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                  className="w-full flex items-center justify-between py-6 text-left group"
+                  className="w-full flex items-center justify-between py-8 text-left group"
+                  whileHover={{ x: 10 }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <span className="font-medium text-lg pr-8 group-hover:translate-x-2 transition-transform duration-300">
+                  <span className="font-medium text-lg md:text-xl pr-8 group-hover:text-foreground transition-colors">
                     {faq.question}
                   </span>
                   <motion.div
-                    animate={{ rotate: openIndex === index ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    className="w-10 h-10 rounded-full border border-border flex items-center justify-center shrink-0"
+                    animate={{
+                      rotate: openIndex === index ? 180 : 0,
+                      backgroundColor: openIndex === index ? "hsl(var(--foreground))" : "transparent",
+                      borderColor: openIndex === index ? "hsl(var(--foreground))" : "hsl(var(--border))",
+                    }}
+                    transition={{ duration: 0.4 }}
                   >
-                    {openIndex === index ? <Minus size={20} /> : <Plus size={20} />}
+                    {openIndex === index ? (
+                      <Minus size={16} className="text-background" />
+                    ) : (
+                      <Plus size={16} />
+                    )}
                   </motion.div>
-                </button>
+                </motion.button>
                 <AnimatePresence>
                   {openIndex === index && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
                       className="overflow-hidden"
                     >
-                      <p className="text-muted-foreground pb-6 pr-12 leading-relaxed">
+                      <motion.p
+                        className="text-muted-foreground pb-8 pr-16 leading-relaxed"
+                        initial={{ y: -20 }}
+                        animate={{ y: 0 }}
+                        transition={{ duration: 0.3, delay: 0.1 }}
+                      >
                         {faq.answer}
-                      </p>
+                      </motion.p>
                     </motion.div>
                   )}
                 </AnimatePresence>
               </motion.div>
             ))}
-            <div className="border-t border-border" />
+            <motion.div
+              className="border-t border-border"
+              initial={{ scaleX: 0 }}
+              animate={isInView ? { scaleX: 1 } : {}}
+              transition={{ duration: 1.5, delay: 1 }}
+              style={{ transformOrigin: "left" }}
+            />
           </motion.div>
         </div>
       </div>

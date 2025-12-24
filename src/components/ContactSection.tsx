@@ -1,10 +1,11 @@
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useState } from "react";
-import { Send, ArrowUpRight } from "lucide-react";
+import { Send, ArrowUpRight, Mail, Phone, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { LineReveal, Magnetic } from "./AnimationComponents";
 
 export const ContactSection = () => {
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -14,6 +15,15 @@ export const ContactSection = () => {
     budget: "",
     message: "",
   });
+  const [focusedField, setFocusedField] = useState<string | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const formY = useTransform(smoothProgress, [0, 1], [100, -50]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,131 +34,236 @@ export const ContactSection = () => {
     setFormData({ name: "", email: "", company: "", budget: "", message: "" });
   };
 
+  const contactInfo = [
+    { icon: Mail, label: "Email", value: "hello@forrof.io" },
+    { icon: Phone, label: "Phone", value: "+1 (555) 123-4567" },
+    { icon: MapPin, label: "Location", value: "New York, NY" },
+  ];
+
   return (
-    <section id="contact" className="section-padding py-32 relative" ref={containerRef}>
+    <section 
+      id="contact" 
+      className="section-padding py-40 relative overflow-hidden" 
+      ref={containerRef}
+    >
       <div className="max-w-[1800px] mx-auto">
         {/* Header */}
         <motion.div
-          className="flex items-center gap-4 mb-16"
+          className="flex items-center gap-4 mb-20"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1, ease: [0.25, 0.1, 0.25, 1] }}
         >
-          <span className="number-label">/08</span>
-          <div className="horizontal-line flex-1" />
-          <span className="text-xs text-muted-foreground uppercase tracking-widest">Contact</span>
+          <motion.span className="number-label">/08</motion.span>
+          <LineReveal className="h-px bg-border flex-1" delay={0.3} />
+          <motion.span className="text-xs text-muted-foreground uppercase tracking-widest">
+            Contact
+          </motion.span>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
+        <div className="grid lg:grid-cols-2 gap-20">
           {/* Left Column - CTA */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: -80 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, delay: 0.2 }}
+            transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
           >
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-8">
-              Let's create something amazing together
-            </h2>
-            <p className="text-lg text-muted-foreground mb-12 max-w-md">
+            <div className="overflow-hidden mb-8">
+              <motion.h2
+                className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.95]"
+                initial={{ y: "100%" }}
+                animate={isInView ? { y: 0 } : {}}
+                transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+              >
+                Let's create something amazing
+              </motion.h2>
+            </div>
+            <motion.p
+              className="text-xl text-muted-foreground mb-16 max-w-lg leading-relaxed"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.6 }}
+            >
               Ready to start your project? Fill out the form and we'll get back to you within 24 hours.
-            </p>
+            </motion.p>
 
+            {/* Contact Info with Hover Effects */}
             <div className="space-y-6">
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <span className="text-muted-foreground group-hover:text-foreground transition-colors">Email</span>
-                <div className="horizontal-line flex-1" />
-                <span className="font-medium group-hover:translate-x-2 transition-transform">hello@forrof.io</span>
-              </div>
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <span className="text-muted-foreground group-hover:text-foreground transition-colors">Phone</span>
-                <div className="horizontal-line flex-1" />
-                <span className="font-medium group-hover:translate-x-2 transition-transform">+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-center gap-4 group cursor-pointer">
-                <span className="text-muted-foreground group-hover:text-foreground transition-colors">Location</span>
-                <div className="horizontal-line flex-1" />
-                <span className="font-medium group-hover:translate-x-2 transition-transform">New York, NY</span>
-              </div>
+              {contactInfo.map((info, index) => (
+                <Magnetic key={info.label} strength={0.1}>
+                  <motion.div
+                    className="flex items-center gap-6 group cursor-pointer py-4 border-b border-border"
+                    initial={{ opacity: 0, x: -30 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                    whileHover={{ x: 10 }}
+                  >
+                    <motion.div
+                      className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:bg-foreground group-hover:border-foreground transition-all duration-500"
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <info.icon size={18} className="group-hover:text-background transition-colors" />
+                    </motion.div>
+                    <div className="flex-1">
+                      <span className="text-sm text-muted-foreground block">{info.label}</span>
+                      <span className="font-medium text-lg">{info.value}</span>
+                    </div>
+                    <ArrowUpRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </motion.div>
+                </Magnetic>
+              ))}
             </div>
           </motion.div>
 
-          {/* Right Column - Form */}
+          {/* Right Column - Animated Form */}
           <motion.form
             onSubmit={handleSubmit}
             className="space-y-8"
-            initial={{ opacity: 0, x: 50 }}
+            style={{ y: formY }}
+            initial={{ opacity: 0, x: 80 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1, delay: 0.3 }}
+            transition={{ duration: 1.2, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
           >
             <div className="grid sm:grid-cols-2 gap-8">
-              <div>
-                <label className="block text-sm font-medium mb-3 text-muted-foreground">Name</label>
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground/50"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-3 text-muted-foreground">Email</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground/50"
-                  placeholder="john@example.com"
-                  required
-                />
-              </div>
+              {[
+                { name: "name", label: "Name", placeholder: "John Doe", type: "text" },
+                { name: "email", label: "Email", placeholder: "john@example.com", type: "email" },
+              ].map((field, index) => (
+                <motion.div
+                  key={field.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.5 + index * 0.1 }}
+                >
+                  <motion.label
+                    className="block text-sm font-medium mb-3 text-muted-foreground"
+                    animate={{ 
+                      color: focusedField === field.name ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
+                    }}
+                  >
+                    {field.label}
+                  </motion.label>
+                  <motion.input
+                    type={field.type}
+                    value={formData[field.name as keyof typeof formData]}
+                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
+                    onFocus={() => setFocusedField(field.name)}
+                    onBlur={() => setFocusedField(null)}
+                    className="w-full bg-transparent border-b-2 border-border py-4 focus:outline-none transition-colors placeholder:text-muted-foreground/40"
+                    placeholder={field.placeholder}
+                    required={field.name === "name" || field.name === "email"}
+                    whileFocus={{ borderColor: "hsl(var(--foreground))" }}
+                  />
+                  <motion.div
+                    className="h-0.5 bg-foreground origin-left mt-[-2px]"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: focusedField === field.name ? 1 : 0 }}
+                    transition={{ duration: 0.4 }}
+                  />
+                </motion.div>
+              ))}
             </div>
-            
+
             <div className="grid sm:grid-cols-2 gap-8">
-              <div>
-                <label className="block text-sm font-medium mb-3 text-muted-foreground">Company</label>
-                <input
-                  type="text"
-                  value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground/50"
-                  placeholder="Your company"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-3 text-muted-foreground">Budget</label>
-                <input
-                  type="text"
-                  value={formData.budget}
-                  onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
-                  className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-foreground transition-colors placeholder:text-muted-foreground/50"
-                  placeholder="$5,000 - $10,000"
-                />
-              </div>
+              {[
+                { name: "company", label: "Company", placeholder: "Your company" },
+                { name: "budget", label: "Budget", placeholder: "$5,000 - $10,000" },
+              ].map((field, index) => (
+                <motion.div
+                  key={field.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={isInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ delay: 0.6 + index * 0.1 }}
+                >
+                  <motion.label
+                    className="block text-sm font-medium mb-3 text-muted-foreground"
+                    animate={{ 
+                      color: focusedField === field.name ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
+                    }}
+                  >
+                    {field.label}
+                  </motion.label>
+                  <input
+                    type="text"
+                    value={formData[field.name as keyof typeof formData]}
+                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
+                    onFocus={() => setFocusedField(field.name)}
+                    onBlur={() => setFocusedField(null)}
+                    className="w-full bg-transparent border-b-2 border-border py-4 focus:outline-none transition-colors placeholder:text-muted-foreground/40"
+                    placeholder={field.placeholder}
+                  />
+                  <motion.div
+                    className="h-0.5 bg-foreground origin-left mt-[-2px]"
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: focusedField === field.name ? 1 : 0 }}
+                    transition={{ duration: 0.4 }}
+                  />
+                </motion.div>
+              ))}
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium mb-3 text-muted-foreground">Message</label>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.7 }}
+            >
+              <motion.label
+                className="block text-sm font-medium mb-3 text-muted-foreground"
+                animate={{ 
+                  color: focusedField === "message" ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
+                }}
+              >
+                Message
+              </motion.label>
               <textarea
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                onFocus={() => setFocusedField("message")}
+                onBlur={() => setFocusedField(null)}
                 rows={4}
-                className="w-full bg-transparent border-b border-border py-3 focus:outline-none focus:border-foreground transition-colors resize-none placeholder:text-muted-foreground/50"
+                className="w-full bg-transparent border-b-2 border-border py-4 focus:outline-none transition-colors resize-none placeholder:text-muted-foreground/40"
                 placeholder="Tell us about your project..."
                 required
               />
-            </div>
-            
-            <motion.button
-              type="submit"
-              className="flex items-center justify-center gap-3 w-full py-5 bg-foreground text-background rounded-full font-medium transition-all duration-500 hover:bg-foreground/90"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              <motion.div
+                className="h-0.5 bg-foreground origin-left mt-[-2px]"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: focusedField === "message" ? 1 : 0 }}
+                transition={{ duration: 0.4 }}
+              />
+            </motion.div>
+
+            {/* Submit Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.8 }}
             >
-              Send Message
-              <ArrowUpRight size={18} />
-            </motion.button>
+              <Magnetic strength={0.1}>
+                <motion.button
+                  type="submit"
+                  className="w-full flex items-center justify-center gap-3 py-6 bg-foreground text-background rounded-full font-medium overflow-hidden relative group"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <motion.span
+                    className="absolute inset-0 bg-muted"
+                    initial={{ y: "100%" }}
+                    whileHover={{ y: 0 }}
+                    transition={{ duration: 0.4 }}
+                  />
+                  <span className="relative z-10 group-hover:text-foreground transition-colors">Send Message</span>
+                  <motion.div
+                    className="relative z-10"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                  >
+                    <ArrowUpRight size={18} className="group-hover:text-foreground transition-colors" />
+                  </motion.div>
+                </motion.button>
+              </Magnetic>
+            </motion.div>
           </motion.form>
         </div>
       </div>
