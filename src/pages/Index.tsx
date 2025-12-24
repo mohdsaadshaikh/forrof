@@ -8,8 +8,12 @@ import { TeamSection } from "@/components/TeamSection";
 import { FAQSection } from "@/components/FAQSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { useLenis } from "@/hooks/useLenis";
 
 const Index = () => {
+  // Initialize Lenis smooth scrolling
+  useLenis();
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />

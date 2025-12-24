@@ -1,124 +1,142 @@
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
+import planetHero from "@/assets/planet-hero.png";
 import starsBg from "@/assets/stars-bg.png";
 
-const stats = [
-  { label: "Launched Projects", value: 75 },
-  { label: "Clients Worldwide", value: 120 },
-  { label: "Years of Experience", value: 8 },
-  { label: "Team Members", value: 25 },
+const categories = [
+  "Branding and Identity",
+  "UI/UX and Product Design", 
+  "Social Media Marketing",
+  "SEO Optimization",
 ];
 
-const AnimatedCounter = ({ value, duration = 2 }: { value: number; duration?: number }) => {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    let start = 0;
-    const end = value;
-    const incrementTime = (duration * 1000) / end;
-    
-    const timer = setInterval(() => {
-      start += 1;
-      setCount(start);
-      if (start >= end) clearInterval(timer);
-    }, incrementTime);
-
-    return () => clearInterval(timer);
-  }, [value, duration]);
-
-  return <span>{count}</span>;
-};
-
 export const HeroSection = () => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"],
+  });
+
+  const planetY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const planetScale = useTransform(scrollYProgress, [0, 1], [1, 0.8]);
+  const planetOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const starsY = useTransform(scrollYProgress, [0, 1], [0, 50]);
+
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col justify-center section-padding pt-32 pb-20 overflow-hidden"
+      ref={containerRef}
+      className="relative min-h-screen flex items-center overflow-hidden"
     >
-      {/* Background */}
-      <div
+      {/* Stars Background with Parallax */}
+      <motion.div
         className="absolute inset-0 z-0"
         style={{
           backgroundImage: `url(${starsBg})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
+          y: starsY,
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/80 to-background z-0" />
 
-      {/* Content */}
-      <div className="relative z-10 max-w-6xl mx-auto w-full">
-        {/* Stats Row */}
-        <motion.div
-          className="flex flex-wrap gap-8 mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          {stats.map((stat, index) => (
-            <div key={stat.label} className="stat-card">
-              <p className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-                {stat.label}
-              </p>
-              <p className="text-3xl font-bold text-accent">
-                <AnimatedCounter value={stat.value} duration={2 + index * 0.3} />
-              </p>
-            </div>
-          ))}
-        </motion.div>
+      {/* Planet Element */}
+      <motion.div
+        className="absolute -left-[20%] md:-left-[10%] top-1/2 -translate-y-1/2 w-[80vw] md:w-[60vw] lg:w-[50vw] aspect-square z-10 pointer-events-none"
+        style={{
+          y: planetY,
+          scale: planetScale,
+          opacity: planetOpacity,
+        }}
+      >
+        <img
+          src={planetHero}
+          alt="Planet"
+          className="w-full h-full object-contain animate-float"
+        />
+      </motion.div>
 
-        {/* Main Headline */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight mb-8">
-            We are a creative
-            <br />
-            <span className="text-accent">design agency</span>
-            <br />
-            that makes brands
-            <br />
-            unforgettable.
-          </h1>
-        </motion.div>
+      {/* Main Content */}
+      <motion.div 
+        className="relative z-20 section-padding w-full pt-32"
+        style={{ y: textY }}
+      >
+        <div className="max-w-[1800px] mx-auto">
+          {/* Top Stats Row */}
+          <motion.div
+            className="flex items-center gap-4 mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span className="number-label">/01</span>
+            <div className="horizontal-line flex-1 max-w-[100px]" />
+            <span className="text-xs text-muted-foreground">Creative Agency</span>
+          </motion.div>
 
-        {/* Subtitle and CTA */}
-        <motion.div
-          className="flex flex-col md:flex-row md:items-end justify-between gap-8 mt-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <p className="text-lg text-muted-foreground max-w-md">
-            We craft digital experiences and brand identities that captivate
-            audiences and drive business growth.
-          </p>
-          <div className="flex gap-4">
-            <a href="#projects" className="btn-primary">
-              View Projects
-            </a>
-            <a href="#contact" className="btn-secondary">
-              Contact Us
-            </a>
+          {/* Main Logo Text */}
+          <div className="overflow-hidden mb-12">
+            <motion.h1
+              className="text-[15vw] md:text-[12vw] font-bold leading-[0.85] tracking-tighter"
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            >
+              Forrof<sup className="text-[3vw]">®</sup>
+            </motion.h1>
           </div>
-        </motion.div>
-      </div>
+
+          {/* Subtitle and Categories */}
+          <div className="grid md:grid-cols-2 gap-12 md:gap-24">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="text-lg md:text-xl text-muted-foreground max-w-md leading-relaxed">
+                We craft digital experiences and brand identities that captivate
+                audiences and drive meaningful business growth.
+              </p>
+            </motion.div>
+
+            <motion.div
+              className="flex flex-wrap gap-3"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {categories.map((cat, index) => (
+                <motion.span
+                  key={cat}
+                  className="px-4 py-2 border border-border rounded-full text-sm text-muted-foreground hover:text-foreground hover:border-foreground transition-all duration-500 cursor-pointer"
+                  whileHover={{ scale: 1.05 }}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.7 + index * 0.1 }}
+                >
+                  {cat}
+                </motion.span>
+              ))}
+            </motion.div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Scroll Indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 10, 0] }}
-        transition={{ 
-          opacity: { delay: 1, duration: 0.5 },
-          y: { repeat: Infinity, duration: 1.5 }
-        }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
       >
-        <div className="w-6 h-10 border-2 border-muted-foreground rounded-full flex justify-center pt-2">
-          <div className="w-1 h-2 bg-muted-foreground rounded-full" />
-        </div>
+        <motion.div
+          className="flex flex-col items-center gap-2"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+        >
+          <span className="text-xs text-muted-foreground tracking-widest uppercase">Scroll</span>
+          <div className="w-px h-12 bg-gradient-to-b from-foreground to-transparent" />
+        </motion.div>
       </motion.div>
     </section>
   );
