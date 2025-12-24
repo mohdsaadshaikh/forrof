@@ -1,7 +1,9 @@
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
-import starsBg from "@/assets/stars-bg.png";
-import { Magnetic, CharacterReveal, TextReveal, LineReveal } from "./AnimationComponents";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { useRef, useEffect, useState, lazy, Suspense } from "react";
+import { Magnetic, LineReveal } from "./AnimationComponents";
+
+// Lazy load the 3D Earth component
+const Earth3D = lazy(() => import("./Earth3D"));
 
 const categories = [
   "Branding and Identity",
@@ -20,129 +22,83 @@ export const HeroSection = () => {
   // Smooth spring physics for parallax
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
 
-  // Parallax transforms with different speeds
-  const planetY = useTransform(smoothProgress, [0, 1], [0, 300]);
-  const planetScale = useTransform(smoothProgress, [0, 0.5], [1, 1.2]);
-  const planetRotate = useTransform(smoothProgress, [0, 1], [0, 15]);
-  const planetOpacity = useTransform(smoothProgress, [0, 0.6], [1, 0]);
-
+  // Parallax transforms
+  const earthOpacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
+  const earthScale = useTransform(smoothProgress, [0, 0.5], [1, 1.3]);
   const textY = useTransform(smoothProgress, [0, 1], [0, 150]);
-  const starsY = useTransform(smoothProgress, [0, 1], [0, 100]);
-  const starsScale = useTransform(smoothProgress, [0, 1], [1, 1.2]);
 
-  const orbiterRotation = useTransform(smoothProgress, [0, 1], [0, 360]);
-
-  // Floating animation for small elements
-  const [floatY, setFloatY] = useState(0);
+  // Twinkling stars effect
+  const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; delay: number; duration: number }>>([]);
+  
   useEffect(() => {
-    const interval = setInterval(() => {
-      setFloatY(Math.sin(Date.now() / 1000) * 10);
-    }, 50);
-    return () => clearInterval(interval);
+    const generatedStars = [...Array(30)].map((_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      delay: Math.random() * 3,
+      duration: 2 + Math.random() * 4,
+    }));
+    setStars(generatedStars);
   }, []);
 
   return (
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-[120vh] flex items-center overflow-hidden"
+      className="relative min-h-[120vh] flex items-center overflow-hidden bg-background"
     >
-      {/* Animated Stars Background */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `url(${starsBg})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          y: starsY,
-          scale: starsScale,
-        }}
-      >
-        {/* Animated star particles */}
-        {[...Array(20)].map((_, i) => (
+      {/* Twinkling Stars Background */}
+      <div className="absolute inset-0 z-0">
+        {stars.map((star) => (
           <motion.div
-            key={i}
-            className="absolute w-1 h-1 bg-foreground/60 rounded-full"
+            key={star.id}
+            className="absolute w-1 h-1 bg-foreground/70 rounded-full"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              left: `${star.x}%`,
+              top: `${star.y}%`,
             }}
             animate={{
               opacity: [0.2, 1, 0.2],
-              scale: [1, 1.5, 1],
+              scale: [0.8, 1.5, 0.8],
+              boxShadow: [
+                "0 0 2px rgba(255,255,255,0.3)",
+                "0 0 8px rgba(255,255,255,0.8)",
+                "0 0 2px rgba(255,255,255,0.3)",
+              ],
             }}
             transition={{
-              duration: 2 + Math.random() * 3,
+              duration: star.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </motion.div>
-
-      {/* Giant Planet/Sphere Element */}
-      <motion.div
-        className="absolute -left-[30%] md:-left-[15%] top-1/2 -translate-y-1/2 z-10 pointer-events-none"
-        style={{
-          y: planetY,
-          scale: planetScale,
-          rotate: planetRotate,
-          opacity: planetOpacity,
-        }}
-      >
-        <div className="relative w-[90vw] md:w-[70vw] lg:w-[60vw] aspect-square">
-          {/* Main sphere */}
-          <motion.div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background: "radial-gradient(circle at 70% 30%, #ffffff 0%, #888888 30%, #333333 70%, #000000 100%)",
-              boxShadow: "inset -40px -40px 100px rgba(0,0,0,0.8), 0 0 100px rgba(255,255,255,0.1)",
-            }}
-            animate={{
-              y: [0, -20, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
+              delay: star.delay,
               ease: "easeInOut",
             }}
           />
-          
-          {/* Horizontal line across planet */}
-          <motion.div
-            className="absolute top-1/2 left-0 right-0 h-px bg-foreground/20"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 2, delay: 1.5 }}
-          />
+        ))}
+      </div>
 
-          {/* Orbiting small sphere */}
-          <motion.div
-            className="absolute top-1/2 left-1/2 w-full h-full"
-            style={{ rotate: orbiterRotation }}
-          >
-            <motion.div
-              className="absolute w-8 h-8 md:w-12 md:h-12 rounded-full bg-background border border-border"
+      {/* 3D Earth Globe with Parallax */}
+      <motion.div
+        className="absolute -left-[20%] md:-left-[10%] top-1/2 -translate-y-1/2 z-10 w-[100vw] md:w-[80vw] lg:w-[70vw] aspect-square pointer-events-auto"
+        style={{
+          opacity: earthOpacity,
+          scale: earthScale,
+        }}
+      >
+        <Suspense fallback={
+          <div className="w-full h-full flex items-center justify-center">
+            <motion.div 
+              className="w-[60%] aspect-square rounded-full"
               style={{
-                top: "10%",
-                right: "20%",
-                boxShadow: "0 0 30px rgba(255,255,255,0.3)",
+                background: "radial-gradient(circle at 30% 30%, #4da6ff 0%, #1a4a7a 40%, #0a1a2a 80%, #000000 100%)",
+                boxShadow: "0 0 100px rgba(77, 166, 255, 0.3), inset -30px -30px 80px rgba(0,0,0,0.8)",
               }}
-              animate={{
-                scale: [1, 1.1, 1],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-              }}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
             />
-          </motion.div>
-
-          {/* Crater details */}
-          <div className="absolute top-[30%] left-[40%] w-12 h-12 rounded-full bg-gradient-to-br from-transparent to-black/30" />
-          <div className="absolute top-[50%] left-[60%] w-8 h-8 rounded-full bg-gradient-to-br from-transparent to-black/20" />
-          <div className="absolute top-[60%] left-[35%] w-6 h-6 rounded-full bg-gradient-to-br from-transparent to-black/25" />
-        </div>
+          </div>
+        }>
+          <Earth3D className="w-full h-full" />
+        </Suspense>
       </motion.div>
 
       {/* Main Content */}
