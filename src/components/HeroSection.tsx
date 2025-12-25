@@ -3,16 +3,13 @@ import {
   useScroll,
   useTransform,
   useSpring,
-  useMotionValue,
 } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
-import starsBg from "@/assets/stars-bg.png";
+import { useRef, useEffect, useState, Suspense } from "react";
 import {
   Magnetic,
-  CharacterReveal,
-  TextReveal,
   LineReveal,
 } from "./AnimationComponents";
+import Earth3D from "./Earth3D";
 
 const categories = [
   "Branding and Identity",
@@ -79,13 +76,13 @@ export const HeroSection = () => {
               ],
             }}
             transition={{
-              duration: 2 + Math.random() * 3,
+              duration: star.duration,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: star.delay,
             }}
           />
         ))}
-      </motion.div>
+      </div>
 
       {/* Gradient Overlay - Teal gradient from black to #167070 */}
       <motion.div
@@ -96,45 +93,6 @@ export const HeroSection = () => {
           pointerEvents: "none",
         }}
       />
-
-      {/* Giant Planet/Sphere Element */}
-      <motion.div
-        className="absolute -left-[30%] md:-left-[15%] top-1/2 -translate-y-1/2 z-10 pointer-events-none"
-        style={{
-          y: planetY,
-          scale: planetScale,
-          rotate: planetRotate,
-          opacity: planetOpacity,
-        }}
-      >
-        <div className="relative w-[90vw] md:w-[70vw] lg:w-[60vw] aspect-square">
-          {/* Main sphere */}
-          <motion.div
-            className="absolute inset-0 rounded-full"
-            style={{
-              background:
-                "radial-gradient(circle at 70% 30%, #ffffff 0%, #888888 30%, #333333 70%, #000000 100%)",
-              boxShadow:
-                "inset -40px -40px 100px rgba(0,0,0,0.8), 0 0 100px rgba(255,255,255,0.1)",
-            }}
-            animate={{
-              y: [0, -20, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              delay: star.delay,
-              ease: "easeInOut",
-            }}
-          />
-
-          {/* Horizontal line across planet */}
-          <motion.div
-            className="absolute top-1/2 left-0 right-0 h-px bg-foreground/20"
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 2, delay: 1.5 }}
-          />
 
       {/* 3D Earth Globe with Parallax */}
       <motion.div
