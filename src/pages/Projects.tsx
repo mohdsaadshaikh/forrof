@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 
 const projectsData = [
   {
-    id: 1,
+    id: "linx-auto",
     title: "Linx Auto",
     date: "Jul 22, 2025",
     image: project1,
@@ -30,7 +30,7 @@ const projectsData = [
     color: "#1a1a1a",
   },
   {
-    id: 2,
+    id: "sonora-sport",
     title: "Sonora Sport",
     date: "Jun 19, 2025",
     image: project2,
@@ -41,7 +41,7 @@ const projectsData = [
     color: "#0a0a0a",
   },
   {
-    id: 3,
+    id: "zima-beauty",
     title: "Zima Beauty",
     date: "May 17, 2024",
     image: project3,
@@ -74,6 +74,7 @@ const ProjectCard = ({
   onSelectProject: (project: (typeof projectsData)[0]) => void;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
@@ -98,7 +99,10 @@ const ProjectCard = ({
         delay: index * 0.2,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      onClick={() => onSelectProject(project)}
+      onClick={() => {
+        navigate(`/project/${project.id}`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }}
     >
       {/* Image Container with Multiple Hover Effects */}
       <div className="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5]">
@@ -182,145 +186,10 @@ const ProjectCard = ({
   );
 };
 
-// Project Detail Modal
-const ProjectModal = ({
-  project,
-  isOpen,
-  onClose,
-}: {
-  project: (typeof projectsData)[0] | null;
-  isOpen: boolean;
-  onClose: () => void;
-}) => {
-  if (!project) return null;
-
-  return (
-    <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isOpen ? 1 : 0 }}
-      exit={{ opacity: 0 }}
-      style={{ pointerEvents: isOpen ? "auto" : "none" }}
-      onClick={onClose}
-    >
-      {/* Backdrop */}
-      <motion.div
-        className="absolute inset-0 bg-background/80 backdrop-blur-sm"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isOpen ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
-      />
-
-      {/* Modal Content */}
-      <motion.div
-        className="relative bg-background border border-border rounded-3xl p-8 md:p-12 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-        initial={{ opacity: 0, scale: 0.8, y: 100 }}
-        animate={{
-          opacity: isOpen ? 1 : 0,
-          scale: isOpen ? 1 : 0.8,
-          y: isOpen ? 0 : 100,
-        }}
-        exit={{ opacity: 0, scale: 0.8, y: 100 }}
-        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Close Button */}
-        <motion.button
-          className="absolute top-6 right-6 p-2 rounded-full hover:bg-foreground/10 transition-colors"
-          onClick={onClose}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <X size={24} />
-        </motion.button>
-
-        {/* Project Image */}
-        <motion.div
-          className="rounded-2xl overflow-hidden mb-8"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={isOpen ? { opacity: 1, scale: 1 } : {}}
-          transition={{ delay: 0.2 }}
-        >
-          <img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-auto object-cover"
-          />
-        </motion.div>
-
-        {/* Project Details */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isOpen ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.3 }}
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            {project.title}
-          </h2>
-
-          <div className="flex items-center gap-8 mb-8 pb-8 border-b border-border">
-            <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">
-                Project Date
-              </p>
-              <p className="text-lg font-medium">{project.date}</p>
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-widest mb-1">
-                Category
-              </p>
-              <p className="text-lg font-medium">{project.category}</p>
-            </div>
-          </div>
-
-          <div className="mb-8">
-            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">
-              Description
-            </p>
-            <p className="text-lg leading-relaxed text-muted-foreground">
-              {project.description}
-            </p>
-          </div>
-
-          <div className="mb-8">
-            <p className="text-xs text-muted-foreground uppercase tracking-widest mb-4">
-              Skills & Services
-            </p>
-            <div className="flex flex-wrap gap-3">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-4 py-2 bg-foreground/10 rounded-full text-sm font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <Magnetic strength={0.15}>
-            <motion.a
-              href="#contact"
-              className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-medium hover:opacity-80 transition-opacity"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Start Similar Project
-              <ArrowUpRight size={18} />
-            </motion.a>
-          </Magnetic>
-        </motion.div>
-      </motion.div>
-    </motion.div>
-  );
-};
-
 const ProjectsPage = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [selectedProject, setSelectedProject] = useState<
-    (typeof projectsData)[0] | null
-  >(null);
+  // Removed selectedProject state and modal logic
   const [activeFilter, setActiveFilter] = useState("All Projects");
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
 
@@ -347,51 +216,109 @@ const ProjectsPage = () => {
       <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
         {/* Hero Section */}
         <motion.section
-          className="relative min-h-[60vh] flex items-center justify-center pt-24 section-padding overflow-hidden"
+          className="relative h-[70vh] min-h-[500px] overflow-hidden flex items-end section-padding pb-20"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1 }}
         >
-          {/* Background Elements */}
-          <div className="absolute inset-0 overflow-hidden">
+          {/* Floating particles */}
+          {Array.from({ length: 18 }).map((_, i) => (
             <motion.div
-              className="absolute -top-40 -right-40 w-96 h-96 bg-foreground/5 rounded-full blur-3xl"
-              style={{ y: backgroundY, scale: backgroundScale }}
-              animate={{ x: [0, 100, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+              key={i}
+              className="absolute rounded-full bg-foreground/20 pointer-events-none z-30"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                width: 2 + Math.random() * 4,
+                height: 2 + Math.random() * 4,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                x: [0, 15, 0],
+                opacity: [0.2, 0.6, 0.2],
+              }}
+              transition={{
+                duration: 4 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 5,
+                ease: "easeInOut",
+              }}
             />
-            <motion.div
-              className="absolute -bottom-40 -left-40 w-96 h-96 bg-foreground/5 rounded-full blur-3xl"
-              style={{ y: backgroundY, scale: backgroundScale }}
-              animate={{ x: [0, -100, 0] }}
-              transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          ))}
+
+          {/* Parallax Background Image */}
+          <motion.div
+            className="absolute inset-0"
+            style={{ scale: backgroundScale, opacity: 0.7 }}
+          >
+            <img
+              src={projectsData[0].image}
+              alt="Portfolio Hero"
+              className="w-full h-full object-cover scale-105 blur-[2px] brightness-75"
             />
-          </div>
+          </motion.div>
+
+          {/* Animated Gradient Overlay */}
+          <motion.div
+            className="absolute inset-0 z-10"
+            style={{ opacity: 0.85 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-background via-background/50 to-background" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" />
+          </motion.div>
 
           {/* Hero Content */}
+          <motion.div className="absolute inset-0 z-20 flex items-end section-padding pb-20">
+            <div className="max-w-[1800px] mx-auto w-full">
+              <div className="overflow-hidden mb-6">
+                <motion.h1
+                  className="text-[12vw] md:text-[10vw] font-bold leading-[0.9] tracking-tighter"
+                  initial={{ y: "120%" }}
+                  animate={{ y: 0 }}
+                  transition={{
+                    duration: 1.2,
+                    ease: [0.25, 0.1, 0.25, 1],
+                    delay: 0.4,
+                  }}
+                >
+                  Our Creative Portfolio
+                </motion.h1>
+              </div>
+              <motion.p
+                className="text-lg md:text-2xl text-muted-foreground max-w-2xl mb-8"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                Explore our finest work across branding, design, and digital
+                solutions
+              </motion.p>
+            </div>
+          </motion.div>
+
+          {/* Scroll Indicator */}
           <motion.div
-            className="relative z-10 text-center max-w-3xl"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5 }}
           >
-            <motion.h1
-              className="text-5xl md:text-7xl font-bold mb-6 leading-[1.1]"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+            <motion.div
+              className="flex flex-col items-center gap-2"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ repeat: Infinity, duration: 2 }}
             >
-              <TextReveal text="Our Creative Portfolio" />
-            </motion.h1>
-            <motion.p
-              className="text-lg md:text-xl text-muted-foreground"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              Explore our finest work across branding, design, and digital
-              solutions
-            </motion.p>
+              <span className="text-xs text-muted-foreground tracking-widest uppercase">
+                Scroll
+              </span>
+              <motion.div
+                className="w-px h-12 bg-gradient-to-b from-foreground to-transparent"
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                transition={{ delay: 1.8, duration: 0.8 }}
+                style={{ transformOrigin: "top" }}
+              />
+            </motion.div>
           </motion.div>
         </motion.section>
 
@@ -470,7 +397,7 @@ const ProjectsPage = () => {
                   project={project}
                   index={index}
                   isInView={isInView}
-                  onSelectProject={setSelectedProject}
+                  onSelectProject={() => {}}
                 />
               ))}
             </motion.div>
@@ -509,7 +436,12 @@ const ProjectsPage = () => {
             </p>
             <Magnetic strength={0.15}>
               <motion.a
-                href="#contact"
+                href="/contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/contact");
+                  window.scrollTo({ top: 0, behavior: "smooth" });
+                }}
                 className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-medium hover:opacity-80 transition-opacity"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -522,12 +454,7 @@ const ProjectsPage = () => {
         </section>
       </div>
 
-      {/* Project Modal */}
-      <ProjectModal
-        project={selectedProject}
-        isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+      {/* Project Modal removed, now using route navigation */}
     </>
   );
 };

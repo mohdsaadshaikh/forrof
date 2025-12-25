@@ -1,14 +1,6 @@
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useSpring,
-} from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef, useEffect, useState, Suspense } from "react";
-import {
-  Magnetic,
-  LineReveal,
-} from "./AnimationComponents";
+import { Magnetic, LineReveal } from "./AnimationComponents";
 import Earth3D from "./Earth3D";
 
 const categories = [
@@ -37,10 +29,12 @@ export const HeroSection = () => {
   const textY = useTransform(smoothProgress, [0, 1], [0, 150]);
 
   // Twinkling stars effect
-  const [stars, setStars] = useState<Array<{ id: number; x: number; y: number; delay: number; duration: number }>>([]);
-  
+  const [stars, setStars] = useState<
+    Array<{ id: number; x: number; y: number; delay: number; duration: number }>
+  >([]);
+
   useEffect(() => {
-    const generatedStars = [...Array(30)].map((_, i) => ({
+    const generatedStars = [...Array(100)].map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
@@ -57,23 +51,21 @@ export const HeroSection = () => {
       className="relative min-h-[120vh] flex items-center overflow-hidden bg-background"
     >
       {/* Twinkling Stars Background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-[1]">
         {stars.map((star) => (
           <motion.div
             key={star.id}
-            className="absolute w-1 h-1 bg-foreground/70 rounded-full"
+            className="absolute rounded-full"
             style={{
               left: `${star.x}%`,
               top: `${star.y}%`,
+              width: "2px",
+              height: "2px",
+              background: "#ffffff",
             }}
             animate={{
-              opacity: [0.2, 1, 0.2],
-              scale: [0.8, 1.5, 0.8],
-              boxShadow: [
-                "0 0 2px rgba(255,255,255,0.3)",
-                "0 0 8px rgba(255,255,255,0.8)",
-                "0 0 2px rgba(255,255,255,0.3)",
-              ],
+              opacity: [0.3, 1, 0.3],
+              scale: [1, 1.5, 1],
             }}
             transition={{
               duration: star.duration,
@@ -84,12 +76,12 @@ export const HeroSection = () => {
         ))}
       </div>
 
-      {/* Gradient Overlay - Teal gradient from black to #167070 */}
+      {/* Gradient Overlay - Deep blue gradient from black to dark blue */}
       <motion.div
-        className="absolute inset-0 z-[1]"
+        className="absolute inset-0 z-0"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(22, 112, 112, 0.6) 100%)",
+            "linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(10, 30, 70, 0.7) 100%)",
           pointerEvents: "none",
         }}
       />
@@ -102,19 +94,23 @@ export const HeroSection = () => {
           scale: earthScale,
         }}
       >
-        <Suspense fallback={
-          <div className="w-full h-full flex items-center justify-center">
-            <motion.div 
-              className="w-[60%] aspect-square rounded-full"
-              style={{
-                background: "radial-gradient(circle at 30% 30%, #4da6ff 0%, #1a4a7a 40%, #0a1a2a 80%, #000000 100%)",
-                boxShadow: "0 0 100px rgba(77, 166, 255, 0.3), inset -30px -30px 80px rgba(0,0,0,0.8)",
-              }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-        }>
+        <Suspense
+          fallback={
+            <div className="w-full h-full flex items-center justify-center">
+              <motion.div
+                className="w-[60%] aspect-square rounded-full"
+                style={{
+                  background:
+                    "radial-gradient(circle at 30% 30%, #4da6ff 0%, #1a4a7a 40%, #0a1a2a 80%, #000000 100%)",
+                  boxShadow:
+                    "0 0 100px rgba(77, 166, 255, 0.3), inset -30px -30px 80px rgba(0,0,0,0.8)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+              />
+            </div>
+          }
+        >
           <Earth3D className="w-full h-full" />
         </Suspense>
       </motion.div>

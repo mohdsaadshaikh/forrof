@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import ProjectDetails from "./pages/ProjectDetails";
 import NotFound from "./pages/NotFound";
+import Contact from "./pages/Contact";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { CustomCursor } from "./components/CustomCursor";
@@ -82,6 +83,14 @@ const App = () => (
             element={
               <LayoutWrapper>
                 <ProjectDetails />
+              </LayoutWrapper>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <LayoutWrapper>
+                <Contact />
               </LayoutWrapper>
             }
           />

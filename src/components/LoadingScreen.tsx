@@ -100,8 +100,8 @@ export const LoadingScreen = ({
                   ease: "easeInOut",
                 }}
               >
-                <div className="flex gap-6 items-center">
-                  <img src="/logo.png" alt="" />
+                <div className="flex  items-center">
+                  <img src="/logo.svg" alt="" width={90} height={90} />
                   <span className="inline-block">
                     Forrof<sup className="text-2xl">®</sup>
                   </span>

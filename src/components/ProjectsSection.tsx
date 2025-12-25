@@ -20,6 +20,7 @@ import project3 from "@/assets/project-3.jpg";
 
 const projects = [
   {
+    id: "linx-auto",
     title: "Linx Auto",
     date: "Jul 22, 2025",
     image: project1,
@@ -27,6 +28,7 @@ const projects = [
     color: "#1a1a1a",
   },
   {
+    id: "sonora-sport",
     title: "Sonora Sport",
     date: "Jun 19, 2025",
     image: project2,
@@ -34,6 +36,7 @@ const projects = [
     color: "#0a0a0a",
   },
   {
+    id: "zima-beauty",
     title: "Zima Beauty",
     date: "May 17, 2024",
     image: project3,
@@ -155,6 +158,10 @@ export const ProjectsSection = () => {
                 delay: 0.5 + index * 0.2,
                 ease: [0.25, 0.1, 0.25, 1],
               }}
+              onClick={() => {
+                navigate(`/project/${project.id}`);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
             >
               {/* Image Container with Multiple Hover Effects */}
               <div className="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5]">
@@ -251,6 +258,7 @@ export const ProjectsSection = () => {
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/projects");
+                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="inline-flex items-center gap-3 px-10 py-5 border border-border rounded-full overflow-hidden relative group"
               whileHover={{ scale: 1.02 }}
@@ -262,12 +270,12 @@ export const ProjectsSection = () => {
                 whileHover={{ x: 0 }}
                 transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
               />
-              <span className="relative z-10 font-medium group-hover:text-background transition-colors duration-300">
+              <span className="relative z-10 font-medium  transition-colors duration-300">
                 All Projects
               </span>
               <ArrowUpRight
                 size={18}
-                className="relative z-10 group-hover:text-background transition-colors duration-300"
+                className="relative z-10 transition-colors duration-300"
               />
             </motion.a>
           </Magnetic>

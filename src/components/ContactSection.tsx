@@ -1,4 +1,10 @@
-import { motion, useInView, useScroll, useTransform, useSpring } from "framer-motion";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  useSpring,
+} from "framer-motion";
 import { useRef, useState } from "react";
 import { Send, ArrowUpRight, Mail, Phone, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -22,16 +28,50 @@ export const ContactSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
   const formY = useTransform(smoothProgress, [0, 1], [100, -50]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Message sent!",
-      description: "We'll get back to you within 24 hours.",
-    });
-    setFormData({ name: "", email: "", company: "", budget: "", message: "" });
+    const form = e.target as HTMLFormElement;
+    const data = new FormData(form);
+    data.append("access_key", "d1b142cc-769d-44c1-acd9-f483031796ea");
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: data,
+      });
+      const result = await response.json();
+      if (result.success) {
+        toast({
+          title: "Message sent!",
+          description: "We'll get back to you within 24 hours.",
+        });
+        setFormData({
+          name: "",
+          email: "",
+          company: "",
+          budget: "",
+          message: "",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description:
+            result.message || "Something went wrong. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const contactInfo = [
@@ -41,9 +81,9 @@ export const ContactSection = () => {
   ];
 
   return (
-    <section 
-      id="contact" 
-      className="section-padding py-40 relative overflow-hidden" 
+    <section
+      id="contact"
+      className="section-padding py-40 relative overflow-hidden"
       ref={containerRef}
     >
       <div className="max-w-[1800px] mx-auto">
@@ -66,14 +106,22 @@ export const ContactSection = () => {
           <motion.div
             initial={{ opacity: 0, x: -80 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{
+              duration: 1.2,
+              delay: 0.2,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
             <div className="overflow-hidden mb-8">
               <motion.h2
                 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.95]"
                 initial={{ y: "100%" }}
                 animate={isInView ? { y: 0 } : {}}
-                transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{
+                  duration: 1.2,
+                  delay: 0.3,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
               >
                 Let's create something amazing
               </motion.h2>
@@ -84,7 +132,8 @@ export const ContactSection = () => {
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.6 }}
             >
-              Ready to start your project? Fill out the form and we'll get back to you within 24 hours.
+              Ready to start your project? Fill out the form and we'll get back
+              to you within 24 hours.
             </motion.p>
 
             {/* Contact Info with Hover Effects */}
@@ -103,13 +152,21 @@ export const ContactSection = () => {
                       whileHover={{ rotate: 360 }}
                       transition={{ duration: 0.6 }}
                     >
-                      <info.icon size={18} className="group-hover:text-background transition-colors" />
+                      <info.icon
+                        size={18}
+                        className="group-hover:text-background transition-colors"
+                      />
                     </motion.div>
                     <div className="flex-1">
-                      <span className="text-sm text-muted-foreground block">{info.label}</span>
+                      <span className="text-sm text-muted-foreground block">
+                        {info.label}
+                      </span>
                       <span className="font-medium text-lg">{info.value}</span>
                     </div>
-                    <ArrowUpRight size={18} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ArrowUpRight
+                      size={18}
+                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    />
                   </motion.div>
                 </Magnetic>
               ))}
@@ -123,12 +180,26 @@ export const ContactSection = () => {
             style={{ y: formY }}
             initial={{ opacity: 0, x: 80 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.2, delay: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{
+              duration: 1.2,
+              delay: 0.4,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
             <div className="grid sm:grid-cols-2 gap-8">
               {[
-                { name: "name", label: "Name", placeholder: "John Doe", type: "text" },
-                { name: "email", label: "Email", placeholder: "john@example.com", type: "email" },
+                {
+                  name: "name",
+                  label: "Name",
+                  placeholder: "John Doe",
+                  type: "text",
+                },
+                {
+                  name: "email",
+                  label: "Email",
+                  placeholder: "john@example.com",
+                  type: "email",
+                },
               ].map((field, index) => (
                 <motion.div
                   key={field.name}
@@ -138,21 +209,28 @@ export const ContactSection = () => {
                 >
                   <motion.label
                     className="block text-sm font-medium mb-3 text-muted-foreground"
-                    animate={{ 
-                      color: focusedField === field.name ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
+                    animate={{
+                      color:
+                        focusedField === field.name
+                          ? "hsl(var(--foreground))"
+                          : "hsl(var(--muted-foreground))",
                     }}
                   >
                     {field.label}
                   </motion.label>
                   <motion.input
                     type={field.type}
+                    name={field.name}
                     value={formData[field.name as keyof typeof formData]}
-                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [field.name]: e.target.value })
+                    }
                     onFocus={() => setFocusedField(field.name)}
                     onBlur={() => setFocusedField(null)}
-                    className="w-full bg-transparent border-b-2 border-border py-4 focus:outline-none transition-colors placeholder:text-muted-foreground/40"
+                    className="w-full bg-background border-b-2 border-border py-4 focus:outline-none transition-colors placeholder:text-muted-foreground/40 focus:bg-background"
                     placeholder={field.placeholder}
                     required={field.name === "name" || field.name === "email"}
+                    autoComplete="off"
                     whileFocus={{ borderColor: "hsl(var(--foreground))" }}
                   />
                   <motion.div
@@ -167,8 +245,16 @@ export const ContactSection = () => {
 
             <div className="grid sm:grid-cols-2 gap-8">
               {[
-                { name: "company", label: "Company", placeholder: "Your company" },
-                { name: "budget", label: "Budget", placeholder: "$5,000 - $10,000" },
+                {
+                  name: "company",
+                  label: "Company",
+                  placeholder: "Your company",
+                },
+                {
+                  name: "budget",
+                  label: "Budget",
+                  placeholder: "$5,000 - $10,000",
+                },
               ].map((field, index) => (
                 <motion.div
                   key={field.name}
@@ -178,20 +264,27 @@ export const ContactSection = () => {
                 >
                   <motion.label
                     className="block text-sm font-medium mb-3 text-muted-foreground"
-                    animate={{ 
-                      color: focusedField === field.name ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
+                    animate={{
+                      color:
+                        focusedField === field.name
+                          ? "hsl(var(--foreground))"
+                          : "hsl(var(--muted-foreground))",
                     }}
                   >
                     {field.label}
                   </motion.label>
                   <input
                     type="text"
+                    name={field.name}
                     value={formData[field.name as keyof typeof formData]}
-                    onChange={(e) => setFormData({ ...formData, [field.name]: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, [field.name]: e.target.value })
+                    }
                     onFocus={() => setFocusedField(field.name)}
                     onBlur={() => setFocusedField(null)}
-                    className="w-full bg-transparent border-b-2 border-border py-4 focus:outline-none transition-colors placeholder:text-muted-foreground/40"
+                    className="w-full bg-background border-b-2 border-border py-4 focus:outline-none transition-colors placeholder:text-muted-foreground/40 focus:bg-background"
                     placeholder={field.placeholder}
+                    autoComplete="off"
                   />
                   <motion.div
                     className="h-0.5 bg-foreground origin-left mt-[-2px]"
@@ -210,21 +303,28 @@ export const ContactSection = () => {
             >
               <motion.label
                 className="block text-sm font-medium mb-3 text-muted-foreground"
-                animate={{ 
-                  color: focusedField === "message" ? "hsl(var(--foreground))" : "hsl(var(--muted-foreground))"
+                animate={{
+                  color:
+                    focusedField === "message"
+                      ? "hsl(var(--foreground))"
+                      : "hsl(var(--muted-foreground))",
                 }}
               >
                 Message
               </motion.label>
               <textarea
+                name="message"
                 value={formData.message}
-                onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, message: e.target.value })
+                }
                 onFocus={() => setFocusedField("message")}
                 onBlur={() => setFocusedField(null)}
                 rows={4}
-                className="w-full bg-transparent border-b-2 border-border py-4 focus:outline-none transition-colors resize-none placeholder:text-muted-foreground/40"
+                className="w-full bg-background border-b-2 border-border py-4 focus:outline-none transition-colors resize-none placeholder:text-muted-foreground/40 focus:bg-background"
                 placeholder="Tell us about your project..."
                 required
+                autoComplete="off"
               />
               <motion.div
                 className="h-0.5 bg-foreground origin-left mt-[-2px]"
@@ -253,13 +353,18 @@ export const ContactSection = () => {
                     whileHover={{ y: 0 }}
                     transition={{ duration: 0.4 }}
                   />
-                  <span className="relative z-10 group-hover:text-foreground transition-colors">Send Message</span>
+                  <span className="relative z-10 group-hover:text-foreground transition-colors">
+                    Send Message
+                  </span>
                   <motion.div
                     className="relative z-10"
                     animate={{ x: [0, 5, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}
                   >
-                    <ArrowUpRight size={18} className="group-hover:text-foreground transition-colors" />
+                    <ArrowUpRight
+                      size={18}
+                      className="group-hover:text-foreground transition-colors"
+                    />
                   </motion.div>
                 </motion.button>
               </Magnetic>

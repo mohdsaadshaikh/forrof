@@ -8,6 +8,7 @@ import {
 import { Ellipsis, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Magnetic } from "./AnimationComponents";
+import { useNavigate } from "react-router-dom";
 
 interface NavLink {
   name: string;
@@ -15,11 +16,11 @@ interface NavLink {
 }
 
 const navLinks: NavLink[] = [
-  { name: "Home", href: "#home" },
+  { name: "Home", href: "/" },
   { name: "Agency", href: "#agency" },
-  { name: "Projects", href: "#projects" },
+  { name: "Projects", href: "/projects" },
   { name: "Insights", href: "#insights" },
-  { name: "Contact", href: "#contact" },
+  { name: "Contact", href: "/contact" },
 ];
 
 const menuVariants = {
@@ -111,6 +112,7 @@ export const NavbarMenuIcon = () => {
     damping: 20,
   });
   const menuRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   // Close menu when clicking outside
   useEffect(() => {
@@ -137,10 +139,15 @@ export const NavbarMenuIcon = () => {
 
   const handleNavClick = (href: string) => {
     setIsOpen(false);
-    // Smooth scroll to section
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (href.startsWith("#")) {
+      // Smooth scroll to section
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    } else if (href.startsWith("/")) {
+      navigate(href);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -162,13 +169,17 @@ export const NavbarMenuIcon = () => {
         <nav className="section-padding py-6 flex items-center justify-between max-w-[1800px] mx-auto w-full">
           {/* Logo */}
           <motion.div
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 z-[100] relative cursor-pointer select-none "
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
+            onClick={() => {
+              navigate("/");
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
           >
             <motion.div
-              className="w-2 h-2 rounded-full bg-foreground"
+              className="w-2 h-2 rounded-full bg-foreground z-[110] relative"
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
@@ -302,7 +313,7 @@ export const NavbarMenuIcon = () => {
               animate="visible"
             >
               {/* Navigation Links with individual parallax */}
-              <div className="space-y-12 md:space-y-16 text-center">
+              <div className="space-y-8 md:space-y-12 text-center z-50">
                 {navLinks.map((link, index) => (
                   <motion.div
                     key={link.name}

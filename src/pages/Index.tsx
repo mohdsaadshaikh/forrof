@@ -19,12 +19,21 @@ const Index = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate page loading - change duration or remove for real loading
+  // Show loader until page is fully loaded
   useEffect(() => {
-    const timer = setTimeout(() => {
+    // Check if page is already loaded
+    if (document.readyState === "complete") {
       setIsLoading(false);
-    }, 2500);
-    return () => clearTimeout(timer);
+      return;
+    }
+
+    // Wait for page load event
+    const handleLoad = () => {
+      setIsLoading(false);
+    };
+
+    window.addEventListener("load", handleLoad);
+    return () => window.removeEventListener("load", handleLoad);
   }, []);
 
   return (

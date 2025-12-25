@@ -8,7 +8,11 @@ import {
 import { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { ArrowUpRight, ArrowLeft, ArrowRight } from "lucide-react";
-import { Magnetic, LineReveal, TextReveal } from "@/components/AnimationComponents";
+import {
+  Magnetic,
+  LineReveal,
+  TextReveal,
+} from "@/components/AnimationComponents";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -22,13 +26,21 @@ const projectsData = [
     year: "2025",
     image: project1,
     tags: ["Branding", "UI/UX", "Marketing", "SEO"],
-    description: "Complete brand identity redesign for automotive industry leader. We created a cohesive visual language that conveys innovation and reliability across all touchpoints.",
-    fullDescription: "Linx Auto approached us with a challenge: modernize their brand while honoring their 30-year legacy in the automotive industry. Our comprehensive approach included a complete visual identity overhaul, from logo design to a full digital ecosystem transformation.",
+    description:
+      "Complete brand identity redesign for automotive industry leader. We created a cohesive visual language that conveys innovation and reliability across all touchpoints.",
+    fullDescription:
+      "Linx Auto approached us with a challenge: modernize their brand while honoring their 30-year legacy in the automotive industry. Our comprehensive approach included a complete visual identity overhaul, from logo design to a full digital ecosystem transformation.",
     category: "Branding and Identity",
     color: "#1a1a1a",
     client: "Linx Automotive Group",
     duration: "4 months",
-    services: ["Brand Strategy", "Visual Identity", "UI/UX Design", "Marketing Campaigns", "SEO Optimization"],
+    services: [
+      "Brand Strategy",
+      "Visual Identity",
+      "UI/UX Design",
+      "Marketing Campaigns",
+      "SEO Optimization",
+    ],
     results: [
       { metric: "250%", label: "Brand Recognition Increase" },
       { metric: "180%", label: "Website Traffic Growth" },
@@ -43,13 +55,20 @@ const projectsData = [
     year: "2025",
     image: project2,
     tags: ["Branding", "Social Media", "SEO"],
-    description: "Dynamic branding and social media strategy for sports equipment brand. Increased engagement by 250% through targeted content and community building.",
-    fullDescription: "Sonora Sport wanted to establish themselves as a premium player in the competitive sports equipment market. We developed a bold, energetic brand identity that resonates with athletes and fitness enthusiasts alike.",
+    description:
+      "Dynamic branding and social media strategy for sports equipment brand. Increased engagement by 250% through targeted content and community building.",
+    fullDescription:
+      "Sonora Sport wanted to establish themselves as a premium player in the competitive sports equipment market. We developed a bold, energetic brand identity that resonates with athletes and fitness enthusiasts alike.",
     category: "Branding and Identity",
     color: "#0a0a0a",
     client: "Sonora Sports Inc.",
     duration: "3 months",
-    services: ["Brand Identity", "Social Media Strategy", "Content Creation", "SEO"],
+    services: [
+      "Brand Identity",
+      "Social Media Strategy",
+      "Content Creation",
+      "SEO",
+    ],
     results: [
       { metric: "350%", label: "Social Engagement" },
       { metric: "200K+", label: "New Followers" },
@@ -64,13 +83,20 @@ const projectsData = [
     year: "2024",
     image: project3,
     tags: ["Identity", "Packaging", "Web", "Social"],
-    description: "Luxury beauty brand identity with comprehensive packaging design. Created a premium positioning strategy for high-end market penetration.",
-    fullDescription: "Zima Beauty represents the pinnacle of luxury skincare. Our mission was to craft an identity that exudes sophistication and elegance while maintaining approachability. Every element, from typography to packaging, was meticulously designed.",
+    description:
+      "Luxury beauty brand identity with comprehensive packaging design. Created a premium positioning strategy for high-end market penetration.",
+    fullDescription:
+      "Zima Beauty represents the pinnacle of luxury skincare. Our mission was to craft an identity that exudes sophistication and elegance while maintaining approachability. Every element, from typography to packaging, was meticulously designed.",
     category: "UI/UX and Product Design",
     color: "#111111",
     client: "Zima Cosmetics Ltd.",
     duration: "6 months",
-    services: ["Brand Strategy", "Packaging Design", "Website Development", "Social Media"],
+    services: [
+      "Brand Strategy",
+      "Packaging Design",
+      "Website Development",
+      "Social Media",
+    ],
     results: [
       { metric: "500%", label: "Online Sales Growth" },
       { metric: "40+", label: "Retail Partners" },
@@ -81,10 +107,18 @@ const projectsData = [
 ];
 
 // Animated stat counter
-const AnimatedCounter = ({ value, label, delay }: { value: string; label: string; delay: number }) => {
+const AnimatedCounter = ({
+  value,
+  label,
+  delay,
+}: {
+  value: string;
+  label: string;
+  delay: number;
+}) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
-  
+
   return (
     <motion.div
       ref={ref}
@@ -101,7 +135,9 @@ const AnimatedCounter = ({ value, label, delay }: { value: string; label: string
       >
         {value}
       </motion.span>
-      <span className="text-sm text-muted-foreground uppercase tracking-widest">{label}</span>
+      <span className="text-sm text-muted-foreground uppercase tracking-widest">
+        {label}
+      </span>
     </motion.div>
   );
 };
@@ -142,7 +178,7 @@ const ParallaxGallery = ({ images }: { images: string[] }) => {
               transition={{ duration: 0.3 }}
             />
           </motion.div>
-          
+
           <motion.div
             className="relative aspect-[3/4] rounded-3xl overflow-hidden md:mt-32"
             style={{ y: y2, rotate: rotate2, scale }}
@@ -160,7 +196,7 @@ const ParallaxGallery = ({ images }: { images: string[] }) => {
               transition={{ duration: 0.3 }}
             />
           </motion.div>
-          
+
           <motion.div
             className="relative aspect-[3/4] rounded-3xl overflow-hidden"
             style={{ y: y3, rotate: rotate1, scale }}
@@ -190,12 +226,15 @@ const ProjectDetails = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  
+
   const project = projectsData.find((p) => p.id === id);
   const projectIndex = projectsData.findIndex((p) => p.id === id);
   const prevProject = projectIndex > 0 ? projectsData[projectIndex - 1] : null;
-  const nextProject = projectIndex < projectsData.length - 1 ? projectsData[projectIndex + 1] : null;
-  
+  const nextProject =
+    projectIndex < projectsData.length - 1
+      ? projectsData[projectIndex + 1]
+      : null;
+
   const isContentInView = useInView(contentRef, { once: true, margin: "-10%" });
 
   const { scrollYProgress } = useScroll({
@@ -203,15 +242,20 @@ const ProjectDetails = () => {
     offset: ["start start", "end start"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
   const heroImageScale = useTransform(smoothProgress, [0, 1], [1, 1.3]);
   const heroImageOpacity = useTransform(smoothProgress, [0, 0.8], [1, 0]);
   const heroTextY = useTransform(smoothProgress, [0, 1], [0, 200]);
   const overlayOpacity = useTransform(smoothProgress, [0, 1], [0.3, 0.8]);
 
   // Floating particles
-  const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; size: number; delay: number }>>([]);
-  
+  const [particles, setParticles] = useState<
+    Array<{ id: number; x: number; y: number; size: number; delay: number }>
+  >([]);
+
   useEffect(() => {
     const generated = [...Array(20)].map((_, i) => ({
       id: i,
@@ -232,7 +276,10 @@ const ProjectDetails = () => {
           className="text-center"
         >
           <h1 className="text-4xl font-bold mb-4">Project Not Found</h1>
-          <Link to="/projects" className="text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            to="/projects"
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
             ← Back to Projects
           </Link>
         </motion.div>
@@ -241,7 +288,10 @@ const ProjectDetails = () => {
   }
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-background text-foreground">
+    <div
+      ref={containerRef}
+      className="min-h-screen bg-background text-foreground"
+    >
       {/* Hero Section with Parallax */}
       <motion.section
         ref={heroRef}
@@ -316,7 +366,9 @@ const ProjectDetails = () => {
                   whileHover={{ x: -5 }}
                 >
                   <ArrowLeft size={20} className="group-hover:animate-pulse" />
-                  <span className="text-sm uppercase tracking-widest">Back to Projects</span>
+                  <span className="text-sm uppercase tracking-widest">
+                    Back to Projects
+                  </span>
                 </motion.button>
               </Magnetic>
             </motion.div>
@@ -327,7 +379,11 @@ const ProjectDetails = () => {
                 className="text-[12vw] md:text-[10vw] font-bold leading-[0.9] tracking-tighter"
                 initial={{ y: "120%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1], delay: 0.4 }}
+                transition={{
+                  duration: 1.2,
+                  ease: [0.25, 0.1, 0.25, 1],
+                  delay: 0.4,
+                }}
               >
                 {project.title}
               </motion.h1>
@@ -341,15 +397,21 @@ const ProjectDetails = () => {
               transition={{ delay: 0.8 }}
             >
               <div>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Year</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
+                  Year
+                </span>
                 <span className="text-lg font-medium">{project.year}</span>
               </div>
               <div>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Client</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
+                  Client
+                </span>
                 <span className="text-lg font-medium">{project.client}</span>
               </div>
               <div>
-                <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Duration</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
+                  Duration
+                </span>
                 <span className="text-lg font-medium">{project.duration}</span>
               </div>
             </motion.div>
@@ -368,7 +430,9 @@ const ProjectDetails = () => {
             animate={{ y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 2 }}
           >
-            <span className="text-xs text-muted-foreground tracking-widest uppercase">Scroll</span>
+            <span className="text-xs text-muted-foreground tracking-widest uppercase">
+              Scroll
+            </span>
             <motion.div
               className="w-px h-12 bg-gradient-to-b from-foreground to-transparent"
               initial={{ scaleY: 0 }}
@@ -397,10 +461,15 @@ const ProjectDetails = () => {
                 transition={{ delay: 0.2 }}
               >
                 <span className="number-label">/01</span>
-                <LineReveal className="h-px bg-border flex-1 max-w-[100px]" delay={0.3} />
-                <span className="text-xs text-muted-foreground uppercase tracking-widest">Overview</span>
+                <LineReveal
+                  className="h-px bg-border flex-1 max-w-[100px]"
+                  delay={0.3}
+                />
+                <span className="text-xs text-muted-foreground uppercase tracking-widest">
+                  Overview
+                </span>
               </motion.div>
-              
+
               <motion.p
                 className="text-2xl md:text-3xl leading-relaxed text-foreground/80 mb-8"
                 initial={{ opacity: 0, y: 30 }}
@@ -409,7 +478,7 @@ const ProjectDetails = () => {
               >
                 {project.fullDescription}
               </motion.p>
-              
+
               <motion.p
                 className="text-lg text-muted-foreground leading-relaxed"
                 initial={{ opacity: 0, y: 30 }}
@@ -433,8 +502,13 @@ const ProjectDetails = () => {
                 transition={{ delay: 0.4 }}
               >
                 <span className="number-label">/02</span>
-                <LineReveal className="h-px bg-border flex-1 max-w-[100px]" delay={0.5} />
-                <span className="text-xs text-muted-foreground uppercase tracking-widest">Services</span>
+                <LineReveal
+                  className="h-px bg-border flex-1 max-w-[100px]"
+                  delay={0.5}
+                />
+                <span className="text-xs text-muted-foreground uppercase tracking-widest">
+                  Services
+                </span>
               </motion.div>
 
               <div className="space-y-4">
@@ -474,7 +548,8 @@ const ProjectDetails = () => {
         <motion.div
           className="absolute inset-0 opacity-5"
           style={{
-            backgroundImage: "radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)",
+            backgroundImage:
+              "radial-gradient(circle at 2px 2px, currentColor 1px, transparent 0)",
             backgroundSize: "40px 40px",
           }}
           animate={{ x: [0, 40], y: [0, 40] }}
@@ -490,7 +565,9 @@ const ProjectDetails = () => {
           >
             <span className="number-label">/03</span>
             <LineReveal className="h-px bg-border w-[100px]" delay={0.2} />
-            <span className="text-xs text-muted-foreground uppercase tracking-widest">Results</span>
+            <span className="text-xs text-muted-foreground uppercase tracking-widest">
+              Results
+            </span>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
@@ -558,8 +635,12 @@ const ProjectDetails = () => {
                       <ArrowLeft size={20} />
                     </motion.div>
                     <div>
-                      <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Previous</span>
-                      <span className="text-xl font-medium">{prevProject.title}</span>
+                      <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
+                        Previous
+                      </span>
+                      <span className="text-xl font-medium">
+                        {prevProject.title}
+                      </span>
                     </div>
                   </motion.button>
                 </Magnetic>
@@ -593,8 +674,12 @@ const ProjectDetails = () => {
                     whileHover={{ x: 10 }}
                   >
                     <div>
-                      <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">Next</span>
-                      <span className="text-xl font-medium">{nextProject.title}</span>
+                      <span className="text-xs text-muted-foreground uppercase tracking-widest block mb-1">
+                        Next
+                      </span>
+                      <span className="text-xl font-medium">
+                        {nextProject.title}
+                      </span>
                     </div>
                     <motion.div
                       className="w-14 h-14 rounded-full border border-border flex items-center justify-center group-hover:bg-foreground group-hover:text-background transition-all duration-500"
@@ -616,7 +701,8 @@ const ProjectDetails = () => {
         <motion.div
           className="absolute inset-0 opacity-20"
           style={{
-            background: "radial-gradient(circle at 50% 50%, hsl(var(--foreground)) 0%, transparent 70%)",
+            background:
+              "radial-gradient(circle at 50% 50%, hsl(var(--foreground)) 0%, transparent 70%)",
           }}
           animate={{
             scale: [1, 1.2, 1],
@@ -634,7 +720,7 @@ const ProjectDetails = () => {
           >
             <TextReveal text="Let's Work Together" />
           </motion.h2>
-          
+
           <motion.p
             className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 30 }}
@@ -642,12 +728,18 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
           >
-            Ready to start your next project? We'd love to hear about your ideas.
+            Ready to start your next project? We'd love to hear about your
+            ideas.
           </motion.p>
 
           <Magnetic strength={0.2}>
             <motion.a
-              href="#contact"
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/contact");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
               className="inline-flex items-center gap-3 px-12 py-6 bg-foreground text-background rounded-full text-lg font-medium hover:opacity-90 transition-opacity"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

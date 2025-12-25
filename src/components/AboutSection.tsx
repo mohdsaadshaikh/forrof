@@ -9,6 +9,7 @@ import {
 import { useRef } from "react";
 import { LineReveal, Magnetic } from "./AnimationComponents";
 import { ArrowUpRight, Award, Users, Globe, Zap } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const values = [
   {
@@ -96,6 +97,7 @@ export const AboutSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const textRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -164,7 +166,12 @@ export const AboutSection = () => {
             >
               <Magnetic strength={0.15}>
                 <motion.a
-                  href="#contact"
+                  href="/contact"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigate("/contact");
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full overflow-hidden relative group"
                   data-cursor="Let's Talk"
                   whileHover={{ scale: 1.02 }}
@@ -176,12 +183,12 @@ export const AboutSection = () => {
                     whileHover={{ y: 0 }}
                     transition={{ duration: 0.4 }}
                   />
-                  <span className="relative z-10 font-medium group-hover:text-foreground transition-colors duration-300">
+                  <span className="relative z-10 font-medium  transition-colors duration-300">
                     Start a Project
                   </span>
                   <ArrowUpRight
                     size={18}
-                    className="relative z-10 group-hover:text-foreground transition-colors"
+                    className="relative z-10 transition-colors"
                   />
                 </motion.a>
               </Magnetic>
