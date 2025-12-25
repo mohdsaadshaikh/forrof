@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
+import ProjectDetails from "./pages/ProjectDetails";
 import NotFound from "./pages/NotFound";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
@@ -26,9 +27,6 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     damping: 30,
     restDelta: 0.001,
   });
-
-  // Hide header/footer on projects page (it has custom header)
-  const isProjectsPage = location.pathname === "/projects";
 
   return (
     <div
@@ -76,6 +74,14 @@ const App = () => (
             element={
               <LayoutWrapper>
                 <Projects />
+              </LayoutWrapper>
+            }
+          />
+          <Route
+            path="/project/:id"
+            element={
+              <LayoutWrapper>
+                <ProjectDetails />
               </LayoutWrapper>
             }
           />
