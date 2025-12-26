@@ -6,6 +6,8 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Projects from "./pages/Projects";
 import ProjectDetails from "./pages/ProjectDetails";
+import Articles from "./pages/Articles";
+import ArticleDetails from "./pages/ArticleDetails";
 import NotFound from "./pages/NotFound";
 import Contact from "./pages/Contact";
 import { Header } from "./components/Header";
@@ -83,6 +85,22 @@ const App = () => (
             element={
               <LayoutWrapper>
                 <ProjectDetails />
+              </LayoutWrapper>
+            }
+          />
+          <Route
+            path="/articles"
+            element={
+              <LayoutWrapper>
+                <Articles />
+              </LayoutWrapper>
+            }
+          />
+          <Route
+            path="/articles/:id"
+            element={
+              <LayoutWrapper>
+                <ArticleDetails />
               </LayoutWrapper>
             }
           />
