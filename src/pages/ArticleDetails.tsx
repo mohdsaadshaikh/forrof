@@ -1,8 +1,8 @@
 import { useRef, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { ArrowLeft, ArrowRight, Clock, Calendar, Share2, Twitter, Linkedin, Facebook, Copy } from "lucide-react";
-import { getArticleById, getRelatedArticles, articles } from "@/data/articles";
+import { getArticleById, articles } from "@/data/articles";
 import { useLenis } from "@/hooks/useLenis";
 import { toast } from "@/hooks/use-toast";
 
@@ -11,7 +11,6 @@ const ArticleDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const article = getArticleById(id || "");
-  const relatedArticles = getRelatedArticles(id || "", 3);
   
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -121,9 +120,9 @@ const ArticleDetails = () => {
           />
         ))}
 
-        {/* Back Button */}
+        {/* Back Button - positioned below header */}
         <motion.div
-          className="absolute top-8 left-8 z-20"
+          className="absolute top-28 left-8 z-20"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.5 }}
@@ -313,11 +312,12 @@ const ArticleDetails = () => {
         </div>
       </section>
 
-      {/* Article Navigation */}
-      <section className="py-12 border-t border-border">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="grid md:grid-cols-2 gap-6">
-            {prevArticle && (
+      {/* Article Navigation - Full width dark bar */}
+      <section className="py-8 bg-background border-t border-border">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between max-w-6xl mx-auto">
+            {/* Previous Article */}
+            {prevArticle ? (
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -325,104 +325,74 @@ const ArticleDetails = () => {
               >
                 <Link 
                   to={`/articles/${prevArticle.id}`}
-                  className="group block p-6 rounded-2xl border border-border hover:border-primary transition-colors"
+                  className="group flex items-center gap-4"
                 >
-                  <span className="text-sm text-muted-foreground flex items-center gap-2 mb-2">
-                    <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-                    Previous Article
-                  </span>
-                  <h4 className="font-semibold group-hover:text-primary transition-colors line-clamp-2">
-                    {prevArticle.title}
-                  </h4>
+                  <motion.div 
+                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:border-primary transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                  </motion.div>
+                  <div>
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Previous</span>
+                    <h4 className="font-medium group-hover:text-primary transition-colors line-clamp-1 max-w-[200px]">
+                      {prevArticle.title}
+                    </h4>
+                  </div>
                 </Link>
               </motion.div>
+            ) : (
+              <div className="w-[200px]" />
             )}
-            {nextArticle && (
+
+            {/* All Articles Button */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <Link 
+                to="/articles"
+                className="px-6 py-3 rounded-full border border-border hover:border-primary transition-colors font-medium"
+              >
+                All Articles
+              </Link>
+            </motion.div>
+
+            {/* Next Article */}
+            {nextArticle ? (
               <motion.div
-                className={prevArticle ? "" : "md:col-start-2"}
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
                 <Link 
                   to={`/articles/${nextArticle.id}`}
-                  className="group block p-6 rounded-2xl border border-border hover:border-primary transition-colors text-right"
+                  className="group flex items-center gap-4"
                 >
-                  <span className="text-sm text-muted-foreground flex items-center gap-2 justify-end mb-2">
-                    Next Article
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                  <h4 className="font-semibold group-hover:text-primary transition-colors line-clamp-2">
-                    {nextArticle.title}
-                  </h4>
+                  <div className="text-right">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Next</span>
+                    <h4 className="font-medium group-hover:text-primary transition-colors line-clamp-1 max-w-[200px]">
+                      {nextArticle.title}
+                    </h4>
+                  </div>
+                  <motion.div 
+                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:border-primary transition-colors"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                  </motion.div>
                 </Link>
               </motion.div>
+            ) : (
+              <div className="w-[200px]" />
             )}
           </div>
         </div>
       </section>
-
-      {/* Related Articles */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <motion.div
-            className="text-center mb-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Related Articles</h2>
-            <p className="text-muted-foreground">Continue exploring similar topics</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {relatedArticles.map((related, index) => (
-              <RelatedArticleCard key={related.id} article={related} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
     </main>
-  );
-};
-
-const RelatedArticleCard = ({ article, index }: { article: typeof articles[0]; index: number }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ delay: index * 0.15, duration: 0.6 }}
-    >
-      <Link to={`/articles/${article.id}`} className="group block">
-        <motion.div
-          className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-4"
-          whileHover={{ scale: 1.02 }}
-        >
-          <img
-            src={article.image}
-            alt={article.title}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
-          <span className="absolute bottom-4 left-4 px-3 py-1 rounded-full bg-background/80 backdrop-blur-sm text-sm">
-            {article.category}
-          </span>
-        </motion.div>
-
-        <h3 className="font-semibold text-lg group-hover:text-primary transition-colors line-clamp-2 mb-2">
-          {article.title}
-        </h3>
-
-        <div className="flex items-center gap-4 text-sm text-muted-foreground">
-          <span>{article.date}</span>
-          <span>{article.readTime}</span>
-        </div>
-      </Link>
-    </motion.div>
   );
 };
 
