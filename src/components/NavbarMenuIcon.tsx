@@ -19,7 +19,7 @@ const navLinks: NavLink[] = [
   { name: "Home", href: "/" },
   { name: "Agency", href: "#agency" },
   { name: "Projects", href: "/projects" },
-  { name: "Insights", href: "#insights" },
+  { name: "Insights", href: "/articles" },
   { name: "Contact", href: "/contact" },
 ];
 
