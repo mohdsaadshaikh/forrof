@@ -32,22 +32,50 @@ const projectsData = [
       {
         phase: "Strategy",
         hours: "12 hours",
-        tasks: ["Competitor Analysis", "Hypothesis Building", "Interaction Flow"],
+        tasks: [
+          "Competitor Analysis",
+          "Hypothesis Building",
+          "Interaction Flow",
+        ],
       },
       {
         phase: "Solution",
         hours: "38 hours",
-        tasks: ["Prototype Animations", "Interactive Wireframes", "Moodboard & Visual Direction"],
+        tasks: [
+          "Prototype Animations",
+          "Interactive Wireframes",
+          "Moodboard & Visual Direction",
+        ],
       },
     ],
-    concepts: [project1, project2, project3, project1, project2, project3, project1, project2, project3, project1, project2, project3],
+    concepts: [
+      project1,
+      project2,
+      project3,
+      project1,
+      project2,
+      project3,
+      project1,
+      project2,
+      project3,
+      project1,
+      project2,
+      project3,
+    ],
     challenge:
       "The main challenge was creating an immersive experience without relying on heavy 3D elements that could impact performance. We focused on layered 2D animations and parallax effects to achieve depth while maintaining smooth 60fps performance across all devices.",
     impact:
       "The result elevated the brand's digital presence significantly, creating a memorable experience that resonates with their target audience and sets them apart from competitors in the automotive space.",
     gallery: [project1, project2, project3],
     responsive: [project1, project2, project3],
-    techStack: ["React", "Three.js", "Framer Motion", "Tailwind CSS", "GSAP", "Figma"],
+    techStack: [
+      "React",
+      "Three.js",
+      "Framer Motion",
+      "Tailwind CSS",
+      "GSAP",
+      "Figma",
+    ],
     liveUrl: "#",
   },
   {
@@ -76,7 +104,20 @@ const projectsData = [
         tasks: ["Visual Identity", "Content Templates", "Campaign Design"],
       },
     ],
-    concepts: [project2, project1, project3, project2, project1, project3, project2, project1, project3, project2, project1, project3],
+    concepts: [
+      project2,
+      project1,
+      project3,
+      project2,
+      project1,
+      project3,
+      project2,
+      project1,
+      project3,
+      project2,
+      project1,
+      project3,
+    ],
     challenge:
       "Standing out in a saturated sports market required a unique visual approach that balanced energy with sophistication while maintaining brand consistency.",
     impact:
@@ -112,7 +153,20 @@ const projectsData = [
         tasks: ["Package Design", "Website Development", "Brand Guidelines"],
       },
     ],
-    concepts: [project3, project1, project2, project3, project1, project2, project3, project1, project2, project3, project1, project2],
+    concepts: [
+      project3,
+      project1,
+      project2,
+      project3,
+      project1,
+      project2,
+      project3,
+      project1,
+      project2,
+      project3,
+      project1,
+      project2,
+    ],
     challenge:
       "Creating luxury without being unapproachable. The brand needed to feel premium yet welcoming to first-time luxury buyers entering the skincare market.",
     impact:
@@ -144,7 +198,11 @@ const ProjectDetails = () => {
     offset: ["start end", "end end"],
   });
 
-  const progressBarWidth = useTransform(scrollYProgress, [0.3, 1], ["0%", "100%"]);
+  const progressBarWidth = useTransform(
+    scrollYProgress,
+    [0.3, 1],
+    ["0%", "100%"]
+  );
 
   // Navigate when scroll completes
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
@@ -188,9 +246,9 @@ const ProjectDetails = () => {
       <section className="min-h-[70vh] flex flex-col justify-center section-padding pt-32">
         <div className="max-w-[1800px] mx-auto w-full">
           {/* Title */}
-          <div className="overflow-hidden mb-8">
+          <div className="overflow-hidden">
             <motion.h1
-              className="text-[18vw] md:text-[14vw] lg:text-[12vw] font-bold leading-[0.85] tracking-tighter uppercase"
+              className="text-[18vw] text-center md:text-[14vw] lg:text-[12vw] font-bold leading-[0.85] tracking-tighter uppercase"
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               transition={{
@@ -204,7 +262,7 @@ const ProjectDetails = () => {
 
           {/* Tags */}
           <motion.div
-            className="flex flex-wrap gap-3"
+            className="flex flex-wrap gap-3 justify-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6 }}
@@ -212,7 +270,7 @@ const ProjectDetails = () => {
             {project.tags.map((tag, index) => (
               <motion.span
                 key={tag}
-                className="px-5 py-2.5 border border-border rounded-full text-xs uppercase tracking-[0.2em] font-medium"
+                className="px-5 py-2.5 border my-14 border-white rounded-full text-xs uppercase tracking-[0.2em] font-medium"
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6 + index * 0.1 }}
@@ -304,11 +362,14 @@ const ProjectDetails = () => {
       {/* Design Process */}
       <section className="section-padding py-24 md:py-32">
         <div className="max-w-[1800px] mx-auto">
+          {/* Large gradient heading */}
           <motion.h2
-            className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-16"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            className="text-[clamp(3.5rem,12vw,9rem)] font-bold mb-12 text-center bg-gradient-to-r from-gray-700 via-gray-100 to-gray-700 bg-clip-text text-transparent select-none"
+            style={{ letterSpacing: "-0.04em" }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
+            transition={{ duration: 1 }}
           >
             Design process
           </motion.h2>
@@ -317,44 +378,58 @@ const ProjectDetails = () => {
             {project.designProcess.map((phase, index) => (
               <motion.div
                 key={phase.phase}
-                className="relative"
+                className="relative  backdrop-blur-lg shadow-xl shadow-black/10 rounded-3xl p-8 transition-all duration-300  overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: index * 0.2, duration: 0.6 }}
               >
-                {/* Hours - Large faded text */}
-                <motion.div
-                  className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground/10 mb-6"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 + 0.1 }}
-                >
-                  {phase.hours}
-                </motion.div>
+                {/* Static gray gradient blob background */}
+                <div className="absolute inset-0 z-0 pointer-events-none">
+                  <div
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 rounded-full blur-[48px]"
+                    style={{
+                      background:
+                        "radial-gradient(circle, rgba(209,213,219,0.18) 0%, rgba(209,213,219,0.07) 60%, transparent 100%)",
+                    }}
+                  />
+                </div>
+                <div className="relative z-10">
+                  {/* Hours - Large faded text */}
+                  <motion.div
+                    className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground/10 mb-6"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.2 + 0.1 }}
+                  >
+                    {phase.hours}
+                  </motion.div>
 
-                {/* Phase Name */}
-                <h3 className="text-2xl md:text-3xl font-semibold mb-6">
-                  {phase.phase}
-                </h3>
+                  {/* Phase Name */}
+                  <h3 className="text-2xl md:text-3xl font-semibold mb-6">
+                    {phase.phase}
+                  </h3>
 
-                {/* Tasks */}
-                <ul className="space-y-3">
-                  {phase.tasks.map((task, taskIndex) => (
-                    <motion.li
-                      key={task}
-                      className="flex items-start gap-3 text-muted-foreground"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.2 + taskIndex * 0.1 + 0.2 }}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-foreground/30 mt-2.5 flex-shrink-0" />
-                      <span>{task}</span>
-                    </motion.li>
-                  ))}
-                </ul>
+                  {/* Tasks */}
+                  <ul className="space-y-3">
+                    {phase.tasks.map((task, taskIndex) => (
+                      <motion.li
+                        key={task}
+                        className="flex items-start gap-3 text-muted-foreground"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          delay: index * 0.2 + taskIndex * 0.1 + 0.2,
+                        }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-foreground/30 mt-2.5 flex-shrink-0" />
+                        <span>{task}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -396,9 +471,7 @@ const ProjectDetails = () => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.4 }}
                 />
-                <motion.div
-                  className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
+                <motion.div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.div>
             ))}
           </div>
@@ -421,7 +494,7 @@ const ProjectDetails = () => {
             <p className="text-2xl md:text-3xl lg:text-4xl leading-relaxed font-light mb-12">
               {project.challenge}
             </p>
-            
+
             <motion.a
               href={project.liveUrl}
               target="_blank"
@@ -558,10 +631,7 @@ const ProjectDetails = () => {
       </section>
 
       {/* Next Project Section - Scroll to Navigate */}
-      <section
-        ref={nextProjectRef}
-        className="min-h-[150vh] relative"
-      >
+      <section ref={nextProjectRef} className="min-h-[150vh] relative">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
           {/* Gradient Blobs - Similar to reference */}
           <motion.div
@@ -580,7 +650,12 @@ const ProjectDetails = () => {
               x: [0, -20, 0],
               y: [0, 30, 0],
             }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
           />
 
           <div className="relative z-10 text-center">
