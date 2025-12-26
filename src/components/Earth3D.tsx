@@ -1,24 +1,26 @@
-import React, { useRef, useLayoutEffect, useMemo, Suspense } from 'react';
-import { Canvas, useFrame, useLoader, useThree } from '@react-three/fiber';
-import * as THREE from 'three';
-import { Stars, Preload } from '@react-three/drei';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef, useLayoutEffect, useMemo, Suspense } from "react";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
+import * as THREE from "three";
+import { Stars, Preload } from "@react-three/drei";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 // High-Res Earth Textures
 const TEXTURES = {
-  earth: 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg',
-  earthNormal: 'https://threejs.org/examples/textures/planets/earth_normal_2048.jpg',
-  earthSpec: 'https://threejs.org/examples/textures/planets/earth_specular_2048.jpg',
-  clouds: 'https://threejs.org/examples/textures/planets/earth_clouds_1024.png',
+  earth: "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",
+  earthNormal:
+    "https://threejs.org/examples/textures/planets/earth_normal_2048.jpg",
+  earthSpec:
+    "https://threejs.org/examples/textures/planets/earth_specular_2048.jpg",
+  clouds: "https://threejs.org/examples/textures/planets/earth_clouds_1024.png",
 };
 
 // Atmospheric Scattering Shader
 const AtmosphereShader = {
   uniforms: {
-    uColor: { value: new THREE.Color('#88ccff') },
+    uColor: { value: new THREE.Color("#88ccff") },
     uOpacity: { value: 0.08 },
     uPower: { value: 3.5 },
   },
@@ -42,7 +44,7 @@ const AtmosphereShader = {
       float fresnel = pow(1.0 - dot(vNormal, viewDirection), uPower);
       gl_FragColor = vec4(uColor, fresnel * uOpacity);
     }
-  `
+  `,
 };
 
 // Earth Scene Component
@@ -55,20 +57,24 @@ const EarthScene: React.FC = () => {
   // Animation Proxy for GSAP
   const proxy = useRef({
     scale: 1,
-    rotationSpeed: 0.08,
+    rotationSpeed: 0.035, // slower rotation
     positionX: 0,
     positionY: 0,
     positionZ: 0,
   });
 
-  const [earthMap, earthNormal, earthSpec, cloudsMap] = useLoader(THREE.TextureLoader, [
-    TEXTURES.earth, TEXTURES.earthNormal, TEXTURES.earthSpec, TEXTURES.clouds
-  ]);
+  const [earthMap, earthNormal, earthSpec, cloudsMap] = useLoader(
+    THREE.TextureLoader,
+    [TEXTURES.earth, TEXTURES.earthNormal, TEXTURES.earthSpec, TEXTURES.clouds]
+  );
 
-  const atmosphereConfig = useMemo(() => ({
-    ...AtmosphereShader,
-    uniforms: THREE.UniformsUtils.clone(AtmosphereShader.uniforms)
-  }), []);
+  const atmosphereConfig = useMemo(
+    () => ({
+      ...AtmosphereShader,
+      uniforms: THREE.UniformsUtils.clone(AtmosphereShader.uniforms),
+    }),
+    []
+  );
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -77,13 +83,13 @@ const EarthScene: React.FC = () => {
         scale: 1.8,
         positionZ: 2,
         positionY: -1,
-        rotationSpeed: 0.15,
+        rotationSpeed: 0.02, // slower on scroll too
         scrollTrigger: {
           trigger: document.body,
           start: "top top",
           end: "+=1500",
           scrub: 1.5,
-        }
+        },
       });
 
       // Fade out as user scrolls
@@ -93,13 +99,13 @@ const EarthScene: React.FC = () => {
           start: "top top",
           end: "+=800",
           scrub: 1,
-        }
+        },
       });
     });
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach(t => t.kill());
+      ScrollTrigger.getAll().forEach((t) => t.kill());
     };
   }, []);
 
@@ -110,7 +116,7 @@ const EarthScene: React.FC = () => {
     if (earthRef.current) {
       // Continuous rotation
       earthRef.current.rotation.y = time * p.rotationSpeed;
-      
+
       // Apply proxy transforms
       earthRef.current.scale.setScalar(p.scale);
       earthRef.current.position.x = p.positionX + mouse.x * 0.2;
@@ -120,30 +126,30 @@ const EarthScene: React.FC = () => {
 
     if (cloudsRef.current) {
       // Clouds rotate slightly faster
-      cloudsRef.current.rotation.y = time * (p.rotationSpeed + 0.02);
+      cloudsRef.current.rotation.y = time * (p.rotationSpeed + 0.01);
     }
   });
 
   return (
     <>
       {/* Stars Background */}
-      <Stars 
-        radius={100} 
-        depth={50} 
-        count={5000} 
-        factor={4} 
-        saturation={0} 
-        fade 
-        speed={0.5} 
+      <Stars
+        radius={100}
+        depth={50}
+        count={5000}
+        factor={4}
+        saturation={0}
+        fade
+        speed={0.5}
       />
-      
+
       {/* Lighting */}
       <ambientLight intensity={0.15} />
-      <directionalLight 
-        position={[10, 5, 5]} 
-        intensity={2.5} 
-        color="#fff5f0" 
-        castShadow 
+      <directionalLight
+        position={[10, 5, 5]}
+        intensity={2.5}
+        color="#fff5f0"
+        castShadow
       />
       <pointLight position={[-15, -10, -10]} intensity={0.8} color="#4477ff" />
       <pointLight position={[0, 10, 5]} intensity={0.5} color="#ffffff" />
@@ -153,34 +159,34 @@ const EarthScene: React.FC = () => {
         {/* Main Earth Sphere */}
         <mesh castShadow receiveShadow>
           <sphereGeometry args={[2.5, 64, 64]} />
-          <meshStandardMaterial 
-            map={earthMap} 
-            normalMap={earthNormal} 
-            roughnessMap={earthSpec} 
-            metalness={0.3} 
-            roughness={0.7} 
+          <meshStandardMaterial
+            map={earthMap}
+            normalMap={earthNormal}
+            roughnessMap={earthSpec}
+            metalness={0.3}
+            roughness={0.7}
           />
         </mesh>
 
         {/* Cloud Layer */}
         <mesh ref={cloudsRef} scale={1.02}>
           <sphereGeometry args={[2.5, 64, 64]} />
-          <meshStandardMaterial 
-            map={cloudsMap} 
-            transparent 
-            opacity={0.35} 
-            depthWrite={false} 
+          <meshStandardMaterial
+            map={cloudsMap}
+            transparent
+            opacity={0.35}
+            depthWrite={false}
           />
         </mesh>
 
         {/* Subtle Atmospheric Glow */}
         <mesh scale={1.03}>
           <sphereGeometry args={[2.5, 64, 64]} />
-          <shaderMaterial 
-            ref={atmosphereRef} 
-            {...atmosphereConfig} 
-            side={THREE.BackSide} 
-            transparent 
+          <shaderMaterial
+            ref={atmosphereRef}
+            {...atmosphereConfig}
+            side={THREE.BackSide}
+            transparent
           />
         </mesh>
       </group>
@@ -199,13 +205,13 @@ export const Earth3D: React.FC<{ className?: string }> = ({ className }) => {
     <div className={className}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 45 }}
-        gl={{ 
-          antialias: true, 
+        gl={{
+          antialias: true,
           alpha: true,
-          powerPreference: "high-performance"
+          powerPreference: "high-performance",
         }}
         dpr={[1, 2]}
-        style={{ background: 'transparent' }}
+        style={{ background: "transparent" }}
       >
         <Suspense fallback={<Loader />}>
           <EarthScene />

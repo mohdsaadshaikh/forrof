@@ -88,7 +88,7 @@ export const HeroSection = () => {
 
       {/* 3D Earth Globe with Parallax */}
       <motion.div
-        className="absolute -left-[20%] md:-left-[10%] top-1/2 -translate-y-1/2 z-10 w-[100vw] md:w-[80vw] lg:w-[70vw] aspect-square pointer-events-auto"
+        className="absolute -left-[20%] md:-left-[40%] top-[40%] -translate-y-[60%] z-10 w-[100vw] md:w-[80vw] lg:w-[80vw] aspect-square pointer-events-auto"
         style={{
           opacity: earthOpacity,
           scale: earthScale,
@@ -111,13 +111,13 @@ export const HeroSection = () => {
             </div>
           }
         >
-          <Earth3D className="w-full h-full" />
+          <Earth3D className="w-[120vw] h-full" />
         </Suspense>
       </motion.div>
 
       {/* Main Content */}
       <motion.div
-        className="relative z-20 section-padding w-full pt-32"
+        className="relative z-20 section-padding w-full"
         style={{ y: textY }}
       >
         <div className="max-w-[1800px] mx-auto">
@@ -212,15 +212,37 @@ export const HeroSection = () => {
 
           {/* Right side description */}
           <motion.div
-            className="absolute right-0 top-1/2 -translate-y-1/2 max-w-sm hidden xl:block section-padding"
+            className="absolute right-0 bottom-[10%] -translate-y-1/2 max-w-[370px] hidden xl:block mr-10"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1.5, duration: 1 }}
           >
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              We craft digital experiences and brand identities that captivate
-              audiences and drive meaningful business growth.
-            </p>
+            <div className="flex flex-col items-center gap-5">
+              <div className="">
+                <p className="text-lg font-light text-foreground leading-tight">
+                  Whether through robust APIs, scalable cloud solutions, or
+                  seamless integrations,
+                  <span className="font-extralight text-foreground/70">
+                    we build digital products that empower businesses to grow
+                    and innovate.
+                  </span>
+                </p>
+              </div>
+              <div className="flex gap-3 -ml-10">
+                <span className="px-4 py-2 border border-white rounded-full text-xs ">
+                  Frontend
+                </span>
+                <span className="px-4 py-2 border border-white rounded-full text-xs ">
+                  Backend
+                </span>
+                <span className="px-4 py-2 border border-white rounded-full text-xs ">
+                  Cloud
+                </span>
+                <span className="px-5 py-1 border border-white rounded-full text-base ">
+                  +
+                </span>
+              </div>
+            </div>
           </motion.div>
         </div>
       </motion.div>

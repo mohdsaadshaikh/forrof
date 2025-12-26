@@ -19,7 +19,7 @@ const navLinks: NavLink[] = [
   { name: "Home", href: "/" },
   { name: "Agency", href: "#agency" },
   { name: "Projects", href: "/projects" },
-  { name: "Insights", href: "/articles" },
+  { name: "Articles", href: "/articles" },
   { name: "Contact", href: "/contact" },
 ];
 
@@ -169,7 +169,7 @@ export const NavbarMenuIcon = () => {
         <nav className="section-padding py-6 flex items-center justify-between max-w-[1800px] mx-auto w-full">
           {/* Logo */}
           <motion.div
-            className="flex items-center gap-2 z-[100] relative cursor-pointer select-none "
+            className="flex items-center gap-1 z-[100] relative cursor-pointer select-none "
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
@@ -178,11 +178,7 @@ export const NavbarMenuIcon = () => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
-            <motion.div
-              className="w-2 h-2 rounded-full bg-foreground z-[110] relative"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            />
+            <img src="/logo.svg" alt="Logo" className="w-14 h-14" />
             <span className="text-3xl font-bold tracking-tight">
               Forrof<sup className="text-xs">®</sup>
             </span>

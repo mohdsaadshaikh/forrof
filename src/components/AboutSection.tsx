@@ -130,7 +130,7 @@ export const AboutSection = () => {
         }}
       >
         <span className="text-[25vw] font-bold text-foreground/[0.02] whitespace-nowrap">
-          ABOUT
+          FOROF
         </span>
       </motion.div>
 

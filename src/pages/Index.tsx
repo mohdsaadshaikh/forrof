@@ -19,21 +19,43 @@ const Index = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  // Show loader until page is fully loaded
+  // Show loader for at least 3 seconds, even on reload
   useEffect(() => {
-    // Check if page is already loaded
-    if (document.readyState === "complete") {
-      setIsLoading(false);
-      return;
-    }
+    let minTimeout: NodeJS.Timeout;
+    let loaded = false;
 
-    // Wait for page load event
-    const handleLoad = () => {
+    const finishLoading = () => {
+      if (loaded) return;
+      loaded = true;
       setIsLoading(false);
     };
 
-    window.addEventListener("load", handleLoad);
-    return () => window.removeEventListener("load", handleLoad);
+    // Wait for both: page load and minimum time
+    const handleLoad = () => {
+      clearTimeout(minTimeout);
+      // Wait for minimum 3s if not already passed
+      setTimeout(
+        finishLoading,
+        Math.max(0, 3000 - (performance.now() - startTime))
+      );
+    };
+
+    const startTime = performance.now();
+    minTimeout = setTimeout(() => {
+      if (document.readyState === "complete") {
+        finishLoading();
+      }
+    }, 3000);
+
+    if (document.readyState === "complete") {
+      setTimeout(finishLoading, 3000);
+    } else {
+      window.addEventListener("load", handleLoad);
+    }
+    return () => {
+      clearTimeout(minTimeout);
+      window.removeEventListener("load", handleLoad);
+    };
   }, []);
 
   return (
