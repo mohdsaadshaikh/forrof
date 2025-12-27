@@ -184,6 +184,7 @@ const ProjectDetails = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const nextProjectRef = useRef<HTMLDivElement>(null);
   const [hasNavigated, setHasNavigated] = useState(false);
+  const [showHoldTight, setShowHoldTight] = useState(false);
 
   const project = projectsData.find((p) => p.id === id);
   const projectIndex = projectsData.findIndex((p) => p.id === id);
@@ -206,18 +207,27 @@ const ProjectDetails = () => {
 
   // Navigate when scroll completes
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    // Show hold tight message when progress is above 90%
+    if (latest >= 0.9 && !showHoldTight) {
+      setShowHoldTight(true);
+    } else if (latest < 0.9 && showHoldTight) {
+      setShowHoldTight(false);
+    }
+
     if (latest >= 0.98 && !hasNavigated && nextProject) {
       setHasNavigated(true);
       setTimeout(() => {
         navigate(`/project/${nextProject.id}`);
         window.scrollTo({ top: 0, behavior: "instant" });
-      }, 300);
+      }, 800);
     }
   });
 
   // Reset navigation state on route change
   useEffect(() => {
     setHasNavigated(false);
+    setShowHoldTight(false);
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [id]);
 
   if (!project) {
@@ -436,9 +446,9 @@ const ProjectDetails = () => {
         </div>
       </section>
 
-      {/* Initial Concepts */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1800px] mx-auto">
+      {/* Initial Concepts - Marquee Style */}
+      <section className="py-24 md:py-32 overflow-hidden">
+        <div className="max-w-[1800px] mx-auto section-padding">
           <motion.div
             className="mb-12"
             initial={{ opacity: 0, y: 20 }}
@@ -452,29 +462,70 @@ const ProjectDetails = () => {
               Early UI Concepts and Visual Explorations.
             </p>
           </motion.div>
+        </div>
 
-          {/* Masonry-style grid */}
-          <div className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
-            {project.concepts.map((concept, index) => (
+        {/* Marquee Row 1 - Left to Right */}
+        <div className="relative mb-6">
+          <motion.div
+            className="flex gap-6"
+            animate={{ x: [0, -1920] }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 30,
+                ease: "linear",
+              },
+            }}
+          >
+            {[...project.concepts, ...project.concepts].map((concept, index) => (
               <motion.div
                 key={index}
-                className="break-inside-avoid relative rounded-xl overflow-hidden group"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: (index % 4) * 0.1, duration: 0.5 }}
+                className="relative shrink-0 w-[300px] md:w-[400px] aspect-[4/3] rounded-xl overflow-hidden group"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
               >
-                <motion.img
+                <img
                   src={concept}
                   alt={`Concept ${index + 1}`}
-                  className="w-full h-auto object-cover"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.4 }}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
-                <motion.div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </motion.div>
             ))}
-          </div>
+          </motion.div>
+        </div>
+
+        {/* Marquee Row 2 - Right to Left */}
+        <div className="relative">
+          <motion.div
+            className="flex gap-6"
+            animate={{ x: [-1920, 0] }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: "loop",
+                duration: 35,
+                ease: "linear",
+              },
+            }}
+          >
+            {[...project.concepts, ...project.concepts].reverse().map((concept, index) => (
+              <motion.div
+                key={index}
+                className="relative shrink-0 w-[280px] md:w-[350px] aspect-[3/4] rounded-xl overflow-hidden group"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src={concept}
+                  alt={`Concept ${index + 1}`}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -669,16 +720,32 @@ const ProjectDetails = () => {
               Next project
             </motion.h2>
 
-            {/* Keep Scrolling Text */}
-            <motion.p
-              className="text-lg text-muted-foreground mb-8"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            >
-              Keep Scrolling
-            </motion.p>
+            {/* Dynamic Text - Changes based on progress */}
+            <AnimatePresence mode="wait">
+              {showHoldTight ? (
+                <motion.p
+                  key="hold-tight"
+                  className="text-lg text-foreground mb-8 font-medium"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Hold tight, we're taking you to another project ✨
+                </motion.p>
+              ) : (
+                <motion.p
+                  key="keep-scrolling"
+                  className="text-lg text-muted-foreground mb-8"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  Keep Scrolling
+                </motion.p>
+              )}
+            </AnimatePresence>
 
             {/* Progress Bar */}
             <div className="w-[300px] md:w-[400px] h-[2px] bg-border/50 mx-auto overflow-hidden rounded-full">
