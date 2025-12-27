@@ -7,7 +7,7 @@ import {
 } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ArrowUpRight } from "lucide-react";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -207,7 +207,6 @@ const ProjectDetails = () => {
 
   // Navigate when scroll completes
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Show hold tight message when progress is above 90%
     if (latest >= 0.9 && !showHoldTight) {
       setShowHoldTight(true);
     } else if (latest < 0.9 && showHoldTight) {
@@ -252,55 +251,53 @@ const ProjectDetails = () => {
 
   return (
     <div ref={containerRef} className="bg-background text-foreground">
-      {/* Hero Section */}
-      <section className="min-h-[70vh] flex flex-col justify-center section-padding pt-32">
-        <div className="max-w-[1800px] mx-auto w-full">
-          {/* Title */}
-          <div className="overflow-hidden">
-            <motion.h1
-              className="text-[18vw] text-center md:text-[14vw] lg:text-[12vw] font-bold leading-[0.85] tracking-tighter uppercase"
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              transition={{
-                duration: 1,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
+      {/* Hero Section - Clean like MDX */}
+      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+        {/* Tags - Top */}
+        <motion.div
+          className="flex flex-wrap gap-3 justify-center mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {project.tags.map((tag, index) => (
+            <motion.span
+              key={tag}
+              className="px-4 py-2 border border-border rounded-full text-xs uppercase tracking-[0.15em] font-medium text-muted-foreground"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 + index * 0.1 }}
             >
-              {project.title}
-            </motion.h1>
-          </div>
+              {tag}
+            </motion.span>
+          ))}
+        </motion.div>
 
-          {/* Tags */}
-          <motion.div
-            className="flex flex-wrap gap-3 justify-center"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
+        {/* Title - Large and centered */}
+        <div className="overflow-hidden">
+          <motion.h1
+            className="text-[14vw] md:text-[12vw] lg:text-[10vw] font-bold leading-[0.9] tracking-tighter text-center"
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            transition={{
+              duration: 1,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
-            {project.tags.map((tag, index) => (
-              <motion.span
-                key={tag}
-                className="px-5 py-2.5 border my-14 border-white rounded-full text-xs uppercase tracking-[0.2em] font-medium"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-              >
-                {tag}
-              </motion.span>
-            ))}
-          </motion.div>
+            {project.title}
+          </motion.h1>
         </div>
       </section>
 
-      {/* Hero Image */}
+      {/* Hero Image - Full width */}
       <motion.section
-        className="w-full"
+        className="px-6 md:px-12 lg:px-20 pb-32"
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.8 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
       >
-        <div className="max-w-[1800px] mx-auto section-padding">
-          <div className="relative w-full aspect-[16/9] md:aspect-[2/1] rounded-2xl overflow-hidden">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden">
             <motion.img
               src={project.image}
               alt={project.title}
@@ -313,19 +310,19 @@ const ProjectDetails = () => {
       </motion.section>
 
       {/* Project Overview */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1800px] mx-auto">
-          <div className="grid lg:grid-cols-3 gap-12 lg:gap-20">
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
             {/* Overview Text */}
             <motion.div
-              className="lg:col-span-2"
+              className="lg:col-span-8"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.8 }}
             >
               <motion.h2
-                className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-8"
+                className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-10"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -334,7 +331,7 @@ const ProjectDetails = () => {
                 Project overview
               </motion.h2>
               <motion.p
-                className="text-xl md:text-2xl lg:text-3xl leading-relaxed font-light"
+                className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -346,23 +343,23 @@ const ProjectDetails = () => {
 
             {/* Metadata */}
             <motion.div
-              className="space-y-8"
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              className="lg:col-span-4 space-y-10"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <div>
-                <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground block mb-3">
+                <span className="text-sm uppercase tracking-[0.2em] text-muted-foreground block mb-3">
                   Date
                 </span>
-                <span className="text-lg">{project.date}</span>
+                <span className="text-lg font-light">{project.date}</span>
               </div>
               <div>
-                <span className="text-xs uppercase tracking-[0.3em] text-muted-foreground block mb-3">
+                <span className="text-sm uppercase tracking-[0.2em] text-muted-foreground block mb-3">
                   Location
                 </span>
-                <span className="text-lg">{project.location}</span>
+                <span className="text-lg font-light">{project.location}</span>
               </div>
             </motion.div>
           </div>
@@ -370,76 +367,62 @@ const ProjectDetails = () => {
       </section>
 
       {/* Design Process */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1800px] mx-auto">
-          {/* Large gradient heading */}
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1600px] mx-auto">
+          {/* Section Header */}
           <motion.h2
-            className="text-[clamp(3.5rem,12vw,9rem)] font-bold mb-12 text-center bg-gradient-to-r from-gray-700 via-gray-100 to-gray-700 bg-clip-text text-transparent select-none"
-            style={{ letterSpacing: "-0.04em" }}
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-20"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            transition={{ duration: 1 }}
           >
             Design process
           </motion.h2>
 
-          <div className="grid md:grid-cols-3 gap-12 md:gap-8">
+          {/* Process Cards - Horizontal layout like MDX */}
+          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             {project.designProcess.map((phase, index) => (
               <motion.div
                 key={phase.phase}
-                className="relative  backdrop-blur-lg shadow-xl shadow-black/10 rounded-3xl p-8 transition-all duration-300  overflow-hidden"
+                className="relative"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: index * 0.2, duration: 0.6 }}
+                transition={{ delay: index * 0.15, duration: 0.6 }}
               >
-                {/* Static gray gradient blob background */}
-                <div className="absolute inset-0 z-0 pointer-events-none">
-                  <div
-                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 rounded-full blur-[48px]"
-                    style={{
-                      background:
-                        "radial-gradient(circle, rgba(209,213,219,0.18) 0%, rgba(209,213,219,0.07) 60%, transparent 100%)",
-                    }}
-                  />
-                </div>
-                <div className="relative z-10">
-                  {/* Hours - Large faded text */}
-                  <motion.div
-                    className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground/10 mb-6"
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.2 + 0.1 }}
-                  >
-                    {phase.hours}
-                  </motion.div>
+                {/* Hours - Large faded text */}
+                <motion.div
+                  className="text-6xl md:text-7xl lg:text-8xl font-bold text-foreground/10 mb-6"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.15 + 0.1 }}
+                >
+                  {phase.hours}
+                </motion.div>
 
-                  {/* Phase Name */}
-                  <h3 className="text-2xl md:text-3xl font-semibold mb-6">
-                    {phase.phase}
-                  </h3>
+                {/* Phase Name */}
+                <h3 className="text-2xl md:text-3xl font-semibold mb-6">
+                  {phase.phase}
+                </h3>
 
-                  {/* Tasks */}
-                  <ul className="space-y-3">
-                    {phase.tasks.map((task, taskIndex) => (
-                      <motion.li
-                        key={task}
-                        className="flex items-start gap-3 text-muted-foreground"
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{
-                          delay: index * 0.2 + taskIndex * 0.1 + 0.2,
-                        }}
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-foreground/30 mt-2.5 flex-shrink-0" />
-                        <span>{task}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
+                {/* Tasks */}
+                <ul className="space-y-3">
+                  {phase.tasks.map((task, taskIndex) => (
+                    <motion.li
+                      key={task}
+                      className="text-muted-foreground font-light"
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{
+                        delay: index * 0.15 + taskIndex * 0.08 + 0.2,
+                      }}
+                    >
+                      {task}
+                    </motion.li>
+                  ))}
+                </ul>
               </motion.div>
             ))}
           </div>
@@ -447,18 +430,18 @@ const ProjectDetails = () => {
       </section>
 
       {/* Initial Concepts - Marquee Style */}
-      <section className="py-24 md:py-32 overflow-hidden">
-        <div className="max-w-[1800px] mx-auto section-padding">
+      <section className="py-24 md:py-40 overflow-hidden">
+        <div className="px-6 md:px-12 lg:px-20 max-w-[1600px] mx-auto">
           <motion.div
-            className="mb-12"
+            className="mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
+            <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Initial concepts
             </h2>
-            <p className="text-lg text-muted-foreground">
+            <p className="text-lg text-muted-foreground font-light">
               Early UI Concepts and Visual Explorations.
             </p>
           </motion.div>
@@ -530,8 +513,8 @@ const ProjectDetails = () => {
       </section>
 
       {/* The Challenge */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1400px] mx-auto">
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1200px] mx-auto">
           <motion.div
             className="text-center"
             initial={{ opacity: 0, y: 40 }}
@@ -539,10 +522,10 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-8">
+            <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-12">
               The challenge
             </h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl leading-relaxed font-light mb-12">
+            <p className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light mb-16">
               {project.challenge}
             </p>
 
@@ -550,22 +533,22 @@ const ProjectDetails = () => {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-3 px-8 py-4 border border-foreground rounded-full text-sm uppercase tracking-[0.2em] font-medium hover:bg-foreground hover:text-background transition-all duration-300"
+              className="inline-flex items-center gap-3 px-8 py-4 border border-foreground rounded-full text-sm uppercase tracking-[0.15em] font-medium hover:bg-foreground hover:text-background transition-all duration-300"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
               View Experience
-              <ExternalLink size={16} />
+              <ArrowUpRight size={16} />
             </motion.a>
           </motion.div>
         </div>
       </section>
 
       {/* Collage Gallery */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1800px] mx-auto">
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1600px] mx-auto">
           <motion.h2
-            className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-12"
+            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -597,10 +580,10 @@ const ProjectDetails = () => {
       </section>
 
       {/* Responsive Showcase */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1800px] mx-auto">
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1600px] mx-auto">
           <motion.h2
-            className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-12"
+            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -632,8 +615,8 @@ const ProjectDetails = () => {
       </section>
 
       {/* The Impact */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1400px] mx-auto">
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1200px] mx-auto">
           <motion.div
             className="text-center"
             initial={{ opacity: 0, y: 40 }}
@@ -641,10 +624,10 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-8">
+            <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-12">
               The impact
             </h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl leading-relaxed font-light">
+            <p className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light">
               {project.impact}
             </p>
           </motion.div>
@@ -652,10 +635,10 @@ const ProjectDetails = () => {
       </section>
 
       {/* Tech Stack */}
-      <section className="section-padding py-24 md:py-32">
-        <div className="max-w-[1800px] mx-auto">
+      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+        <div className="max-w-[1600px] mx-auto">
           <motion.h2
-            className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-12"
+            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -683,36 +666,11 @@ const ProjectDetails = () => {
 
       {/* Next Project Section - Scroll to Navigate */}
       <section ref={nextProjectRef} className="min-h-[150vh] relative">
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center">
-          {/* Gradient Blobs - Similar to reference */}
-          <motion.div
-            className="absolute left-[10%] top-[20%] w-[400px] h-[400px] rounded-full bg-gradient-to-br from-primary/30 to-transparent blur-[100px]"
-            animate={{
-              scale: [1, 1.2, 1],
-              x: [0, 30, 0],
-              y: [0, -20, 0],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <motion.div
-            className="absolute right-[10%] bottom-[20%] w-[350px] h-[350px] rounded-full bg-gradient-to-tl from-primary/20 to-transparent blur-[80px]"
-            animate={{
-              scale: [1, 1.1, 1],
-              x: [0, -20, 0],
-              y: [0, 30, 0],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1,
-            }}
-          />
-
-          <div className="relative z-10 text-center">
+        <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
+          <div className="relative z-10 text-center max-w-[600px]">
             {/* Next Project Title */}
             <motion.h2
-              className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8"
+              className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -725,7 +683,7 @@ const ProjectDetails = () => {
               {showHoldTight ? (
                 <motion.p
                   key="hold-tight"
-                  className="text-lg text-foreground mb-8 font-medium"
+                  className="text-lg text-foreground mb-10 font-medium"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -736,7 +694,7 @@ const ProjectDetails = () => {
               ) : (
                 <motion.p
                   key="keep-scrolling"
-                  className="text-lg text-muted-foreground mb-8"
+                  className="text-lg text-muted-foreground mb-10"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -748,7 +706,7 @@ const ProjectDetails = () => {
             </AnimatePresence>
 
             {/* Progress Bar */}
-            <div className="w-[300px] md:w-[400px] h-[2px] bg-border/50 mx-auto overflow-hidden rounded-full">
+            <div className="w-full max-w-[400px] h-[2px] bg-border/50 mx-auto overflow-hidden rounded-full">
               <motion.div
                 className="h-full bg-foreground origin-left"
                 style={{ width: progressBarWidth }}
