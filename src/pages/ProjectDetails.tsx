@@ -14,175 +14,7 @@ import {
   Briefcase,
   Lock,
 } from "lucide-react";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
-
-// Project data
-const projectsData = [
-  {
-    id: "linx-auto",
-    title: "Linx Auto",
-    date: "Jul 22, 2025",
-    location: "United States",
-    image: project1,
-    tags: ["UI/UX", "DEVELOPMENT"],
-    overview:
-      "Linx Auto was developed as a concept-driven website focused on immersive storytelling through motion design and spatial composition. The project combines strong visual direction, smooth transitions, and layered sections to communicate a premium automotive brand. The experience is designed to feel fluid, modern, and intentional from the first interaction.",
-    designProcess: [
-      {
-        phase: "Discovery",
-        hours: "4 hours",
-        tasks: ["Information Architecture", "User Persona", "Research"],
-      },
-      {
-        phase: "Strategy",
-        hours: "12 hours",
-        tasks: [
-          "Competitor Analysis",
-          "Hypothesis Building",
-          "Interaction Flow",
-        ],
-      },
-      {
-        phase: "Solution",
-        hours: "38 hours",
-        tasks: [
-          "Prototype Animations",
-          "Interactive Wireframes",
-          "Moodboard & Visual Direction",
-        ],
-      },
-    ],
-    concepts: [
-      project1,
-      project2,
-      project3,
-      project1,
-      project2,
-      project3,
-      project1,
-      project2,
-      project3,
-      project1,
-      project2,
-      project3,
-    ],
-    challenge:
-      "The main challenge was creating an immersive experience without relying on heavy 3D elements that could impact performance. We focused on layered 2D animations and parallax effects to achieve depth while maintaining smooth 60fps performance across all devices.",
-    impact:
-      "The result elevated the brand's digital presence significantly, creating a memorable experience that resonates with their target audience and sets them apart from competitors in the automotive space.",
-    gallery: [project1, project2, project3],
-    responsive: [project1, project2, project3],
-    techStack: [
-      "React",
-      "Three.js",
-      "Framer Motion",
-      "Tailwind CSS",
-      "GSAP",
-      "Figma",
-    ],
-    liveUrl: "#",
-  },
-  {
-    id: "sonora-sport",
-    title: "Sonora Sport",
-    date: "Jun 19, 2025",
-    location: "Mexico",
-    image: project2,
-    tags: ["BRANDING", "SOCIAL MEDIA"],
-    overview:
-      "Sonora Sport wanted to establish themselves as a premium player in the competitive sports equipment market. We developed a bold, energetic brand identity that resonates with athletes and fitness enthusiasts alike through motion-first design principles and dynamic visuals.",
-    designProcess: [
-      {
-        phase: "Discovery",
-        hours: "6 hours",
-        tasks: ["Market Research", "Brand Audit", "User Analysis"],
-      },
-      {
-        phase: "Strategy",
-        hours: "10 hours",
-        tasks: ["Content Strategy", "Platform Analysis", "Engagement Plan"],
-      },
-      {
-        phase: "Solution",
-        hours: "24 hours",
-        tasks: ["Visual Identity", "Content Templates", "Campaign Design"],
-      },
-    ],
-    concepts: [
-      project2,
-      project1,
-      project3,
-      project2,
-      project1,
-      project3,
-      project2,
-      project1,
-      project3,
-      project2,
-      project1,
-      project3,
-    ],
-    challenge:
-      "Standing out in a saturated sports market required a unique visual approach that balanced energy with sophistication while maintaining brand consistency.",
-    impact:
-      "The new brand identity drove massive social engagement and established Sonora as a recognizable name in the industry with 350% increase in engagement.",
-    gallery: [project2, project1, project3],
-    responsive: [project2, project1, project3],
-    techStack: ["Figma", "After Effects", "Illustrator", "Photoshop"],
-    liveUrl: "#",
-  },
-  {
-    id: "zima-beauty",
-    title: "Zima Beauty",
-    date: "May 17, 2024",
-    location: "France",
-    image: project3,
-    tags: ["IDENTITY", "PACKAGING", "WEB"],
-    overview:
-      "Zima Beauty represents the pinnacle of luxury skincare. Our mission was to craft an identity that exudes sophistication and elegance while maintaining approachability. Every element, from typography to packaging, was meticulously designed to create a cohesive premium experience.",
-    designProcess: [
-      {
-        phase: "Discovery",
-        hours: "8 hours",
-        tasks: ["Brand Immersion", "Competitor Study", "Target Audience"],
-      },
-      {
-        phase: "Strategy",
-        hours: "16 hours",
-        tasks: ["Positioning", "Visual Direction", "Packaging Strategy"],
-      },
-      {
-        phase: "Solution",
-        hours: "48 hours",
-        tasks: ["Package Design", "Website Development", "Brand Guidelines"],
-      },
-    ],
-    concepts: [
-      project3,
-      project1,
-      project2,
-      project3,
-      project1,
-      project2,
-      project3,
-      project1,
-      project2,
-      project3,
-      project1,
-      project2,
-    ],
-    challenge:
-      "Creating luxury without being unapproachable. The brand needed to feel premium yet welcoming to first-time luxury buyers entering the skincare market.",
-    impact:
-      "Zima Beauty successfully launched across 40+ retail partners with a 95% customer satisfaction rate and 500% growth in online sales.",
-    gallery: [project3, project1, project2],
-    responsive: [project3, project1, project2],
-    techStack: ["React", "Next.js", "Shopify", "Figma", "Blender"],
-    liveUrl: "#",
-  },
-];
+import { projectsData } from "@/data/projects";
 
 const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -194,10 +26,8 @@ const ProjectDetails = () => {
 
   const project = projectsData.find((p) => p.id === id);
   const projectIndex = projectsData.findIndex((p) => p.id === id);
-  const nextProject =
-    projectIndex < projectsData.length - 1
-      ? projectsData[projectIndex + 1]
-      : projectsData[0];
+  // Only one project (Bushel), so always loop back to it
+  const nextProject = projectsData[0];
 
   // Simple scroll-based progress for the next project section
   const { scrollYProgress } = useScroll({
@@ -304,7 +134,7 @@ const ProjectDetails = () => {
             <motion.img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-fill"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.6 }}
             />
@@ -313,7 +143,7 @@ const ProjectDetails = () => {
       </motion.section>
 
       {/* Project Overview */}
-      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+      <section className="px-6 md:px-12 lg:px-20 py-16 md:py-40">
         <div className="max-w-[1600px] mx-auto">
           <div className="">
             {/* Overview Text */}
@@ -460,7 +290,7 @@ const ProjectDetails = () => {
 
       {/* Initial Concepts - Marquee Style */}
       <section className="py-24 md:py-40 overflow-hidden">
-        <div className="max-w-[1600px] mx-auto">
+        <div className="ml-28">
           <motion.div
             className="mb-16"
             initial={{ opacity: 0, y: 20 }}
@@ -526,7 +356,7 @@ const ProjectDetails = () => {
               .map((concept, index) => (
                 <motion.div
                   key={index}
-                  className="relative shrink-0 w-[280px] md:w-[350px] aspect-[3/4] rounded-xl overflow-hidden group"
+                  className="relative shrink-0 w-[300px] md:w-[400px] aspect-[4/3] rounded-xl overflow-hidden group"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
@@ -543,7 +373,7 @@ const ProjectDetails = () => {
       </section>
 
       {/* The Challenge */}
-      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+      <section className="px-6 md:px-12 lg:px-20 py-16 md:py-24">
         <div className="max-w-[1200px] mx-auto">
           <motion.div
             className="text-center"
@@ -552,7 +382,7 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-12">
+            <h2 className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12">
               The challenge
             </h2>
             <p className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light mb-16">
@@ -575,22 +405,13 @@ const ProjectDetails = () => {
       </section>
 
       {/* Collage Gallery */}
-      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
-        <div className="max-w-[1600px] mx-auto">
-          <motion.h2
-            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-16"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Collage
-          </motion.h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            {project.gallery.slice(0, 2).map((img, index) => (
+      <section className=" py-16 md:py-24">
+        <div className="w-[100vw]">
+          <div className="w-full">
+            {project.gallery.map((img, index) => (
               <motion.div
                 key={index}
-                className="relative aspect-[4/3] rounded-2xl overflow-hidden"
+                className="relative w-full aspect-video overflow-hidden"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -613,7 +434,7 @@ const ProjectDetails = () => {
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
         <div className="max-w-[1600px] mx-auto">
           <motion.h2
-            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-16"
+            className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -621,31 +442,50 @@ const ProjectDetails = () => {
             Responsive
           </motion.h2>
 
-          <div className="flex gap-6 overflow-x-auto pb-6 scrollbar-hide">
-            {project.responsive.map((img, index) => (
-              <motion.div
-                key={index}
-                className="relative flex-shrink-0 w-[280px] md:w-[350px] aspect-[3/4] rounded-2xl overflow-hidden"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
-              >
-                <motion.img
-                  src={img}
-                  alt={`Responsive ${index + 1}`}
-                  className="w-full h-full object-cover"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.5 }}
-                />
-              </motion.div>
-            ))}
+          {/* Mobile Marquee */}
+          <div className="relative overflow-hidden mb-12">
+            <style>{`
+              @keyframes marquee-mobile { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+              .marquee-mobile-track { display: flex; gap: 1.5rem; will-change: transform; }
+            `}</style>
+
+            <div
+              className="marquee-mobile-track"
+              style={{ animation: "marquee-mobile 25s linear infinite" }}
+            >
+              {[
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(1).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(2).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(3).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(4).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(5).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(6).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(7).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(8).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(9).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(1).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(2).png",
+                "https://dev.gemseeroo.com/bushel/bushel-mob%20(3).png",
+              ].map((src, i) => (
+                <div
+                  key={`${src}-${i}`}
+                  className="relative flex-shrink-0 w-[200px] md:w-[280px] aspect-[9/16] rounded-xl overflow-hidden group"
+                >
+                  <img
+                    src={src}
+                    alt={`Mobile ${i + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* The Impact */}
-      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+      <section className="px-6 md:px-12 lg:px-20 py-16 md:py-24">
         <div className="max-w-[1200px] mx-auto">
           <motion.div
             className="text-center"
@@ -654,7 +494,7 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-12">
+            <h2 className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12">
               The impact
             </h2>
             <p className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light">
@@ -665,10 +505,10 @@ const ProjectDetails = () => {
       </section>
 
       {/* Tech Stack */}
-      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+      <section className="px-6 md:px-12 lg:px-20 pt-16 md:pt-24">
         <div className="max-w-[1600px] mx-auto">
           <motion.h2
-            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-16"
+            className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -695,7 +535,7 @@ const ProjectDetails = () => {
       </section>
 
       {/* Next Project Section - Simple scroll progress */}
-      <section ref={nextProjectRef} className="min-h-[150vh] relative">
+      <section ref={nextProjectRef} className="min-h-[100vh] relative">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
           <div className="relative z-10 text-center max-w-[600px]">
             {/* Next Project Title */}

@@ -12,54 +12,10 @@ import {
   Magnetic,
   TextReveal,
 } from "@/components/AnimationComponents";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
 import { useNavigate } from "react-router-dom";
+import { projectsData } from "@/data/projects";
 
-const projectsData = [
-  {
-    id: "linx-auto",
-    title: "Linx Auto",
-    date: "Jul 22, 2025",
-    image: project1,
-    tags: ["Branding", "UI/UX", "Marketing", "SEO"],
-    description:
-      "Complete brand identity redesign for automotive industry leader. We created a cohesive visual language that conveys innovation and reliability.",
-    category: "Branding and Identity",
-    color: "#1a1a1a",
-  },
-  {
-    id: "sonora-sport",
-    title: "Sonora Sport",
-    date: "Jun 19, 2025",
-    image: project2,
-    tags: ["Branding", "Social Media", "SEO"],
-    description:
-      "Dynamic branding and social media strategy for sports equipment brand. Increased engagement by 250% through targeted content.",
-    category: "Branding and Identity",
-    color: "#0a0a0a",
-  },
-  {
-    id: "zima-beauty",
-    title: "Zima Beauty",
-    date: "May 17, 2024",
-    image: project3,
-    tags: ["Identity", "Packaging", "Web", "Social"],
-    description:
-      "Luxury beauty brand identity with comprehensive packaging design. Created a premium positioning strategy for high-end market.",
-    category: "UI/UX and Product Design",
-    color: "#111111",
-  },
-];
-
-const projectFilters = [
-  "All Projects",
-  "Branding and Identity",
-  "UI/UX and Product Design",
-  "Social Media Marketing",
-  "SEO Optimization",
-];
+const projectFilters = ["All Projects", "Web Development", "Mobile App"];
 
 // Individual Project Card Component
 const ProjectCard = ({
@@ -105,13 +61,7 @@ const ProjectCard = ({
       }}
     >
       {/* Image Container - Landscape */}
-      <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/10]">
-        {/* Background color layer */}
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{ backgroundColor: project.color }}
-        />
-
+      <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/9]">
         {/* Main Image with Parallax */}
         <motion.div
           className="absolute inset-0"
@@ -121,7 +71,7 @@ const ProjectCard = ({
           <motion.img
             src={project.image}
             alt={project.title}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-fill"
             initial={{ scale: 1.2, opacity: 0 }}
             animate={isInView ? { scale: 1, opacity: 1 } : {}}
             transition={{ duration: 1.5, delay: 0.2 + index * 0.2 }}

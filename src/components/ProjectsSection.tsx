@@ -14,51 +14,9 @@ import {
   ScaleReveal,
 } from "./AnimationComponents";
 import { useNavigate } from "react-router-dom";
-import project1 from "@/assets/project-1.jpg";
-import project2 from "@/assets/project-2.jpg";
-import project3 from "@/assets/project-3.jpg";
+import { projectsData } from "@/data/projects";
 
-const projects = [
-  {
-    id: "linx-auto",
-    title: "Linx Auto",
-    date: "Jul 22, 2025",
-    image: project1,
-    tags: ["Branding", "UI/UX", "Marketing", "SEO"],
-    color: "#1a1a1a",
-  },
-  {
-    id: "sonora-sport",
-    title: "Sonora Sport",
-    date: "Jun 19, 2025",
-    image: project2,
-    tags: ["Branding", "Social Media", "SEO"],
-    color: "#0a0a0a",
-  },
-  {
-    id: "zima-beauty",
-    title: "Zima Beauty",
-    date: "May 17, 2024",
-    image: project3,
-    tags: ["Identity", "Packaging", "Web", "Social"],
-    color: "#111111",
-  },
-  {
-    id: "aurora-tech",
-    title: "Aurora Tech",
-    date: "Apr 10, 2024",
-    image: project1,
-    tags: ["UI/UX", "Web Development", "Branding"],
-    color: "#0f0f0f",
-  },
-];
-
-const projectFilters = [
-  "Branding and Identity",
-  "UI/UX and Product Design",
-  "Social Media Marketing",
-  "SEO Optimization",
-];
+const projectFilters = ["All Projects", "Web Development", "Mobile App"];
 
 export const ProjectsSection = () => {
   const navigate = useNavigate();
@@ -77,6 +35,12 @@ export const ProjectsSection = () => {
   });
   const backgroundY = useTransform(smoothProgress, [0, 1], [0, -150]);
   const counterScale = useTransform(smoothProgress, [0, 0.3], [0.8, 1]);
+
+  // Filter projects based on active filter, limit to 4 for main page
+  const filteredProjects =
+    activeFilter === "All Projects" || !activeFilter
+      ? projectsData.slice(0, 4)
+      : projectsData.filter((p) => p.category === activeFilter).slice(0, 4);
 
   return (
     <section
@@ -118,7 +82,7 @@ export const ProjectsSection = () => {
                 delay: 0.4,
               }}
             >
-              75
+              {projectsData.length.toString().padStart(2, "0")}
             </motion.span>
           </motion.div>
 
@@ -155,9 +119,9 @@ export const ProjectsSection = () => {
 
         {/* Projects Grid with Staggered Animation - 2 per row, 2 rows */}
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-          {projects.map((project, index) => (
+          {filteredProjects.map((project, index) => (
             <motion.div
-              key={project.title}
+              key={project.id}
               className="group cursor-pointer"
               initial={{ opacity: 0, y: 80 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -173,12 +137,6 @@ export const ProjectsSection = () => {
             >
               {/* Image Container - Landscape */}
               <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/10]">
-                {/* Background color layer */}
-                <motion.div
-                  className="absolute inset-0 z-0"
-                  style={{ backgroundColor: project.color }}
-                />
-
                 {/* Main Image with Parallax */}
                 <motion.div
                   className="absolute inset-0"
