@@ -43,6 +43,14 @@ const projects = [
     tags: ["Identity", "Packaging", "Web", "Social"],
     color: "#111111",
   },
+  {
+    id: "aurora-tech",
+    title: "Aurora Tech",
+    date: "Apr 10, 2024",
+    image: project1,
+    tags: ["UI/UX", "Web Development", "Branding"],
+    color: "#0f0f0f",
+  },
 ];
 
 const projectFilters = [
@@ -145,8 +153,8 @@ export const ProjectsSection = () => {
           </motion.div>
         </div>
 
-        {/* Projects Grid with Staggered Animation */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
+        {/* Projects Grid with Staggered Animation - 2 per row, 2 rows */}
+        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}

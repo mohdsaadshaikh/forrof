@@ -386,9 +386,9 @@ const ProjectsPage = () => {
               </motion.div>
             </div>
 
-            {/* Projects Grid */}
+            {/* Projects Grid - 2 per row */}
             <motion.div
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12"
+              className="grid grid-cols-1 md:grid-cols-2 gap-12"
               layout
             >
               {filteredProjects.map((project, index) => (
