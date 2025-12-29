@@ -57,7 +57,7 @@ const EarthScene: React.FC = () => {
   // Animation Proxy for GSAP
   const proxy = useRef({
     scale: 1,
-    rotationSpeed: 0.035, // slower rotation
+    rotationSpeed: 0.02, // slower rotation
     positionX: 0,
     positionY: 0,
     positionZ: 0,

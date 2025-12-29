@@ -21,28 +21,28 @@ export const OurClientsSection = () => {
     "Screenshot 2025-12-28 163931.png",
   ];
 
-  const paths = clientFiles.map(
-    (name) => `/our-clients/${encodeURIComponent(name)}`
-  );
+  // Keep commas intact (some filenames include commas). encodeURI handles spaces
+  // while leaving commas unescaped so the dev server can resolve filenames.
+  const paths = clientFiles.map((name) => `/our-clients/${encodeURI(name)}`);
 
   const firstRow = paths.slice(0, Math.ceil(paths.length / 2));
   const secondRow = paths.slice(Math.ceil(paths.length / 2));
 
   return (
-    <section className="py-32 relative overflow-hidden">
+    <section className="pb-24 pt-10 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
-      
+
       <div className="max-w-[1800px] mx-auto relative z-10 px-6 md:px-12 lg:px-20">
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <motion.span 
+          <motion.span
             className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-4 block"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -51,7 +51,7 @@ export const OurClientsSection = () => {
           >
             Trusted By
           </motion.span>
-          <motion.h2 
+          <motion.h2
             className="text-4xl md:text-5xl font-bold tracking-tight"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -92,6 +92,15 @@ export const OurClientsSection = () => {
                     src={src}
                     alt={`Client ${i + 1}`}
                     className="max-h-[60px] max-w-[160px] object-contain filter grayscale hover:grayscale-0 transition-all duration-500"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      const t = e.target as HTMLImageElement;
+                      if (t && !t.dataset.fallback) {
+                        t.dataset.fallback = "1";
+                        t.src = "/placeholder.svg";
+                      }
+                    }}
                   />
                 </motion.div>
               ))}
@@ -122,6 +131,15 @@ export const OurClientsSection = () => {
                     src={src}
                     alt={`Client ${i + 1}`}
                     className="max-h-[60px] max-w-[160px] object-contain filter grayscale hover:grayscale-0 transition-all duration-500"
+                    loading="lazy"
+                    decoding="async"
+                    onError={(e) => {
+                      const t = e.target as HTMLImageElement;
+                      if (t && !t.dataset.fallback) {
+                        t.dataset.fallback = "1";
+                        t.src = "/placeholder.svg";
+                      }
+                    }}
                   />
                 </motion.div>
               ))}
@@ -130,7 +148,7 @@ export const OurClientsSection = () => {
         </div>
 
         {/* Stats Row */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-20 pt-12 border-t border-border/50"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -143,7 +161,7 @@ export const OurClientsSection = () => {
             { number: "5+", label: "Years Experience" },
             { number: "98%", label: "Client Satisfaction" },
           ].map((stat, index) => (
-            <motion.div 
+            <motion.div
               key={stat.label}
               className="text-center"
               initial={{ opacity: 0, y: 20 }}
@@ -151,7 +169,7 @@ export const OurClientsSection = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.5 + index * 0.1 }}
             >
-              <motion.span 
+              <motion.span
                 className="text-4xl md:text-5xl font-bold block mb-2"
                 initial={{ scale: 0.5 }}
                 whileInView={{ scale: 1 }}

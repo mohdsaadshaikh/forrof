@@ -257,7 +257,7 @@ const ProjectsPage = () => {
           </motion.div>
 
           {/* Hero Content */}
-          <motion.div className="absolute inset-0 z-20 flex items-end section-padding pb-20">
+          <motion.div className="absolute inset-0 z-20 section-padding pb-20 pt-40">
             <div className="max-w-[1800px] mx-auto w-full">
               <div className="overflow-hidden mb-6">
                 <motion.h1

@@ -106,7 +106,7 @@ export const AboutSection = () => {
 
   const { scrollYProgress: textScrollProgress } = useScroll({
     target: textRef,
-    offset: ["start 0.8", "end 0.2"],
+    offset: ["start 1", "end 0.7"],
   });
 
   const smoothProgress = useSpring(scrollYProgress, {
@@ -130,7 +130,7 @@ export const AboutSection = () => {
         }}
       >
         <span className="text-[25vw] font-bold text-foreground/[0.02] whitespace-nowrap">
-          FOROF
+          FORROF
         </span>
       </motion.div>
 

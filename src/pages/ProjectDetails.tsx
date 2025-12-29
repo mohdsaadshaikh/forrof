@@ -213,9 +213,9 @@ const ProjectDetails = () => {
 
   // Navigate when scroll completes
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest >= 0.9 && !showHoldTight) {
+    if (latest >= 0.6 && !showHoldTight) {
       setShowHoldTight(true);
-    } else if (latest < 0.9 && showHoldTight) {
+    } else if (latest < 0.6 && showHoldTight) {
       setShowHoldTight(false);
     }
 
@@ -224,7 +224,7 @@ const ProjectDetails = () => {
       setTimeout(() => {
         navigate(`/project/${nextProject.id}`);
         window.scrollTo({ top: 0, behavior: "instant" });
-      }, 800);
+      }, 2000);
     }
   });
 
@@ -258,7 +258,7 @@ const ProjectDetails = () => {
   return (
     <div ref={containerRef} className="bg-background text-foreground">
       {/* Hero Section - Clean like MDX */}
-      <section className="h-[60vh] flex flex-col items-center justify-center px-6 pt-20 space-y-12">
+      <section className="px-6 pt-44 pb-20  space-y-12">
         {/* Title - Large and centered */}
         <div className="overflow-hidden">
           <motion.h1
@@ -318,7 +318,7 @@ const ProjectDetails = () => {
       {/* Project Overview */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
         <div className="max-w-[1600px] mx-auto">
-          <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
+          <div className="">
             {/* Overview Text */}
             <motion.div
               className="lg:col-span-8"
@@ -328,7 +328,7 @@ const ProjectDetails = () => {
               transition={{ duration: 0.8 }}
             >
               <motion.h2
-                className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-10"
+                className="text-3xl uppercase tracking-[0.2em] text-muted-foreground mb-10"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -349,20 +349,20 @@ const ProjectDetails = () => {
 
             {/* Metadata */}
             <motion.div
-              className="lg:col-span-4 space-y-10"
+              className="mt-6 flex  gap-12 flex-wrap"
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <div>
-                <span className="text-sm uppercase tracking-[0.2em] text-muted-foreground block mb-3">
+              <div className="">
+                <span className="text-lg uppercase tracking-[0.2em] text-muted-foreground mr-3">
                   Date
                 </span>
                 <span className="text-lg font-light">{project.date}</span>
               </div>
               <div>
-                <span className="text-sm uppercase tracking-[0.2em] text-muted-foreground block mb-3">
+                <span className="text-lg uppercase tracking-[0.2em] text-muted-foreground mr-3">
                   Location
                 </span>
                 <span className="text-lg font-light">{project.location}</span>
