@@ -199,15 +199,16 @@ const ProjectDetails = () => {
       ? projectsData[projectIndex + 1]
       : projectsData[0];
 
-  // Scroll progress for next project section
+  // Scroll progress for next project section - only track when section is in view
   const { scrollYProgress } = useScroll({
     target: nextProjectRef,
-    offset: ["start end", "end end"],
+    offset: ["start start", "end end"],
   });
 
+  // Progress bar only fills when actively scrolling through the section
   const progressBarWidth = useTransform(
     scrollYProgress,
-    [0.3, 1],
+    [0, 0.8],
     ["0%", "100%"]
   );
 
@@ -219,12 +220,12 @@ const ProjectDetails = () => {
       setShowHoldTight(false);
     }
 
-    if (latest >= 0.98 && !hasNavigated && nextProject) {
+    if (latest >= 0.78 && !hasNavigated && nextProject) {
       setHasNavigated(true);
       setTimeout(() => {
         navigate(`/project/${nextProject.id}`);
         window.scrollTo({ top: 0, behavior: "instant" });
-      }, 2000);
+      }, 1500);
     }
   });
 
@@ -698,7 +699,7 @@ const ProjectDetails = () => {
       </section>
 
       {/* Next Project Section - Scroll to Navigate */}
-      <section ref={nextProjectRef} className="min-h-[150vh] relative">
+      <section ref={nextProjectRef} className="min-h-[200vh] relative">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
           <div className="relative z-10 text-center max-w-[600px]">
             {/* Next Project Title */}
