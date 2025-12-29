@@ -60,7 +60,6 @@ const ProjectCard = ({
         window.scrollTo({ top: 0, behavior: "smooth" });
       }}
     >
-      {/* Image Container - Landscape */}
       <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/9]">
         {/* Main Image with Parallax */}
         <motion.div
