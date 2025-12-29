@@ -245,19 +245,22 @@ const ProjectDetails = () => {
       const sectionInView = rect.top < window.innerHeight && rect.bottom > 0;
 
       // If section is visible and user scrolls DOWN, lock and consume scroll for progress.
-      if (sectionInView && e.deltaY > 0 && !isLocked && progress === 0) {
+      // IMPORTANT: treat this event as "locked" immediately (setState is async).
+      let lockedNow = isLocked;
+      if (sectionInView && e.deltaY > 0 && !lockedNow && progress === 0) {
         lockToSectionTop(rect);
         setIsLocked(true);
+        lockedNow = true;
       }
 
       // Allow normal scrolling UP when progress is 0 (escape hatch)
-      if (isLocked && e.deltaY < 0 && progress === 0) {
+      if (lockedNow && e.deltaY < 0 && progress === 0) {
         setIsLocked(false);
         unlockUntilRef.current = Date.now() + 600;
         return;
       }
 
-      if (!isLocked) return;
+      if (!lockedNow) return;
 
       // While locked, consume scroll to drive progress
       e.preventDefault();
