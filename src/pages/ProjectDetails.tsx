@@ -200,30 +200,55 @@ const ProjectDetails = () => {
 
   // Handle scroll lock and progress
   useEffect(() => {
+    const getRect = () => nextProjectRef.current?.getBoundingClientRect();
+
+    const isSectionActive = (rect: DOMRect) => {
+      // Consider the section "active" when it's mostly on screen
+      const topThreshold = Math.min(24, window.innerHeight * 0.05);
+      return rect.top <= topThreshold && rect.bottom >= window.innerHeight - topThreshold;
+    };
+
+    const lockToSectionTop = (rect: DOMRect) => {
+      // Snap so the section is perfectly aligned (prevents accidental exit)
+      const targetTop = window.scrollY + rect.top;
+      window.scrollTo({ top: targetTop, behavior: "instant" });
+    };
+
     const handleScroll = () => {
       if (!nextProjectRef.current || hasNavigated) return;
-      
-      const rect = nextProjectRef.current.getBoundingClientRect();
-      const shouldLock = rect.top <= 0;
-      
-      if (shouldLock && !isLocked) {
+      const rect = getRect();
+      if (!rect) return;
+
+      if (isSectionActive(rect) && !isLocked) {
+        lockToSectionTop(rect);
         setIsLocked(true);
       }
     };
 
     const handleWheel = (e: WheelEvent) => {
-      if (!isLocked || hasNavigated) return;
+      if (hasNavigated) return;
+
+      const rect = getRect();
+      if (!rect) return;
+
+      // If user starts scrolling while the section is in view, lock immediately
+      const sectionInView = rect.top < window.innerHeight && rect.bottom > 0;
+      if (sectionInView && !isLocked) {
+        lockToSectionTop(rect);
+        setIsLocked(true);
+      }
+
+      if (!isLocked) return;
+
+      // While locked, consume scroll to drive progress
+      e.preventDefault();
 
       if (e.deltaY > 0) {
-        // Scrolling down - increase progress
-        e.preventDefault();
         setProgress((prev) => {
-          const newProgress = Math.min(prev + 2, 100);
-          
-          if (newProgress >= 60 && !showHoldTight) {
-            setShowHoldTight(true);
-          }
-          
+          const newProgress = Math.min(prev + 2.5, 100);
+
+          if (newProgress >= 60 && !showHoldTight) setShowHoldTight(true);
+
           if (newProgress >= 100 && !hasNavigated) {
             setHasNavigated(true);
             setTimeout(() => {
@@ -231,25 +256,21 @@ const ProjectDetails = () => {
               window.scrollTo({ top: 0, behavior: "instant" });
             }, 1000);
           }
-          
+
           return newProgress;
         });
       } else if (e.deltaY < 0) {
-        // Scrolling up - decrease progress or unlock
-        e.preventDefault();
         setProgress((prev) => {
-          const newProgress = Math.max(prev - 3, 0);
-          
-          if (newProgress < 60 && showHoldTight) {
-            setShowHoldTight(false);
-          }
-          
+          const newProgress = Math.max(prev - 4, 0);
+
+          if (newProgress < 60 && showHoldTight) setShowHoldTight(false);
+
           if (newProgress === 0) {
             setIsLocked(false);
-            // Scroll up a bit to exit the section
-            window.scrollBy({ top: -100, behavior: "smooth" });
+            // Nudge upward to clearly exit the sticky screen
+            window.scrollBy({ top: -120, behavior: "smooth" });
           }
-          
+
           return newProgress;
         });
       }
