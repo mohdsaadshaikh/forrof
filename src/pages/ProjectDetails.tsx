@@ -186,6 +186,8 @@ const ProjectDetails = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const nextProjectRef = useRef<HTMLDivElement>(null);
+  const lastScrollYRef = useRef(0);
+  const unlockUntilRef = useRef(0);
   const [hasNavigated, setHasNavigated] = useState(false);
   const [showHoldTight, setShowHoldTight] = useState(false);
   const [isLocked, setIsLocked] = useState(false);
@@ -216,10 +218,19 @@ const ProjectDetails = () => {
 
     const handleScroll = () => {
       if (!nextProjectRef.current || hasNavigated) return;
+
+      const now = window.scrollY;
+      const direction: "up" | "down" = now > lastScrollYRef.current ? "down" : "up";
+      lastScrollYRef.current = now;
+
+      // Prevent immediate re-lock right after unlocking
+      if (Date.now() < unlockUntilRef.current) return;
+
       const rect = getRect();
       if (!rect) return;
 
-      if (isSectionActive(rect) && !isLocked) {
+      // Only lock when the user is scrolling DOWN into the section and progress is at 0
+      if (direction === "down" && progress === 0 && isSectionActive(rect) && !isLocked) {
         lockToSectionTop(rect);
         setIsLocked(true);
       }
@@ -231,11 +242,19 @@ const ProjectDetails = () => {
       const rect = getRect();
       if (!rect) return;
 
-      // If user starts scrolling while the section is in view, lock immediately
       const sectionInView = rect.top < window.innerHeight && rect.bottom > 0;
-      if (sectionInView && !isLocked) {
+
+      // If section is visible and user scrolls DOWN, lock and consume scroll for progress.
+      if (sectionInView && e.deltaY > 0 && !isLocked && progress === 0) {
         lockToSectionTop(rect);
         setIsLocked(true);
+      }
+
+      // Allow normal scrolling UP when progress is 0 (escape hatch)
+      if (isLocked && e.deltaY < 0 && progress === 0) {
+        setIsLocked(false);
+        unlockUntilRef.current = Date.now() + 600;
+        return;
       }
 
       if (!isLocked) return;
@@ -267,7 +286,8 @@ const ProjectDetails = () => {
 
           if (newProgress === 0) {
             setIsLocked(false);
-            // Nudge upward to clearly exit the sticky screen
+            unlockUntilRef.current = Date.now() + 600;
+            // Nudge upward to clearly exit the locked screen
             window.scrollBy({ top: -120, behavior: "smooth" });
           }
 
