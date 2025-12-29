@@ -7,7 +7,13 @@ import {
 } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
+import {
+  ExternalLink,
+  ArrowUpRight,
+  Search,
+  Briefcase,
+  Lock,
+} from "lucide-react";
 import project1 from "@/assets/project-1.jpg";
 import project2 from "@/assets/project-2.jpg";
 import project3 from "@/assets/project-3.jpg";
@@ -252,27 +258,7 @@ const ProjectDetails = () => {
   return (
     <div ref={containerRef} className="bg-background text-foreground">
       {/* Hero Section - Clean like MDX */}
-      <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-20">
-        {/* Tags - Top */}
-        <motion.div
-          className="flex flex-wrap gap-3 justify-center mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          {project.tags.map((tag, index) => (
-            <motion.span
-              key={tag}
-              className="px-4 py-2 border border-border rounded-full text-xs uppercase tracking-[0.15em] font-medium text-muted-foreground"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.1 + index * 0.1 }}
-            >
-              {tag}
-            </motion.span>
-          ))}
-        </motion.div>
-
+      <section className="h-[60vh] flex flex-col items-center justify-center px-6 pt-20 space-y-12">
         {/* Title - Large and centered */}
         <div className="overflow-hidden">
           <motion.h1
@@ -287,6 +273,26 @@ const ProjectDetails = () => {
             {project.title}
           </motion.h1>
         </div>
+
+        {/* Tags - Top */}
+        <motion.div
+          className="flex flex-wrap gap-3 justify-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          {project.tags.map((tag, index) => (
+            <motion.span
+              key={tag}
+              className="px-6 py-3 border border-border rounded-full text-base uppercase tracking-[0.15em] font-extralight text-muted-foreground"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 + index * 0.1 }}
+            >
+              {tag}
+            </motion.span>
+          ))}
+        </motion.div>
       </section>
 
       {/* Hero Image - Full width */}
@@ -367,83 +373,106 @@ const ProjectDetails = () => {
       </section>
 
       {/* Design Process */}
-      <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
+      <section className="px-6 md:px-12 lg:px-20 py-8 md:py-12">
         <div className="max-w-[1600px] mx-auto">
-          {/* Section Header */}
-          <motion.h2
-            className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-20"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Design process
-          </motion.h2>
+          {/* Section Header with Blob Effect */}
+          <div className="relative mb-20">
+            {/* Blob Background */}
+            <div className="absolute -top-20 -left-40 w-96 h-96 bg-gradient-to-r from-primary/20 to-transparent rounded-full blur-3xl opacity-40 pointer-events-none" />
+            <div className="absolute -top-10 -right-32 w-80 h-80 bg-gradient-to-l from-primary/15 to-transparent rounded-full blur-3xl opacity-30 pointer-events-none" />
 
-          {/* Process Cards - Horizontal layout like MDX */}
+            <motion.h2
+              className="text-5xl md:text-7xl lg:text-9xl text-center font-bold mb-20 relative z-10"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              Design process
+            </motion.h2>
+          </div>
+
+          {/* Process Cards */}
           <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            {project.designProcess.map((phase, index) => (
-              <motion.div
-                key={phase.phase}
-                className="relative"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ delay: index * 0.15, duration: 0.6 }}
-              >
-                {/* Hours - Large faded text */}
+            {project.designProcess.map((phase, index) => {
+              const icons = [Search, Briefcase, Lock];
+              const IconComponent = icons[index];
+
+              return (
                 <motion.div
-                  className="text-6xl md:text-7xl lg:text-8xl font-bold text-foreground/10 mb-6"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.15 + 0.1 }}
+                  key={phase.phase}
+                  className="relative p-8 rounded-2xl bg-foreground/5 border border-border/20"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: index * 0.15, duration: 0.6 }}
                 >
-                  {phase.hours}
-                </motion.div>
-
-                {/* Phase Name */}
-                <h3 className="text-2xl md:text-3xl font-semibold mb-6">
-                  {phase.phase}
-                </h3>
-
-                {/* Tasks */}
-                <ul className="space-y-3">
-                  {phase.tasks.map((task, taskIndex) => (
-                    <motion.li
-                      key={task}
-                      className="text-muted-foreground font-light"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
+                  {/* Icon and Hours */}
+                  <div className="flex items-center justify-between mb-10">
+                    <motion.div
+                      className="flex-shrink-0 w-16 h-16 rounded-full border-2 border-border/40 flex items-center justify-center"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
-                      transition={{
-                        delay: index * 0.15 + taskIndex * 0.08 + 0.2,
-                      }}
+                      transition={{ delay: index * 0.15 + 0.1 }}
                     >
-                      {task}
-                    </motion.li>
-                  ))}
-                </ul>
-              </motion.div>
-            ))}
+                      <IconComponent
+                        size={28}
+                        className="text-muted-foreground"
+                      />
+                    </motion.div>
+                    <motion.div
+                      className="text-lg font-medium text-muted-foreground"
+                      initial={{ opacity: 0 }}
+                      whileInView={{ opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.15 + 0.15 }}
+                    >
+                      {phase.hours}
+                    </motion.div>
+                  </div>
+
+                  {/* Phase Name */}
+                  <h3 className="text-2xl md:text-3xl font-semibold mb-8">
+                    {phase.phase}
+                  </h3>
+
+                  {/* Tasks - As badges */}
+                  <div className="flex flex-wrap gap-3">
+                    {phase.tasks.map((task, taskIndex) => (
+                      <motion.div
+                        key={task}
+                        className="px-4 py-2 border border-border/50 rounded-full text-xs text-muted-foreground font-light hover:bg-foreground/5 transition-colors"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{
+                          delay: index * 0.15 + taskIndex * 0.08 + 0.2,
+                        }}
+                      >
+                        {task}
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* Initial Concepts - Marquee Style */}
       <section className="py-24 md:py-40 overflow-hidden">
-        <div className="px-6 md:px-12 lg:px-20 max-w-[1600px] mx-auto">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div
             className="mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-sm uppercase tracking-[0.2em] text-muted-foreground mb-4">
+            <h2 className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Initial concepts
             </h2>
-            <p className="text-lg text-muted-foreground font-light">
-              Early UI Concepts and Visual Explorations.
-            </p>
           </motion.div>
         </div>
 
@@ -461,21 +490,23 @@ const ProjectDetails = () => {
               },
             }}
           >
-            {[...project.concepts, ...project.concepts].map((concept, index) => (
-              <motion.div
-                key={index}
-                className="relative shrink-0 w-[300px] md:w-[400px] aspect-[4/3] rounded-xl overflow-hidden group"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img
-                  src={concept}
-                  alt={`Concept ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.div>
-            ))}
+            {[...project.concepts, ...project.concepts].map(
+              (concept, index) => (
+                <motion.div
+                  key={index}
+                  className="relative shrink-0 w-[300px] md:w-[400px] aspect-[4/3] rounded-xl overflow-hidden group"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src={concept}
+                    alt={`Concept ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.div>
+              )
+            )}
           </motion.div>
         </div>
 
@@ -493,21 +524,23 @@ const ProjectDetails = () => {
               },
             }}
           >
-            {[...project.concepts, ...project.concepts].reverse().map((concept, index) => (
-              <motion.div
-                key={index}
-                className="relative shrink-0 w-[280px] md:w-[350px] aspect-[3/4] rounded-xl overflow-hidden group"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
-              >
-                <img
-                  src={concept}
-                  alt={`Concept ${index + 1}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </motion.div>
-            ))}
+            {[...project.concepts, ...project.concepts]
+              .reverse()
+              .map((concept, index) => (
+                <motion.div
+                  key={index}
+                  className="relative shrink-0 w-[280px] md:w-[350px] aspect-[3/4] rounded-xl overflow-hidden group"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <img
+                    src={concept}
+                    alt={`Concept ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-foreground/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </motion.div>
+              ))}
           </motion.div>
         </div>
       </section>
