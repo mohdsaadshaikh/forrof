@@ -171,8 +171,8 @@ export const ProjectsSection = () => {
                 window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
-              {/* Image Container with Multiple Hover Effects */}
-              <div className="relative overflow-hidden rounded-2xl mb-6 aspect-[4/5]">
+              {/* Image Container - Landscape */}
+              <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/10]">
                 {/* Background color layer */}
                 <motion.div
                   className="absolute inset-0 z-0"
@@ -182,71 +182,60 @@ export const ProjectsSection = () => {
                 {/* Main Image with Parallax */}
                 <motion.div
                   className="absolute inset-0"
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 >
                   <motion.img
                     src={project.image}
                     alt={project.title}
                     className="w-full h-full object-cover"
-                    initial={{ scale: 1.3, opacity: 0 }}
+                    initial={{ scale: 1.2, opacity: 0 }}
                     animate={isInView ? { scale: 1, opacity: 1 } : {}}
                     transition={{ duration: 1.5, delay: 0.6 + index * 0.2 }}
                   />
                 </motion.div>
 
-                {/* Gradient Overlay */}
-                <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
-
-                {/* Tags with Staggered Reveal */}
-                <div className="absolute top-6 left-6 flex flex-wrap gap-2 z-10">
-                  {project.tags.map((tag, tagIndex) => (
-                    <motion.span
-                      key={tag}
-                      className="px-3 py-1.5 bg-background/80 backdrop-blur-md rounded-full text-xs font-medium"
-                      initial={{ opacity: 0, y: -20, scale: 0.8 }}
-                      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                      transition={{
-                        delay: 0.8 + index * 0.2 + tagIndex * 0.05,
-                      }}
-                    >
-                      {tag}
-                    </motion.span>
-                  ))}
-                </div>
-
-                {/* Arrow Button */}
-                <motion.div
-                  className="absolute bottom-6 right-6 w-14 h-14 bg-foreground rounded-full flex items-center justify-center z-10"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={isInView ? { scale: 1, opacity: 1 } : {}}
-                  whileHover={{ scale: 1.1, rotate: 45 }}
-                  transition={{ delay: 0.9 + index * 0.2 }}
-                >
-                  <ArrowUpRight className="text-background" size={20} />
-                </motion.div>
+                {/* Subtle Gradient Overlay */}
+                <motion.div className="absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-700" />
               </div>
 
-              {/* Project Info with Slide Effect */}
-              <div className="flex items-start justify-between">
-                <div className="overflow-hidden">
+              {/* Project Info Below Image */}
+              <div className="space-y-2">
+                {/* Category Tags */}
+                <motion.div
+                  className="flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-wider"
+                  initial={{ opacity: 0 }}
+                  animate={isInView ? { opacity: 1 } : {}}
+                  transition={{ delay: 0.8 + index * 0.2 }}
+                >
+                  {project.tags.slice(0, 3).map((tag, tagIndex) => (
+                    <span key={tag}>
+                      {tag}
+                      {tagIndex < Math.min(project.tags.length, 3) - 1 && (
+                        <span className="ml-2">/</span>
+                      )}
+                    </span>
+                  ))}
+                </motion.div>
+
+                {/* Title with Arrow */}
+                <div className="flex items-center gap-3">
                   <motion.h3
-                    className="text-2xl font-semibold mb-1"
-                    initial={{ y: "100%" }}
-                    animate={isInView ? { y: 0 } : {}}
-                    whileHover={{ x: 10 }}
+                    className="text-2xl md:text-3xl font-semibold text-primary group-hover:text-primary/80 transition-colors"
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={isInView ? { y: 0, opacity: 1 } : {}}
                     transition={{ duration: 0.6, delay: 0.7 + index * 0.2 }}
                   >
                     {project.title}
                   </motion.h3>
-                  <motion.p
-                    className="text-sm text-muted-foreground"
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
+                  <motion.div
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={isInView ? { opacity: 1, x: 0 } : {}}
+                    whileHover={{ rotate: 45 }}
                     transition={{ delay: 0.9 + index * 0.2 }}
                   >
-                    {project.date}
-                  </motion.p>
+                    <ArrowUpRight className="text-primary" size={24} />
+                  </motion.div>
                 </div>
               </div>
             </motion.div>
