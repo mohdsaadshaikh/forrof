@@ -24,6 +24,9 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll();
 
+  // Check if on project details page
+  const isProjectDetails = location.pathname.startsWith("/project/");
+
   // Progress bar
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
@@ -51,8 +54,8 @@ const LayoutWrapper = ({ children }: { children: React.ReactNode }) => {
       {/* Page content */}
       {children}
 
-      {/* Footer - show on all pages */}
-      <Footer />
+      {/* Footer - hide on project details page */}
+      {!isProjectDetails && <Footer />}
     </div>
   );
 };
