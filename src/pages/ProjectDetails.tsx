@@ -1,5 +1,8 @@
 import {
   motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
@@ -186,12 +189,8 @@ const ProjectDetails = () => {
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const nextProjectRef = useRef<HTMLDivElement>(null);
-  const lastScrollYRef = useRef(0);
-  const unlockUntilRef = useRef(0);
   const [hasNavigated, setHasNavigated] = useState(false);
   const [showHoldTight, setShowHoldTight] = useState(false);
-  const [isLocked, setIsLocked] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const project = projectsData.find((p) => p.id === id);
   const projectIndex = projectsData.findIndex((p) => p.id === id);
@@ -200,120 +199,36 @@ const ProjectDetails = () => {
       ? projectsData[projectIndex + 1]
       : projectsData[0];
 
-  // Handle scroll lock and progress
-  useEffect(() => {
-    const getRect = () => nextProjectRef.current?.getBoundingClientRect();
+  // Simple scroll-based progress for the next project section
+  const { scrollYProgress } = useScroll({
+    target: nextProjectRef,
+    offset: ["start end", "end end"],
+  });
 
-    const isSectionActive = (rect: DOMRect) => {
-      // Consider the section "active" when it's mostly on screen
-      const topThreshold = Math.min(24, window.innerHeight * 0.05);
-      return rect.top <= topThreshold && rect.bottom >= window.innerHeight - topThreshold;
-    };
+  const progress = useTransform(scrollYProgress, [0.3, 1], [0, 100]);
+  const progressWidth = useTransform(progress, (v) => `${v}%`);
 
-    const lockToSectionTop = (rect: DOMRect) => {
-      // Snap so the section is perfectly aligned (prevents accidental exit)
-      const targetTop = window.scrollY + rect.top;
-      window.scrollTo({ top: targetTop, behavior: "instant" });
-    };
+  // Handle navigation when progress reaches 100
+  useMotionValueEvent(progress, "change", (latest) => {
+    if (latest >= 60 && !showHoldTight) {
+      setShowHoldTight(true);
+    } else if (latest < 60 && showHoldTight) {
+      setShowHoldTight(false);
+    }
 
-    const handleScroll = () => {
-      if (!nextProjectRef.current || hasNavigated) return;
-
-      const now = window.scrollY;
-      const direction: "up" | "down" = now > lastScrollYRef.current ? "down" : "up";
-      lastScrollYRef.current = now;
-
-      // Prevent immediate re-lock right after unlocking
-      if (Date.now() < unlockUntilRef.current) return;
-
-      const rect = getRect();
-      if (!rect) return;
-
-      // Only lock when the user is scrolling DOWN into the section and progress is at 0
-      if (direction === "down" && progress === 0 && isSectionActive(rect) && !isLocked) {
-        lockToSectionTop(rect);
-        setIsLocked(true);
-      }
-    };
-
-    const handleWheel = (e: WheelEvent) => {
-      if (hasNavigated) return;
-
-      const rect = getRect();
-      if (!rect) return;
-
-      const sectionInView = rect.top < window.innerHeight && rect.bottom > 0;
-
-      // If section is visible and user scrolls DOWN, lock and consume scroll for progress.
-      // IMPORTANT: treat this event as "locked" immediately (setState is async).
-      let lockedNow = isLocked;
-      if (sectionInView && e.deltaY > 0 && !lockedNow && progress === 0) {
-        lockToSectionTop(rect);
-        setIsLocked(true);
-        lockedNow = true;
-      }
-
-      // Allow normal scrolling UP when progress is 0 (escape hatch)
-      if (lockedNow && e.deltaY < 0 && progress === 0) {
-        setIsLocked(false);
-        unlockUntilRef.current = Date.now() + 600;
-        return;
-      }
-
-      if (!lockedNow) return;
-
-      // While locked, consume scroll to drive progress
-      e.preventDefault();
-
-      if (e.deltaY > 0) {
-        setProgress((prev) => {
-          const newProgress = Math.min(prev + 2.5, 100);
-
-          if (newProgress >= 60 && !showHoldTight) setShowHoldTight(true);
-
-          if (newProgress >= 100 && !hasNavigated) {
-            setHasNavigated(true);
-            setTimeout(() => {
-              navigate(`/project/${nextProject.id}`);
-              window.scrollTo({ top: 0, behavior: "instant" });
-            }, 1000);
-          }
-
-          return newProgress;
-        });
-      } else if (e.deltaY < 0) {
-        setProgress((prev) => {
-          const newProgress = Math.max(prev - 4, 0);
-
-          if (newProgress < 60 && showHoldTight) setShowHoldTight(false);
-
-          if (newProgress === 0) {
-            setIsLocked(false);
-            unlockUntilRef.current = Date.now() + 600;
-            // Nudge upward to clearly exit the locked screen
-            window.scrollBy({ top: -120, behavior: "smooth" });
-          }
-
-          return newProgress;
-        });
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("wheel", handleWheel, { passive: false });
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("wheel", handleWheel);
-    };
-  }, [isLocked, hasNavigated, showHoldTight, navigate, nextProject]);
+    if (latest >= 99 && !hasNavigated && nextProject) {
+      setHasNavigated(true);
+      setTimeout(() => {
+        navigate(`/project/${nextProject.id}`);
+        window.scrollTo({ top: 0, behavior: "instant" });
+      }, 800);
+    }
+  });
 
   // Reset state on route change
   useEffect(() => {
     setHasNavigated(false);
     setShowHoldTight(false);
-    setIsLocked(false);
-    setProgress(0);
     window.scrollTo({ top: 0, behavior: "instant" });
   }, [id]);
 
@@ -779,9 +694,9 @@ const ProjectDetails = () => {
         </div>
       </section>
 
-      {/* Next Project Section - Scroll Lock */}
-      <section ref={nextProjectRef} className="h-screen relative">
-        <div className="h-screen flex flex-col items-center justify-center px-6">
+      {/* Next Project Section - Simple scroll progress */}
+      <section ref={nextProjectRef} className="min-h-[150vh] relative">
+        <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
           <div className="relative z-10 text-center max-w-[600px]">
             {/* Next Project Title */}
             <motion.h2
@@ -824,7 +739,7 @@ const ProjectDetails = () => {
             <div className="w-full max-w-[400px] h-[2px] bg-border/50 mx-auto overflow-hidden rounded-full">
               <motion.div
                 className="h-full bg-foreground origin-left"
-                style={{ width: `${progress}%` }}
+                style={{ width: progressWidth }}
               />
             </div>
 
