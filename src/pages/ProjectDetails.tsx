@@ -24,8 +24,10 @@ const ProjectDetails = () => {
 
   const project = projectsData.find((p) => p.id === id);
   const projectIndex = projectsData.findIndex((p) => p.id === id);
-  // Only one project (Bushel), so always loop back to it
-  const nextProject = projectsData[0];
+  const nextProject =
+    projectsData.length > 0
+      ? projectsData[(Math.max(0, projectIndex) + 1) % projectsData.length]
+      : undefined;
 
   // Manual scroll tracking for reliability
   const handleScroll = useCallback(() => {
@@ -60,16 +62,6 @@ const ProjectDetails = () => {
     if (scrollProgress >= 95 && !hasNavigated && nextProject) {
       setHasNavigated(true);
       setTimeout(() => {
-        // If there is only one project, navigating to the same route won't remount.
-        // So we simulate the "next" transition by snapping back to the top and resetting.
-        if (nextProject.id === id) {
-          window.scrollTo(0, 0);
-          setHasNavigated(false);
-          setShowHoldTight(false);
-          setProgress(0);
-          return;
-        }
-
         navigate(`/project/${nextProject.id}`);
       }, 500);
     }
