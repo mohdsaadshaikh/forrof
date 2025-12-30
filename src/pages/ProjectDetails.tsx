@@ -453,32 +453,21 @@ const ProjectDetails = () => {
               className="marquee-mobile-track"
               style={{ animation: "marquee-mobile 25s linear infinite" }}
             >
-              {[
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(1).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(2).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(3).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(4).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(5).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(6).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(7).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(8).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(9).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(1).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(2).png",
-                "https://dev.gemseeroo.com/bushel/bushel-mob%20(3).png",
-              ].map((src, i) => (
-                <div
-                  key={`${src}-${i}`}
-                  className="relative flex-shrink-0 w-[200px] md:w-[280px] aspect-[9/16] rounded-xl overflow-hidden group"
-                >
-                  <img
-                    src={src}
-                    alt={`Mobile ${i + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-              ))}
+              {(project.responsive ?? [])
+                .concat(project.responsive ?? [])
+                .map((src, i) => (
+                  <div
+                    key={`${src}-${i}`}
+                    className="relative flex-shrink-0 w-[200px] md:w-[280px] aspect-[9/16] rounded-xl overflow-hidden group"
+                  >
+                    <img
+                      src={src}
+                      alt={`Mobile ${i + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-foreground/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                ))}
             </div>
           </div>
         </div>
