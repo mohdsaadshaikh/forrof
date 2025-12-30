@@ -65,5 +65,18 @@ export const useParallax = (ref: RefObject<HTMLElement>, speed: number = 0.5) =>
 export const scrollTo = (target: string | number) => {
   if (lenisInstance) {
     lenisInstance.scrollTo(target);
+    return;
   }
+
+  if (typeof target === "number") {
+    window.scrollTo(0, target);
+  }
+};
+
+export const scrollToTop = () => {
+  if (lenisInstance) {
+    lenisInstance.scrollTo(0, { immediate: true });
+    return;
+  }
+  window.scrollTo(0, 0);
 };

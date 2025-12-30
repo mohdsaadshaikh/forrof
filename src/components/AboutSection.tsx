@@ -170,7 +170,6 @@ export const AboutSection = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     navigate("/contact");
-                    window.scrollTo({ top: 0, behavior: "smooth" });
                   }}
                   className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full overflow-hidden relative group"
                   data-cursor="Let's Talk"

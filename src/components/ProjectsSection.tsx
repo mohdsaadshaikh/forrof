@@ -132,7 +132,6 @@ export const ProjectsSection = () => {
               }}
               onClick={() => {
                 navigate(`/project/${project.id}`);
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
             >
               {/* Image Container - Landscape */}
@@ -213,7 +212,6 @@ export const ProjectsSection = () => {
               onClick={(e) => {
                 e.preventDefault();
                 navigate("/projects");
-                window.scrollTo({ top: 0, behavior: "smooth" });
               }}
               className="inline-flex items-center gap-3 px-10 py-5 border border-border rounded-full overflow-hidden relative group"
               whileHover={{ scale: 1.02 }}

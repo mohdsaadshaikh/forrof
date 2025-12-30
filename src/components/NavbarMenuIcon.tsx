@@ -139,14 +139,13 @@ export const NavbarMenuIcon = () => {
   const handleNavClick = (href: string) => {
     setIsOpen(false);
     if (href.startsWith("#")) {
-      // Smooth scroll to section
       const element = document.querySelector(href);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    } else if (href.startsWith("/")) {
+      if (element) element.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    if (href.startsWith("/")) {
       navigate(href);
-      window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
@@ -174,7 +173,6 @@ export const NavbarMenuIcon = () => {
             transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
             onClick={() => {
               navigate("/");
-              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
             <img src="/logo.svg" alt="Logo" className="w-14 h-14" />
