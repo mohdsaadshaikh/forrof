@@ -241,8 +241,8 @@ const ProjectDetails = () => {
               const IconComponent = icons[index];
 
               return (
-                <motion.div 
-                  key={phase.phase} 
+                <motion.div
+                  key={phase.phase}
                   className="relative rounded-3xl bg-card border border-border/30 overflow-hidden min-h-[320px] flex flex-col"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -255,7 +255,14 @@ const ProjectDetails = () => {
                     <motion.div
                       className="absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full blur-[80px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(30 30% 85% / 0.8) 0%, hsl(35 20% 88% / 0.5) 50%, transparent 70%)',
+                        background: `
+    radial-gradient(
+      circle,
+      hsl(220 5% 9% / 0.25) 0%,
+      hsl(220 5% 7% / 0.18) 30%,
+      transparent 75%
+    )
+  `,
                       }}
                       animate={{
                         x: [0, 30, 0],
@@ -272,7 +279,8 @@ const ProjectDetails = () => {
                     <motion.div
                       className="absolute bottom-10 left-1/4 w-[200px] h-[200px] rounded-full blur-[60px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(30 25% 82% / 0.7) 0%, hsl(25 15% 85% / 0.4) 60%, transparent 80%)',
+                        background:
+                          "radial-gradient(circle, hsl(30 25% 82% / 0.7) 0%, hsl(25 15% 85% / 0.4) 60%, transparent 80%)",
                       }}
                       animate={{
                         x: [0, -20, 0],
@@ -289,7 +297,8 @@ const ProjectDetails = () => {
                     <motion.div
                       className="absolute top-20 right-10 w-[120px] h-[120px] rounded-full blur-[50px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(0 0% 90% / 0.5) 0%, transparent 70%)',
+                        background:
+                          "radial-gradient(circle, hsl(0 0% 90% / 0.5) 0%, transparent 70%)",
                       }}
                       animate={{
                         x: [0, 15, 0],
