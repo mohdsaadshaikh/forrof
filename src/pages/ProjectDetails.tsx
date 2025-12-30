@@ -241,72 +241,87 @@ const ProjectDetails = () => {
               const IconComponent = icons[index];
 
               return (
-                <div key={phase.phase} className="relative">
-                  {/* Blob layer (behind card content) */}
-                  <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
+                <motion.div 
+                  key={phase.phase} 
+                  className="relative rounded-3xl bg-card border border-border/30 overflow-hidden min-h-[320px] flex flex-col"
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ delay: index * 0.15, duration: 0.6 }}
+                >
+                  {/* Animated Blob Background */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                    {/* Primary warm blob - bottom left */}
                     <motion.div
-                      className="absolute -top-6 -left-10 w-40 h-40  rounded-full blur-3xl"
+                      className="absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full blur-[80px]"
+                      style={{
+                        background: 'radial-gradient(circle, hsl(30 80% 75% / 0.7) 0%, hsl(35 85% 80% / 0.4) 50%, transparent 70%)',
+                      }}
                       animate={{
-                        x: [0, 20, 0],
-                        y: [0, -10, 0],
-                        opacity: [0.6, 0.95, 0.6],
+                        x: [0, 30, 0],
+                        y: [0, -20, 0],
+                        scale: [1, 1.1, 1],
                       }}
                       transition={{
-                        duration: 8 + index,
+                        duration: 8 + index * 2,
                         repeat: Infinity,
                         ease: "easeInOut",
                       }}
                     />
+                    {/* Secondary peach blob - center */}
                     <motion.div
-                      className="absolute -bottom-6 -right-8 w-44 h-44 bg-foreground/5 rounded-full blur-3xl"
+                      className="absolute bottom-10 left-1/4 w-[200px] h-[200px] rounded-full blur-[60px]"
+                      style={{
+                        background: 'radial-gradient(circle, hsl(25 90% 85% / 0.6) 0%, hsl(30 80% 80% / 0.3) 60%, transparent 80%)',
+                      }}
                       animate={{
                         x: [0, -20, 0],
-                        y: [0, 10, 0],
-                        opacity: [0.45, 0.8, 0.45],
+                        y: [0, 15, 0],
+                        scale: [0.9, 1.05, 0.9],
                       }}
                       transition={{
-                        duration: 9 + index,
+                        duration: 10 + index * 2,
                         repeat: Infinity,
                         ease: "easeInOut",
                       }}
                     />
+                    {/* Subtle accent blob - top area */}
                     <motion.div
-                      className="absolute top-1/2 left-1/2 w-32 h-32 bg-foreground/4 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
+                      className="absolute top-20 right-10 w-[120px] h-[120px] rounded-full blur-[50px]"
+                      style={{
+                        background: 'radial-gradient(circle, hsl(35 70% 88% / 0.4) 0%, transparent 70%)',
+                      }}
                       animate={{
-                        scale: [0.9, 1.15, 0.9],
-                        opacity: [0.35, 0.65, 0.35],
+                        x: [0, 15, 0],
+                        y: [0, 10, 0],
+                        opacity: [0.3, 0.5, 0.3],
                       }}
                       transition={{
-                        duration: 7 + index,
+                        duration: 6 + index * 2,
                         repeat: Infinity,
                         ease: "easeInOut",
                       }}
                     />
                   </div>
 
-                  <motion.div
-                    className="relative p-8 rounded-2xl bg-foreground/5 border border-border/20 z-10 overflow-hidden"
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ delay: index * 0.15, duration: 0.6 }}
-                  >
-                    {/* Icon and Hours */}
-                    <div className="flex items-center justify-between mb-10">
+                  {/* Card Content */}
+                  <div className="relative z-10 p-8 flex flex-col h-full">
+                    {/* Icon and Hours - Top Row */}
+                    <div className="flex items-center justify-between mb-auto">
                       <motion.div
-                        className="flex-shrink-0 w-16 h-16 rounded-full border-2 border-border/40 flex items-center justify-center"
+                        className="flex-shrink-0 w-12 h-12 rounded-full border border-border/50 bg-background/50 backdrop-blur-sm flex items-center justify-center"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.15 + 0.1 }}
                       >
                         <IconComponent
-                          size={28}
+                          size={20}
                           className="text-muted-foreground"
                         />
                       </motion.div>
                       <motion.div
-                        className="text-lg font-medium text-muted-foreground"
+                        className="text-sm font-medium text-muted-foreground"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
@@ -316,17 +331,17 @@ const ProjectDetails = () => {
                       </motion.div>
                     </div>
 
-                    {/* Phase Name */}
-                    <h3 className="text-2xl md:text-3xl font-semibold mb-8">
+                    {/* Phase Name - Large Title */}
+                    <h3 className="text-3xl md:text-4xl font-semibold mb-6 mt-8">
                       {phase.phase}
                     </h3>
 
                     {/* Tasks - As badges */}
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-wrap gap-2">
                       {phase.tasks.map((task, taskIndex) => (
                         <motion.div
                           key={task}
-                          className="px-4 py-2 border border-border/50 rounded-full text-xs text-muted-foreground font-light hover:bg-foreground/5 transition-colors"
+                          className="px-4 py-2 border border-border/40 bg-background/40 backdrop-blur-sm rounded-full text-xs text-muted-foreground font-light hover:bg-background/60 transition-colors"
                           initial={{ opacity: 0, scale: 0.8 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
@@ -338,8 +353,8 @@ const ProjectDetails = () => {
                         </motion.div>
                       ))}
                     </div>
-                  </motion.div>
-                </div>
+                  </div>
+                </motion.div>
               );
             })}
           </div>
