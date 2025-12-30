@@ -135,7 +135,7 @@ export const ProjectsSection = () => {
               }}
             >
               {/* Image Container - Landscape */}
-              <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/10]">
+              <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/8]">
                 {/* Main Image with Parallax */}
                 <motion.div
                   className="absolute inset-0"
@@ -145,7 +145,7 @@ export const ProjectsSection = () => {
                   <motion.img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-fill"
                     initial={{ scale: 1.2, opacity: 0 }}
                     animate={isInView ? { scale: 1, opacity: 1 } : {}}
                     transition={{ duration: 1.5, delay: 0.6 + index * 0.2 }}

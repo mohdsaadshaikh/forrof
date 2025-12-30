@@ -59,7 +59,7 @@ const ProjectCard = ({
         navigate(`/project/${project.id}`);
       }}
     >
-      <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/9]">
+      <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/8]">
         {/* Main Image with Parallax */}
         <motion.div
           className="absolute inset-0"

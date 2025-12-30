@@ -1,7 +1,4 @@
-import {
-  motion,
-  AnimatePresence,
-} from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
@@ -69,8 +66,8 @@ const ProjectDetails = () => {
 
   // Attach scroll listener
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
   // Reset state on route change
@@ -142,17 +139,17 @@ const ProjectDetails = () => {
 
       {/* Hero Image - Full width */}
       <motion.section
-        className="px-6 md:px-12 lg:px-20 pb-32"
+        className="px-6 md:px-12 lg:px-20 pb-20"
         initial={{ opacity: 0, y: 60 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.8 }}
       >
         <div className="max-w-[1600px] mx-auto">
-          <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden">
+          <div className="relative w-full aspect-[16/8] rounded-2xl overflow-hidden">
             <motion.img
               src={project.image}
               alt={project.title}
-              className="w-full h-full object-fill"
+              className="w-full h-full object-cover"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.6 }}
             />
@@ -339,7 +336,7 @@ const ProjectDetails = () => {
               (concept, index) => (
                 <motion.div
                   key={index}
-                  className="relative shrink-0 w-[300px] md:w-[400px] aspect-[4/3] rounded-xl overflow-hidden group"
+                  className="relative shrink-0 w-[300px] md:w-[400px] aspect-[16/8] rounded-xl overflow-hidden group"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
@@ -374,7 +371,7 @@ const ProjectDetails = () => {
               .map((concept, index) => (
                 <motion.div
                   key={index}
-                  className="relative shrink-0 w-[300px] md:w-[400px] aspect-[4/3] rounded-xl overflow-hidden group"
+                  className="relative shrink-0 w-[300px] md:w-[400px] aspect-[16/8] rounded-xl overflow-hidden group"
                   whileHover={{ scale: 1.02 }}
                   transition={{ duration: 0.3 }}
                 >
