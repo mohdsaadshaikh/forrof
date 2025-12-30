@@ -20,7 +20,7 @@ const ProjectDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
-  const nextProjectRef = useRef<HTMLDivElement>(null);
+  const nextProjectRef = useRef<HTMLElement>(null);
   const [hasNavigated, setHasNavigated] = useState(false);
   const [showHoldTight, setShowHoldTight] = useState(false);
 
@@ -29,16 +29,17 @@ const ProjectDetails = () => {
   // Only one project (Bushel), so always loop back to it
   const nextProject = projectsData[0];
 
-  // Simple scroll-based progress for the next project section
+  // Scroll-based progress for the next project section
   const { scrollYProgress } = useScroll({
     target: nextProjectRef,
-    offset: ["start end", "end end"],
+    offset: ["start end", "end start"],
   });
 
-  const progress = useTransform(scrollYProgress, [0.3, 1], [0, 100]);
+  // Map full section progress -> 0..100 (more reliable than starting at 0.3)
+  const progress = useTransform(scrollYProgress, [0, 1], [0, 100]);
   const progressWidth = useTransform(progress, (v) => `${v}%`);
 
-  // Handle navigation when progress reaches 100
+  // Handle navigation when progress reaches ~100
   useMotionValueEvent(progress, "change", (latest) => {
     if (latest >= 60 && !showHoldTight) {
       setShowHoldTight(true);
@@ -50,7 +51,6 @@ const ProjectDetails = () => {
       setHasNavigated(true);
       setTimeout(() => {
         navigate(`/project/${nextProject.id}`);
-        window.scrollTo({ top: 0, behavior: "instant" });
       }, 800);
     }
   });
@@ -59,7 +59,6 @@ const ProjectDetails = () => {
   useEffect(() => {
     setHasNavigated(false);
     setShowHoldTight(false);
-    window.scrollTo({ top: 0, behavior: "instant" });
   }, [id]);
 
   if (!project) {
@@ -524,7 +523,7 @@ const ProjectDetails = () => {
       </section>
 
       {/* Next Project Section - Simple scroll progress */}
-      <section ref={nextProjectRef} className="min-h-[100vh] relative">
+      <section ref={nextProjectRef} className="min-h-[160vh] relative">
         <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
           <div className="relative z-10 text-center max-w-[600px]">
             {/* Next Project Title */}

@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { CustomCursor } from "./components/CustomCursor";
+import { ScrollToTop } from "./components/ScrollToTop";
 import { motion, useScroll, useSpring } from "framer-motion";
 import { useRef } from "react";
 
@@ -66,6 +67,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route
             path="/"

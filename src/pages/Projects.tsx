@@ -57,7 +57,6 @@ const ProjectCard = ({
       }}
       onClick={() => {
         navigate(`/project/${project.id}`);
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }}
     >
       <div className="relative overflow-hidden rounded-2xl mb-4 aspect-[16/9]">
@@ -378,7 +377,6 @@ const ProjectsPage = () => {
                 onClick={(e) => {
                   e.preventDefault();
                   navigate("/contact");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
                 }}
                 className="inline-flex items-center gap-3 px-8 py-4 bg-foreground text-background rounded-full font-medium hover:opacity-80 transition-opacity"
                 whileHover={{ scale: 1.05 }}
