@@ -1,7 +1,17 @@
 import { useRef, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { ArrowLeft, ArrowRight, Clock, Calendar, Share2, Twitter, Linkedin, Facebook, Copy } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Clock,
+  Calendar,
+  Share2,
+  Twitter,
+  Linkedin,
+  Facebook,
+  Copy,
+} from "lucide-react";
 import { getArticleById, articles } from "@/data/articles";
 import { useLenis } from "@/hooks/useLenis";
 import { toast } from "@/hooks/use-toast";
@@ -11,19 +21,19 @@ const ArticleDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const article = getArticleById(id || "");
-  
+
   const heroRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress: heroProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
 
   const { scrollYProgress: contentProgress } = useScroll({
     target: contentRef,
-    offset: ["start start", "end end"]
+    offset: ["start start", "end end"],
   });
 
   const heroY = useTransform(heroProgress, [0, 1], [0, 300]);
@@ -31,7 +41,10 @@ const ArticleDetails = () => {
   const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
   const smoothHeroY = useSpring(heroY, { stiffness: 100, damping: 30 });
 
-  const progressWidth = useSpring(contentProgress, { stiffness: 100, damping: 30 });
+  const progressWidth = useSpring(contentProgress, {
+    stiffness: 100,
+    damping: 30,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -50,27 +63,37 @@ const ArticleDetails = () => {
     );
   }
 
-  const currentIndex = articles.findIndex(a => a.id === id);
+  const currentIndex = articles.findIndex((a) => a.id === id);
   const prevArticle = currentIndex > 0 ? articles[currentIndex - 1] : null;
-  const nextArticle = currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
+  const nextArticle =
+    currentIndex < articles.length - 1 ? articles[currentIndex + 1] : null;
 
   const handleShare = (platform: string) => {
     const url = window.location.href;
     const text = article.title;
-    
+
     const urls: Record<string, string> = {
-      twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`,
-      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(
+        url
+      )}&text=${encodeURIComponent(text)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+        url
+      )}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+        url
+      )}`,
     };
 
-    if (platform === 'copy') {
+    if (platform === "copy") {
       navigator.clipboard.writeText(url);
-      toast({ title: "Link copied!", description: "Article link copied to clipboard" });
+      toast({
+        title: "Link copied!",
+        description: "Article link copied to clipboard",
+      });
       return;
     }
 
-    window.open(urls[platform], '_blank', 'width=600,height=400');
+    window.open(urls[platform], "_blank", "width=600,height=400");
   };
 
   return (
@@ -120,36 +143,35 @@ const ArticleDetails = () => {
           />
         ))}
 
-        {/* Back Button - positioned below header */}
-        <motion.div
-          className="absolute top-28 left-8 z-20"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.5 }}
-        >
-          <Link 
-            to="/articles"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:border-primary transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Articles
-          </Link>
-        </motion.div>
-
         {/* Hero Content */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 p-8 md:p-16"
+          className="absolute bottom-0 left-0 right-0 p-2 md:p-16"
           style={{ opacity: heroOpacity }}
         >
           <div className="container mx-auto max-w-4xl">
-            <motion.span
+            <motion.div
+              className="mb-6 "
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              <Link
+                to="/articles"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-background/80 backdrop-blur-sm border border-border hover:border-primary transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Articles
+              </Link>
+            </motion.div>
+
+            {/* <motion.span
               className="inline-block px-4 py-2 rounded-full border border-primary/30 text-primary text-sm mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
               {article.category}
-            </motion.span>
+            </motion.span> */}
 
             <motion.h1
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight"
@@ -173,7 +195,9 @@ const ArticleDetails = () => {
                   className="w-12 h-12 rounded-full object-cover ring-2 ring-primary/20"
                 />
                 <div>
-                  <p className="font-medium text-foreground">{article.author.name}</p>
+                  <p className="font-medium text-foreground">
+                    {article.author.name}
+                  </p>
                   <p className="text-sm">{article.author.role}</p>
                 </div>
               </div>
@@ -202,7 +226,7 @@ const ArticleDetails = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
             >
-              <div 
+              <div
                 className="article-content space-y-6"
                 dangerouslySetInnerHTML={{ __html: article.content }}
               />
@@ -245,10 +269,22 @@ const ArticleDetails = () => {
                 </h3>
                 <div className="flex gap-3">
                   {[
-                    { icon: Twitter, platform: 'twitter', color: 'hover:bg-[#1DA1F2]' },
-                    { icon: Linkedin, platform: 'linkedin', color: 'hover:bg-[#0A66C2]' },
-                    { icon: Facebook, platform: 'facebook', color: 'hover:bg-[#1877F2]' },
-                    { icon: Copy, platform: 'copy', color: 'hover:bg-primary' },
+                    {
+                      icon: Twitter,
+                      platform: "twitter",
+                      color: "hover:bg-[#1DA1F2]",
+                    },
+                    {
+                      icon: Linkedin,
+                      platform: "linkedin",
+                      color: "hover:bg-[#0A66C2]",
+                    },
+                    {
+                      icon: Facebook,
+                      platform: "facebook",
+                      color: "hover:bg-[#1877F2]",
+                    },
+                    { icon: Copy, platform: "copy", color: "hover:bg-primary" },
                   ].map(({ icon: Icon, platform, color }) => (
                     <motion.button
                       key={platform}
@@ -279,7 +315,9 @@ const ArticleDetails = () => {
                   />
                   <div>
                     <p className="font-medium">{article.author.name}</p>
-                    <p className="text-sm text-muted-foreground">{article.author.role}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {article.author.role}
+                    </p>
                   </div>
                 </div>
               </motion.div>
@@ -293,16 +331,28 @@ const ArticleDetails = () => {
               >
                 <h3 className="font-semibold mb-4">In This Article</h3>
                 <nav className="space-y-2 text-sm">
-                  <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a
+                    href="#"
+                    className="block text-muted-foreground hover:text-primary transition-colors"
+                  >
                     Introduction
                   </a>
-                  <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a
+                    href="#"
+                    className="block text-muted-foreground hover:text-primary transition-colors"
+                  >
                     Key Concepts
                   </a>
-                  <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a
+                    href="#"
+                    className="block text-muted-foreground hover:text-primary transition-colors"
+                  >
                     Best Practices
                   </a>
-                  <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                  <a
+                    href="#"
+                    className="block text-muted-foreground hover:text-primary transition-colors"
+                  >
                     Conclusion
                   </a>
                 </nav>
@@ -323,22 +373,24 @@ const ArticleDetails = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <Link 
+                <Link
                   to={`/articles/${prevArticle.id}`}
-                  className="group flex items-center gap-4"
+                  className="group flex items-center"
                 >
-                  <motion.div 
-                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:border-primary transition-colors"
+                  <motion.div
+                    className="md:w-12 md:h-12 w-7 h-7 rounded-full border border-border flex items-center justify-center group-hover:border-primary transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <ArrowLeft className="w-5 h-5 group-hover:-translate-x-0.5 transition-transform" />
+                    <ArrowLeft className="md:w-5 md:h-5 h-3 w-3 group-hover:-translate-x-0.5 transition-transform" />
                   </motion.div>
                   <div>
-                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Previous</span>
-                    <h4 className="font-medium group-hover:text-primary transition-colors line-clamp-1 max-w-[200px]">
+                    <span className="md:px-6 px-3 md:py-3 py-1.5 md:text-base text-xs text-muted-foreground uppercase tracking-wider">
+                      Previous
+                    </span>
+                    {/* <h4 className="md:px-6 px-3 md:py-3 py-1.5 md:text-base text-xs font-medium group-hover:text-primary transition-colors line-clamp-1 max-w-[200px]">
                       {prevArticle.title}
-                    </h4>
+                    </h4> */}
                   </div>
                 </Link>
               </motion.div>
@@ -352,9 +404,9 @@ const ArticleDetails = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Link 
+              <Link
                 to="/articles"
-                className="px-6 py-3 rounded-full border border-border hover:border-primary transition-colors font-medium"
+                className="md:px-6 px-3 md:py-3 py-1.5 md:text-base text-xs rounded-full border border-border hover:border-primary transition-colors font-medium"
               >
                 All Articles
               </Link>
@@ -367,22 +419,24 @@ const ArticleDetails = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <Link 
+                <Link
                   to={`/articles/${nextArticle.id}`}
-                  className="group flex items-center gap-4"
+                  className="group flex items-center "
                 >
                   <div className="text-right">
-                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Next</span>
-                    <h4 className="font-medium group-hover:text-primary transition-colors line-clamp-1 max-w-[200px]">
+                    <span className="md:px-6 px-3 md:py-3 py-1.5 md:text-base text-xs text-muted-foreground uppercase tracking-wider">
+                      Next
+                    </span>
+                    {/* <h4 className="md:px-6 px-3 md:py-3 py-1.5 md:text-base text-xs font-medium group-hover:text-primary transition-colors line-clamp-1 max-w-[200px]">
                       {nextArticle.title}
-                    </h4>
+                    </h4> */}
                   </div>
-                  <motion.div 
-                    className="w-12 h-12 rounded-full border border-border flex items-center justify-center group-hover:border-primary transition-colors"
+                  <motion.div
+                    className="md:w-12 md:h-12 w-7 h-7 rounded-full border border-border flex items-center justify-center group-hover:border-primary transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <ArrowRight className="w-5 h-5 group-hover:translate-x-0.5 transition-transform" />
+                    <ArrowRight className="md:w-5 md:h-5 h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
                   </motion.div>
                 </Link>
               </motion.div>

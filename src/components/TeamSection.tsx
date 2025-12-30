@@ -1,4 +1,10 @@
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+} from "framer-motion";
 import { useRef } from "react";
 import { LineReveal, Magnetic, ImageReveal } from "./AnimationComponents";
 import team1 from "@/assets/team-1.jpg";
@@ -23,12 +29,15 @@ export const TeamSection = () => {
     offset: ["start end", "end start"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
 
   return (
-    <section 
-      id="about" 
-      className="section-padding py-40 relative overflow-hidden" 
+    <section
+      id="about"
+      className="section-padding md:py-40 max-md:pt-28 max-md:pb-16  relative overflow-hidden"
       ref={containerRef}
     >
       <div className="max-w-[1800px] mx-auto">
@@ -58,7 +67,11 @@ export const TeamSection = () => {
               className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.95]"
               initial={{ y: "100%" }}
               animate={isInView ? { y: 0 } : {}}
-              transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1], delay: 0.3 }}
+              transition={{
+                duration: 1.2,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: 0.3,
+              }}
             >
               Meet the creative minds behind Forrof
             </motion.h2>
@@ -73,10 +86,10 @@ export const TeamSection = () => {
               className="group"
               initial={{ opacity: 0, y: 80 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ 
-                duration: 1, 
+              transition={{
+                duration: 1,
                 delay: 0.4 + index * 0.15,
-                ease: [0.25, 0.1, 0.25, 1]
+                ease: [0.25, 0.1, 0.25, 1],
               }}
             >
               {/* Image with Multiple Effects */}
@@ -98,9 +111,7 @@ export const TeamSection = () => {
                 </motion.div>
 
                 {/* Gradient Overlay */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-700"
-                />
+                <motion.div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent opacity-70 group-hover:opacity-40 transition-opacity duration-700" />
 
                 {/* Social Links on Hover */}
                 <motion.div

@@ -1,7 +1,14 @@
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+} from "framer-motion";
 import { useRef, useState } from "react";
 import { ArrowUpRight, Clock, Calendar } from "lucide-react";
 import { LineReveal, Magnetic } from "./AnimationComponents";
+import { useNavigate } from "react-router-dom";
 
 const insights = [
   {
@@ -9,24 +16,30 @@ const insights = [
     category: "Branding",
     date: "Dec 15, 2024",
     readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80",
-    excerpt: "Exploring how digital transformation is reshaping brand identity strategies for modern businesses.",
+    image:
+      "https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80",
+    excerpt:
+      "Exploring how digital transformation is reshaping brand identity strategies for modern businesses.",
   },
   {
     title: "Mastering the Art of Micro-Interactions in UI Design",
     category: "UI/UX",
     date: "Dec 10, 2024",
     readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80",
-    excerpt: "How subtle animations and micro-interactions can dramatically improve user experience.",
+    image:
+      "https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80",
+    excerpt:
+      "How subtle animations and micro-interactions can dramatically improve user experience.",
   },
   {
     title: "SEO Trends That Will Dominate 2025",
     category: "Marketing",
     date: "Dec 5, 2024",
     readTime: "10 min read",
-    image: "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&q=80",
-    excerpt: "Stay ahead of the curve with these emerging SEO strategies and techniques.",
+    image:
+      "https://images.unsplash.com/photo-1432888622747-4eb9a8efeb07?w=800&q=80",
+    excerpt:
+      "Stay ahead of the curve with these emerging SEO strategies and techniques.",
   },
 ];
 
@@ -34,25 +47,29 @@ export const InsightsSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 50, damping: 20 });
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 20,
+  });
   const headerY = useTransform(smoothProgress, [0, 0.3], [100, 0]);
   const headerOpacity = useTransform(smoothProgress, [0, 0.3], [0, 1]);
 
   return (
-    <section 
-      className="section-padding py-40 relative overflow-hidden border-t border-border" 
+    <section
+      className="section-padding md:py-40 py-12 relative overflow-hidden border-t border-border"
       ref={containerRef}
     >
       {/* Floating background elements */}
       <motion.div
         className="absolute top-40 right-0 w-[500px] h-[500px] rounded-full bg-foreground/[0.02] blur-3xl"
-        animate={{ 
+        animate={{
           scale: [1, 1.2, 1],
           x: [0, 50, 0],
         }}
@@ -79,7 +96,11 @@ export const InsightsSection = () => {
               className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[0.95]"
               initial={{ y: "120%", rotateX: -45 }}
               animate={isInView ? { y: 0, rotateX: 0 } : {}}
-              transition={{ duration: 1.4, ease: [0.25, 0.1, 0.25, 1], delay: 0.2 }}
+              transition={{
+                duration: 1.4,
+                ease: [0.25, 0.1, 0.25, 1],
+                delay: 0.2,
+              }}
             >
               Latest thoughts & articles
             </motion.h2>
@@ -91,7 +112,8 @@ export const InsightsSection = () => {
             transition={{ duration: 1, delay: 0.6 }}
           >
             <p className="text-xl text-muted-foreground max-w-md leading-relaxed">
-              Explore our collection of insights, tips, and industry trends to help elevate your brand.
+              Explore our collection of insights, tips, and industry trends to
+              help elevate your brand.
             </p>
           </motion.div>
         </div>
@@ -105,10 +127,10 @@ export const InsightsSection = () => {
               data-cursor="Read"
               initial={{ opacity: 0, y: 100, rotateY: -10 }}
               animate={isInView ? { opacity: 1, y: 0, rotateY: 0 } : {}}
-              transition={{ 
-                duration: 1.2, 
+              transition={{
+                duration: 1.2,
                 delay: 0.4 + index * 0.15,
-                ease: [0.25, 0.1, 0.25, 1]
+                ease: [0.25, 0.1, 0.25, 1],
               }}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -129,7 +151,10 @@ export const InsightsSection = () => {
                   className="absolute inset-0"
                   animate={{
                     scale: hoveredIndex === index ? 1.15 : 1,
-                    filter: hoveredIndex === index ? "brightness(0.7)" : "brightness(1)",
+                    filter:
+                      hoveredIndex === index
+                        ? "brightness(0.7)"
+                        : "brightness(1)",
                   }}
                   transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
                 >
@@ -144,7 +169,7 @@ export const InsightsSection = () => {
                 </motion.div>
 
                 {/* Gradient overlay */}
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"
                   animate={{ opacity: hoveredIndex === index ? 0.8 : 0.5 }}
                   transition={{ duration: 0.5 }}
@@ -165,7 +190,7 @@ export const InsightsSection = () => {
                 <motion.div
                   className="absolute bottom-6 right-6 w-14 h-14 bg-foreground rounded-full flex items-center justify-center"
                   initial={{ scale: 0, opacity: 0, rotate: -180 }}
-                  animate={{ 
+                  animate={{
                     scale: hoveredIndex === index ? 1 : 0,
                     opacity: hoveredIndex === index ? 1 : 0,
                     rotate: hoveredIndex === index ? 0 : -180,
@@ -242,7 +267,10 @@ export const InsightsSection = () => {
                       transition={{ duration: 0.3 }}
                     />
                   </span>
-                  <ArrowUpRight size={14} className="group-hover/link:rotate-45 transition-transform" />
+                  <ArrowUpRight
+                    size={14}
+                    className="group-hover/link:rotate-45 transition-transform"
+                  />
                 </motion.a>
               </div>
             </motion.article>
@@ -258,7 +286,11 @@ export const InsightsSection = () => {
         >
           <Magnetic strength={0.15}>
             <motion.a
-              href="#"
+              href="/articles"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/contact");
+              }}
               className="inline-flex items-center gap-3 px-10 py-5 border border-border rounded-full overflow-hidden relative group"
               data-cursor="View"
               whileHover={{ scale: 1.02 }}
@@ -270,10 +302,8 @@ export const InsightsSection = () => {
                 whileHover={{ x: 0, skewX: 0 }}
                 transition={{ duration: 0.5, ease: [0.25, 0.1, 0.25, 1] }}
               />
-              <span className="relative z-10 font-medium group-hover:text-background transition-colors duration-300">
-                All Insights
-              </span>
-              <ArrowUpRight size={18} className="relative z-10 group-hover:text-background transition-colors duration-300" />
+              <span className="relative z-10 font-medium">All Insights</span>
+              <ArrowUpRight size={18} className="relative z-10" />
             </motion.a>
           </Magnetic>
         </motion.div>

@@ -120,7 +120,7 @@ export const HeroSection = () => {
         className="relative z-20 section-padding w-full"
         style={{ y: textY }}
       >
-        <div className="max-w-[1800px] mx-auto max-[1500px]:mt-28">
+        <div className="max-w-[1800px] mx-auto max-[1500px]:mt-28 ">
           {/* Top Label */}
           <motion.div
             className="flex items-center gap-4 mb-8"

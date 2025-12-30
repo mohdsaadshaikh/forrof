@@ -16,7 +16,6 @@ const footerLinks = {
     { icon: Twitter, href: "#", label: "Twitter" },
     { icon: Instagram, href: "#", label: "Instagram" },
     { icon: Linkedin, href: "#", label: "LinkedIn" },
-    { icon: Dribbble, href: "#", label: "Dribbble" },
   ],
 };
 
@@ -40,7 +39,7 @@ export const Footer = () => {
 
   return (
     <footer
-      className="section-padding py-20 border-t border-border relative overflow-hidden"
+      className="section-padding md:py-20 max-md:pb-10 border-t border-border relative overflow-hidden"
       ref={containerRef}
     >
       {/* Animated background gradient blobs - same as hero section */}
@@ -147,10 +146,7 @@ export const Footer = () => {
                       whileHover={{ y: 0 }}
                       transition={{ duration: 0.3 }}
                     />
-                    <social.icon
-                      size={18}
-                      className="relative z-10 group-hover:text-background transition-colors"
-                    />
+                    <social.icon size={18} className="relative z-10 " />
                   </motion.a>
                 </Magnetic>
               ))}

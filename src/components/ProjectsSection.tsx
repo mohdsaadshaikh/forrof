@@ -45,7 +45,7 @@ export const ProjectsSection = () => {
   return (
     <section
       id="projects"
-      className="section-padding py-40 relative overflow-hidden"
+      className="section-padding md:py-40 py-20 relative overflow-hidden"
       ref={containerRef}
     >
       <div className="max-w-[1800px] mx-auto">

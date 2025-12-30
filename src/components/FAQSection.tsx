@@ -2,27 +2,33 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import { Plus, Minus, ArrowUpRight } from "lucide-react";
 import { LineReveal, Magnetic } from "./AnimationComponents";
+import { useNavigate } from "react-router-dom";
 
 const faqs = [
   {
     question: "What services does Forrof offer?",
-    answer: "We offer a comprehensive range of creative services including brand identity design, UI/UX design, web development, social media marketing, SEO optimization, and content creation. Our team works closely with clients to deliver tailored solutions that drive results.",
+    answer:
+      "We offer a comprehensive range of creative services including brand identity design, UI/UX design, web development, social media marketing, SEO optimization, and content creation. Our team works closely with clients to deliver tailored solutions that drive results.",
   },
   {
     question: "How long does a typical project take?",
-    answer: "Project timelines vary depending on scope and complexity. A brand identity project typically takes 4-6 weeks, while a complete website design and development project may take 8-12 weeks. We provide detailed timelines during our initial consultation.",
+    answer:
+      "Project timelines vary depending on scope and complexity. A brand identity project typically takes 4-6 weeks, while a complete website design and development project may take 8-12 weeks. We provide detailed timelines during our initial consultation.",
   },
   {
     question: "What is your pricing structure?",
-    answer: "We offer flexible pricing options including per-project rates starting from $5,490 and monthly retainer packages starting from $8,990/month. The exact pricing depends on the scope of work and deliverables required.",
+    answer:
+      "We offer flexible pricing options including per-project rates starting from $5,490 and monthly retainer packages starting from $8,990/month. The exact pricing depends on the scope of work and deliverables required.",
   },
   {
     question: "Do you work with international clients?",
-    answer: "Yes! We work with clients worldwide. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones and cultures.",
+    answer:
+      "Yes! We work with clients worldwide. Our team is experienced in remote collaboration and we use modern tools to ensure seamless communication across different time zones and cultures.",
   },
   {
     question: "What is your revision policy?",
-    answer: "All our packages include unlimited revisions to ensure you are completely satisfied with the final deliverables. We believe in collaborative work and value your feedback throughout the entire design process.",
+    answer:
+      "All our packages include unlimited revisions to ensure you are completely satisfied with the final deliverables. We believe in collaborative work and value your feedback throughout the entire design process.",
   },
 ];
 
@@ -30,10 +36,11 @@ export const FAQSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-10%" });
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   return (
-    <section 
-      className="section-padding py-40 relative overflow-hidden border-t border-border" 
+    <section
+      className="section-padding md:py-40 py-24 relative overflow-hidden border-t border-border"
       ref={containerRef}
     >
       <div className="max-w-[1800px] mx-auto">
@@ -56,7 +63,11 @@ export const FAQSection = () => {
           <motion.div
             initial={{ opacity: 0, x: -60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.2, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{
+              duration: 1.2,
+              delay: 0.2,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
             <div className="overflow-hidden mb-8">
               <motion.h2
@@ -78,7 +89,11 @@ export const FAQSection = () => {
             </motion.p>
             <Magnetic strength={0.15}>
               <motion.a
-                href="#contact"
+                href="/contact"
+                onClick={(e) => {
+                  e.preventDefault();
+                  navigate("/contact");
+                }}
                 className="inline-flex items-center gap-3 px-8 py-4 border border-border rounded-full overflow-hidden relative group"
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -92,10 +107,10 @@ export const FAQSection = () => {
                   whileHover={{ x: 0 }}
                   transition={{ duration: 0.4 }}
                 />
-                <span className="relative z-10 font-medium group-hover:text-background transition-colors duration-300">
+                <span className="relative z-10 font-medium">
                   Ask your Question
                 </span>
-                <ArrowUpRight size={18} className="relative z-10 group-hover:text-background transition-colors duration-300" />
+                <ArrowUpRight size={18} className="relative z-10" />
               </motion.a>
             </Magnetic>
           </motion.div>
@@ -105,7 +120,11 @@ export const FAQSection = () => {
             className="space-y-0"
             initial={{ opacity: 0, x: 60 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 1.2, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
+            transition={{
+              duration: 1.2,
+              delay: 0.3,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
           >
             {faqs.map((faq, index) => (
               <motion.div
@@ -116,7 +135,9 @@ export const FAQSection = () => {
                 transition={{ delay: 0.4 + index * 0.1 }}
               >
                 <motion.button
-                  onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                  onClick={() =>
+                    setOpenIndex(openIndex === index ? null : index)
+                  }
                   className="w-full flex items-center justify-between py-8 text-left group"
                   whileHover={{ x: 10 }}
                   transition={{ duration: 0.3 }}
@@ -128,8 +149,14 @@ export const FAQSection = () => {
                     className="w-10 h-10 rounded-full border border-border flex items-center justify-center shrink-0"
                     animate={{
                       rotate: openIndex === index ? 180 : 0,
-                      backgroundColor: openIndex === index ? "hsl(var(--foreground))" : "transparent",
-                      borderColor: openIndex === index ? "hsl(var(--foreground))" : "hsl(var(--border))",
+                      backgroundColor:
+                        openIndex === index
+                          ? "hsl(var(--foreground))"
+                          : "transparent",
+                      borderColor:
+                        openIndex === index
+                          ? "hsl(var(--foreground))"
+                          : "hsl(var(--border))",
                     }}
                     transition={{ duration: 0.4 }}
                   >

@@ -172,34 +172,10 @@ export default function ContactPage() {
             </motion.p>
           </div>
         </motion.div>
-        {/* Scroll Indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5 }}
-        >
-          <motion.div
-            className="flex flex-col items-center gap-2"
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-          >
-            <span className="text-xs text-muted-foreground tracking-widest uppercase">
-              Scroll
-            </span>
-            <motion.div
-              className="w-px h-12 bg-gradient-to-b from-foreground to-transparent"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              transition={{ delay: 1.8, duration: 0.8 }}
-              style={{ transformOrigin: "top" }}
-            />
-          </motion.div>
-        </motion.div>
       </motion.section>
 
       {/* Contact Info & Form Section */}
-      <section className="section-padding py-40 relative overflow-hidden min-h-screen flex items-center">
+      <section className="section-padding md:py-40 py-20 relative overflow-hidden min-h-screen flex items-center">
         <div className="max-w-[1800px] mx-auto w-full">
           <motion.div
             className="flex items-center gap-4 mb-20"
@@ -262,7 +238,7 @@ export default function ContactPage() {
               <motion.form
                 onSubmit={handleSubmit}
                 className="space-y-8"
-                style={{ y: formY }}
+                // style={{ y: formY }}
                 // initial={{ opacity: 0, x: 80 }}
                 // animate={{ opacity: 1, x: 0 }}
                 // transition={{
@@ -286,12 +262,7 @@ export default function ContactPage() {
                       type: "email",
                     },
                   ].map((field, index) => (
-                    <motion.div
-                      key={field.name}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                    >
+                    <motion.div key={field.name}>
                       <motion.label
                         className="block text-sm font-medium mb-3 text-muted-foreground"
                         animate={{
@@ -347,12 +318,7 @@ export default function ContactPage() {
                       placeholder: "$5,000 - $10,000",
                     },
                   ].map((field, index) => (
-                    <motion.div
-                      key={field.name}
-                      initial={{ opacity: 0, y: 30 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.6 + index * 0.1 }}
-                    >
+                    <motion.div key={field.name}>
                       <motion.label
                         className="block text-sm font-medium mb-3 text-muted-foreground"
                         animate={{
@@ -391,11 +357,7 @@ export default function ContactPage() {
                     </motion.div>
                   ))}
                 </div>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
+                <motion.div>
                   <motion.label
                     className="block text-sm font-medium mb-3 text-muted-foreground"
                     animate={{

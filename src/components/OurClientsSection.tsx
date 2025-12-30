@@ -29,7 +29,7 @@ export const OurClientsSection = () => {
   const secondRow = paths.slice(Math.ceil(paths.length / 2));
 
   return (
-    <section className="pb-24 pt-10 relative overflow-hidden">
+    <section className="md:pt-10 pt-6 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/20 to-background" />
 

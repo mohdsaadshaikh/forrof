@@ -35,13 +35,13 @@ export const MarqueeSection = () => {
     >
       {/* Background floating elements */}
       <motion.div
-        className="absolute left-10 top-1/2 -translate-y-1/2 opacity-5"
+        className="absolute left-10 top-1/2 -translate-y-1/2 opacity-5 max-md:hidden"
         style={{ rotate, scale }}
       >
         <Star size={200} />
       </motion.div>
       <motion.div
-        className="absolute right-10 top-1/2 -translate-y-1/2 opacity-5"
+        className="absolute right-10 top-1/2 -translate-y-1/2 opacity-5 max-md:hidden"
         style={{ rotate: useTransform(rotate, (v) => -v), scale }}
       >
         <Star size={150} />

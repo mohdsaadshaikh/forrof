@@ -1,36 +1,42 @@
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useInView,
+} from "framer-motion";
 import { ArrowRight, Clock, Calendar } from "lucide-react";
 import { articles } from "@/data/articles";
 import { useLenis } from "@/hooks/useLenis";
 
 const Articles = () => {
   useLenis();
-  
+
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
-    offset: ["start start", "end start"]
+    offset: ["start start", "end start"],
   });
-  
+
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.9]);
   const smoothHeroY = useSpring(heroY, { stiffness: 100, damping: 30 });
 
-  const categories = ["All", ...new Set(articles.map(a => a.category))];
+  const categories = ["All", ...new Set(articles.map((a) => a.category))];
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-background max-md:pt-12">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative h-[70vh] flex items-center justify-center overflow-hidden">
+      <section
+        ref={heroRef}
+        className="relative h-[70vh] flex items-center justify-center overflow-hidden"
+      >
         {/* Animated Background Grid */}
         <div className="absolute inset-0 overflow-hidden">
-          <motion.div 
-            className="absolute inset-0"
-            style={{ y: smoothHeroY }}
-          >
+          <motion.div className="absolute inset-0" style={{ y: smoothHeroY }}>
             {[...Array(20)].map((_, i) => (
               <motion.div
                 key={i}
@@ -84,7 +90,7 @@ const Articles = () => {
           />
         ))}
 
-        <motion.div 
+        <motion.div
           className="relative z-10 text-center px-4"
           style={{ opacity: heroOpacity, scale: heroScale }}
         >
@@ -93,7 +99,7 @@ const Articles = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <motion.span 
+            <motion.span
               className="inline-block px-6 py-2 rounded-full border border-primary/30 text-primary text-sm mb-8"
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -109,7 +115,7 @@ const Articles = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.span 
+            <motion.span
               className="block"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -117,7 +123,7 @@ const Articles = () => {
             >
               Ideas That
             </motion.span>
-            <motion.span 
+            <motion.span
               className="block text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-primary/60"
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -133,7 +139,8 @@ const Articles = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.8 }}
           >
-            Explore our latest thoughts on design, technology, and the future of digital experiences.
+            Explore our latest thoughts on design, technology, and the future of
+            digital experiences.
           </motion.p>
         </motion.div>
 
@@ -161,7 +168,7 @@ const Articles = () => {
       {/* Category Filter */}
       <section className="py-12 border-b border-border">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             className="flex flex-wrap gap-4 justify-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -170,9 +177,9 @@ const Articles = () => {
             {categories.map((category, index) => (
               <motion.button
                 key={category}
-                className={`px-6 py-3 rounded-full border transition-all duration-300 ${
-                  index === 0 
-                    ? "bg-primary text-primary-foreground border-primary" 
+                className={`px-6 py-3 max-md:text-xs rounded-full border transition-all duration-300 ${
+                  index === 0
+                    ? "bg-primary text-primary-foreground border-primary"
                     : "border-border hover:border-primary hover:text-primary"
                 }`}
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -205,7 +212,7 @@ const Articles = () => {
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
             variants={{
-              visible: { transition: { staggerChildren: 0.1 } }
+              visible: { transition: { staggerChildren: 0.1 } },
             }}
           >
             {articles.slice(1).map((article, index) => (
@@ -218,14 +225,14 @@ const Articles = () => {
       {/* Newsletter Section */}
       <section className="py-32 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
-        <motion.div 
+        <motion.div
           className="container mx-auto px-4 relative z-10"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <div className="max-w-2xl mx-auto text-center">
-            <motion.h2 
+            <motion.h2
               className="text-4xl md:text-5xl font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -233,16 +240,17 @@ const Articles = () => {
             >
               Stay in the Loop
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="text-muted-foreground mb-10"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              Get our latest insights delivered straight to your inbox. No spam, just quality content.
+              Get our latest insights delivered straight to your inbox. No spam,
+              just quality content.
             </motion.p>
-            <motion.form 
+            <motion.form
               className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -270,12 +278,12 @@ const Articles = () => {
   );
 };
 
-const FeaturedArticle = ({ article }: { article: typeof articles[0] }) => {
+const FeaturedArticle = ({ article }: { article: (typeof articles)[0] }) => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  
+
   return (
-    <motion.div 
+    <motion.div
       ref={ref}
       className="group relative"
       initial={{ opacity: 0, y: 50 }}
@@ -284,7 +292,7 @@ const FeaturedArticle = ({ article }: { article: typeof articles[0] }) => {
     >
       <Link to={`/articles/${article.id}`}>
         <div className="grid lg:grid-cols-2 gap-8 items-center">
-          <motion.div 
+          <motion.div
             className="relative aspect-[4/3] rounded-3xl overflow-hidden"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.4 }}
@@ -365,7 +373,9 @@ const FeaturedArticle = ({ article }: { article: typeof articles[0] }) => {
               />
               <div>
                 <p className="font-medium">{article.author.name}</p>
-                <p className="text-sm text-muted-foreground">{article.author.role}</p>
+                <p className="text-sm text-muted-foreground">
+                  {article.author.role}
+                </p>
               </div>
             </motion.div>
 
@@ -386,12 +396,18 @@ const FeaturedArticle = ({ article }: { article: typeof articles[0] }) => {
   );
 };
 
-const ArticleCard = ({ article, index }: { article: typeof articles[0]; index: number }) => {
+const ArticleCard = ({
+  article,
+  index,
+}: {
+  article: (typeof articles)[0];
+  index: number;
+}) => {
   return (
     <motion.div
       variants={{
         hidden: { opacity: 0, y: 50 },
-        visible: { opacity: 1, y: 0 }
+        visible: { opacity: 1, y: 0 },
       }}
       transition={{ duration: 0.6 }}
     >

@@ -83,7 +83,7 @@ export const ContactSection = () => {
   return (
     <section
       id="contact"
-      className="section-padding py-40 relative overflow-hidden"
+      className="section-padding md:py-40 py-20 relative overflow-hidden"
       ref={containerRef}
     >
       <div className="max-w-[1800px] mx-auto">
@@ -174,18 +174,7 @@ export const ContactSection = () => {
           </motion.div>
 
           {/* Right Column - Animated Form */}
-          <motion.form
-            onSubmit={handleSubmit}
-            className="space-y-8"
-            style={{ y: formY }}
-            initial={{ opacity: 0, x: 80 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{
-              duration: 1.2,
-              delay: 0.4,
-              ease: [0.25, 0.1, 0.25, 1],
-            }}
-          >
+          <motion.form onSubmit={handleSubmit} className="space-y-8">
             <div className="grid sm:grid-cols-2 gap-8">
               {[
                 {
@@ -353,18 +342,13 @@ export const ContactSection = () => {
                     whileHover={{ y: 0 }}
                     transition={{ duration: 0.4 }}
                   />
-                  <span className="relative z-10 group-hover:text-foreground transition-colors">
-                    Send Message
-                  </span>
+                  <span className="relative z-10">Send Message</span>
                   <motion.div
                     className="relative z-10"
                     animate={{ x: [0, 5, 0] }}
                     transition={{ repeat: Infinity, duration: 1.5 }}
                   >
-                    <ArrowUpRight
-                      size={18}
-                      className="group-hover:text-foreground transition-colors"
-                    />
+                    <ArrowUpRight size={18} />
                   </motion.div>
                 </motion.button>
               </Magnetic>

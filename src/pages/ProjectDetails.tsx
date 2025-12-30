@@ -126,7 +126,7 @@ const ProjectDetails = () => {
           {project.tags.map((tag, index) => (
             <motion.span
               key={tag}
-              className="px-6 py-3 border border-border rounded-full text-base uppercase tracking-[0.15em] font-extralight text-muted-foreground"
+              className="px-6 py-3 border border-border rounded-full text-[10px] md:text-base uppercase tracking-[0.15em] font-extralight text-muted-foreground"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 + index * 0.1 }}
@@ -179,7 +179,7 @@ const ProjectDetails = () => {
                 Project overview
               </motion.h2>
               <motion.p
-                className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light"
+                className="text-xl md:text-3xl lg:text-4xl leading-[1.4] font-light"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -241,62 +241,105 @@ const ProjectDetails = () => {
               const IconComponent = icons[index];
 
               return (
-                <motion.div
-                  key={phase.phase}
-                  className="relative p-8 rounded-2xl bg-foreground/5 border border-border/20"
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ delay: index * 0.15, duration: 0.6 }}
-                >
-                  {/* Icon and Hours */}
-                  <div className="flex items-center justify-between mb-10">
+                <div key={phase.phase} className="relative">
+                  {/* Blob layer (behind card content) */}
+                  <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
                     <motion.div
-                      className="flex-shrink-0 w-16 h-16 rounded-full border-2 border-border/40 flex items-center justify-center"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.15 + 0.1 }}
-                    >
-                      <IconComponent
-                        size={28}
-                        className="text-muted-foreground"
-                      />
-                    </motion.div>
+                      className="absolute -top-6 -left-10 w-40 h-40  rounded-full blur-3xl"
+                      animate={{
+                        x: [0, 20, 0],
+                        y: [0, -10, 0],
+                        opacity: [0.6, 0.95, 0.6],
+                      }}
+                      transition={{
+                        duration: 8 + index,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
                     <motion.div
-                      className="text-lg font-medium text-muted-foreground"
-                      initial={{ opacity: 0 }}
-                      whileInView={{ opacity: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.15 + 0.15 }}
-                    >
-                      {phase.hours}
-                    </motion.div>
+                      className="absolute -bottom-6 -right-8 w-44 h-44 bg-foreground/5 rounded-full blur-3xl"
+                      animate={{
+                        x: [0, -20, 0],
+                        y: [0, 10, 0],
+                        opacity: [0.45, 0.8, 0.45],
+                      }}
+                      transition={{
+                        duration: 9 + index,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                    <motion.div
+                      className="absolute top-1/2 left-1/2 w-32 h-32 bg-foreground/4 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"
+                      animate={{
+                        scale: [0.9, 1.15, 0.9],
+                        opacity: [0.35, 0.65, 0.35],
+                      }}
+                      transition={{
+                        duration: 7 + index,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
                   </div>
 
-                  {/* Phase Name */}
-                  <h3 className="text-2xl md:text-3xl font-semibold mb-8">
-                    {phase.phase}
-                  </h3>
-
-                  {/* Tasks - As badges */}
-                  <div className="flex flex-wrap gap-3">
-                    {phase.tasks.map((task, taskIndex) => (
+                  <motion.div
+                    className="relative p-8 rounded-2xl bg-foreground/5 border border-border/20 z-10 overflow-hidden"
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px" }}
+                    transition={{ delay: index * 0.15, duration: 0.6 }}
+                  >
+                    {/* Icon and Hours */}
+                    <div className="flex items-center justify-between mb-10">
                       <motion.div
-                        key={task}
-                        className="px-4 py-2 border border-border/50 rounded-full text-xs text-muted-foreground font-light hover:bg-foreground/5 transition-colors"
+                        className="flex-shrink-0 w-16 h-16 rounded-full border-2 border-border/40 flex items-center justify-center"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
-                        transition={{
-                          delay: index * 0.15 + taskIndex * 0.08 + 0.2,
-                        }}
+                        transition={{ delay: index * 0.15 + 0.1 }}
                       >
-                        {task}
+                        <IconComponent
+                          size={28}
+                          className="text-muted-foreground"
+                        />
                       </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
+                      <motion.div
+                        className="text-lg font-medium text-muted-foreground"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.15 + 0.15 }}
+                      >
+                        {phase.hours}
+                      </motion.div>
+                    </div>
+
+                    {/* Phase Name */}
+                    <h3 className="text-2xl md:text-3xl font-semibold mb-8">
+                      {phase.phase}
+                    </h3>
+
+                    {/* Tasks - As badges */}
+                    <div className="flex flex-wrap gap-3">
+                      {phase.tasks.map((task, taskIndex) => (
+                        <motion.div
+                          key={task}
+                          className="px-4 py-2 border border-border/50 rounded-full text-xs text-muted-foreground font-light hover:bg-foreground/5 transition-colors"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{
+                            delay: index * 0.15 + taskIndex * 0.08 + 0.2,
+                          }}
+                        >
+                          {task}
+                        </motion.div>
+                      ))}
+                    </div>
+                  </motion.div>
+                </div>
               );
             })}
           </div>
@@ -305,14 +348,14 @@ const ProjectDetails = () => {
 
       {/* Initial Concepts - Marquee Style */}
       <section className="py-24 md:py-40 overflow-hidden">
-        <div className="ml-28">
+        <div className="md:ml-28 max-md:text-center max-md:px-4">
           <motion.div
             className="mb-16"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-4">
+            <h2 className="text-3xl md:text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-4">
               Initial concepts
             </h2>
           </motion.div>
@@ -397,10 +440,10 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12">
+            <h2 className="text-3xl md:text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12">
               The challenge
             </h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light mb-16">
+            <p className="text-xl md:text-3xl lg:text-4xl leading-[1.4] font-light mb-16">
               {project.challenge}
             </p>
 
@@ -447,9 +490,9 @@ const ProjectDetails = () => {
 
       {/* Responsive Showcase */}
       <section className="px-6 md:px-12 lg:px-20 py-24 md:py-40">
-        <div className="max-w-[1600px] mx-auto">
+        <div className="max-w-[1600px] mx-auto max-md:text-center">
           <motion.h2
-            className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-16"
+            className="text-3xl md:text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-16"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -498,10 +541,10 @@ const ProjectDetails = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12">
+            <h2 className="text-3xl md:text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12">
               The impact
             </h2>
-            <p className="text-2xl md:text-3xl lg:text-4xl leading-[1.4] font-light">
+            <p className="text-xl md:text-3xl lg:text-4xl leading-[1.4] font-light">
               {project.impact}
             </p>
           </motion.div>
@@ -512,7 +555,7 @@ const ProjectDetails = () => {
       <section className="px-6 md:px-12 lg:px-20 pt-16 md:pt-24">
         <div className="max-w-[1600px] mx-auto">
           <motion.h2
-            className="text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12"
+            className="text-3xl md:text-5xl uppercase tracking-[0.2em] text-muted-foreground mb-12"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
