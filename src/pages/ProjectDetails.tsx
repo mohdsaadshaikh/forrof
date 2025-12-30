@@ -29,20 +29,28 @@ const ProjectDetails = () => {
 
   // Manual scroll tracking for reliability
   const handleScroll = useCallback(() => {
-    if (!nextProjectRef.current || hasNavigated) return;
+    if (!nextProjectRef.current) return;
 
     const section = nextProjectRef.current;
     const rect = section.getBoundingClientRect();
     const windowHeight = window.innerHeight;
-    
-    // Calculate how much of the section is scrolled
+
     // When section top reaches viewport bottom = 0%
     // When section top reaches viewport top = 100%
     const sectionTop = rect.top;
-    const scrollProgress = Math.max(0, Math.min(100, ((windowHeight - sectionTop) / windowHeight) * 100));
-    
+    const scrollProgress = Math.max(
+      0,
+      Math.min(100, ((windowHeight - sectionTop) / windowHeight) * 100)
+    );
+
     setProgress(scrollProgress);
-    
+
+    // Allow re-triggering: once the user scrolls back up, unlock navigation.
+    if (scrollProgress <= 5 && hasNavigated) {
+      setHasNavigated(false);
+      setShowHoldTight(false);
+    }
+
     if (scrollProgress >= 60 && !showHoldTight) {
       setShowHoldTight(true);
     } else if (scrollProgress < 60 && showHoldTight) {
@@ -52,10 +60,20 @@ const ProjectDetails = () => {
     if (scrollProgress >= 95 && !hasNavigated && nextProject) {
       setHasNavigated(true);
       setTimeout(() => {
+        // If there is only one project, navigating to the same route won't remount.
+        // So we simulate the "next" transition by snapping back to the top and resetting.
+        if (nextProject.id === id) {
+          window.scrollTo(0, 0);
+          setHasNavigated(false);
+          setShowHoldTight(false);
+          setProgress(0);
+          return;
+        }
+
         navigate(`/project/${nextProject.id}`);
       }, 500);
     }
-  }, [hasNavigated, showHoldTight, nextProject, navigate]);
+  }, [hasNavigated, showHoldTight, nextProject, navigate, id]);
 
   // Attach scroll listener
   useEffect(() => {
