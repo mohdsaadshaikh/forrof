@@ -251,11 +251,11 @@ const ProjectDetails = () => {
                 >
                   {/* Animated Blob Background */}
                   <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    {/* Primary warm blob - bottom left */}
+                    {/* Primary light gray blob - bottom left */}
                     <motion.div
                       className="absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full blur-[80px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(30 80% 75% / 0.7) 0%, hsl(35 85% 80% / 0.4) 50%, transparent 70%)',
+                        background: 'radial-gradient(circle, hsl(30 30% 85% / 0.8) 0%, hsl(35 20% 88% / 0.5) 50%, transparent 70%)',
                       }}
                       animate={{
                         x: [0, 30, 0],
@@ -268,11 +268,11 @@ const ProjectDetails = () => {
                         ease: "easeInOut",
                       }}
                     />
-                    {/* Secondary peach blob - center */}
+                    {/* Secondary warm gray blob - center */}
                     <motion.div
                       className="absolute bottom-10 left-1/4 w-[200px] h-[200px] rounded-full blur-[60px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(25 90% 85% / 0.6) 0%, hsl(30 80% 80% / 0.3) 60%, transparent 80%)',
+                        background: 'radial-gradient(circle, hsl(30 25% 82% / 0.7) 0%, hsl(25 15% 85% / 0.4) 60%, transparent 80%)',
                       }}
                       animate={{
                         x: [0, -20, 0],
@@ -289,7 +289,7 @@ const ProjectDetails = () => {
                     <motion.div
                       className="absolute top-20 right-10 w-[120px] h-[120px] rounded-full blur-[50px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(35 70% 88% / 0.4) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, hsl(0 0% 90% / 0.5) 0%, transparent 70%)',
                       }}
                       animate={{
                         x: [0, 15, 0],
