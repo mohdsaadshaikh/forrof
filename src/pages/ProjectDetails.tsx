@@ -243,7 +243,7 @@ const ProjectDetails = () => {
               return (
                 <motion.div 
                   key={phase.phase} 
-                  className="relative rounded-3xl bg-[#f8f7f5] overflow-hidden min-h-[320px] flex flex-col"
+                  className="relative rounded-3xl bg-card border border-border/30 overflow-hidden min-h-[320px] flex flex-col"
                   initial={{ opacity: 0, y: 50 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
@@ -251,11 +251,11 @@ const ProjectDetails = () => {
                 >
                   {/* Animated Blob Background */}
                   <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                    {/* Primary warm peach blob - bottom left */}
+                    {/* Primary light gray blob - bottom left */}
                     <motion.div
-                      className="absolute -bottom-10 -left-10 w-[300px] h-[300px] rounded-full blur-[80px]"
+                      className="absolute bottom-0 left-0 w-[280px] h-[280px] rounded-full blur-[80px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(32 60% 85% / 0.9) 0%, hsl(35 50% 88% / 0.6) 50%, transparent 70%)',
+                        background: 'radial-gradient(circle, hsl(30 30% 85% / 0.8) 0%, hsl(35 20% 88% / 0.5) 50%, transparent 70%)',
                       }}
                       animate={{
                         x: [0, 30, 0],
@@ -268,11 +268,11 @@ const ProjectDetails = () => {
                         ease: "easeInOut",
                       }}
                     />
-                    {/* Secondary cream blob - center */}
+                    {/* Secondary warm gray blob - center */}
                     <motion.div
-                      className="absolute bottom-0 left-1/4 w-[220px] h-[220px] rounded-full blur-[70px]"
+                      className="absolute bottom-10 left-1/4 w-[200px] h-[200px] rounded-full blur-[60px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(38 45% 88% / 0.8) 0%, hsl(35 35% 90% / 0.5) 60%, transparent 80%)',
+                        background: 'radial-gradient(circle, hsl(30 25% 82% / 0.7) 0%, hsl(25 15% 85% / 0.4) 60%, transparent 80%)',
                       }}
                       animate={{
                         x: [0, -20, 0],
@@ -285,16 +285,16 @@ const ProjectDetails = () => {
                         ease: "easeInOut",
                       }}
                     />
-                    {/* Subtle warm accent blob - top area */}
+                    {/* Subtle accent blob - top area */}
                     <motion.div
-                      className="absolute top-10 right-5 w-[140px] h-[140px] rounded-full blur-[50px]"
+                      className="absolute top-20 right-10 w-[120px] h-[120px] rounded-full blur-[50px]"
                       style={{
-                        background: 'radial-gradient(circle, hsl(35 40% 92% / 0.6) 0%, transparent 70%)',
+                        background: 'radial-gradient(circle, hsl(0 0% 90% / 0.5) 0%, transparent 70%)',
                       }}
                       animate={{
                         x: [0, 15, 0],
                         y: [0, 10, 0],
-                        opacity: [0.4, 0.6, 0.4],
+                        opacity: [0.3, 0.5, 0.3],
                       }}
                       transition={{
                         duration: 6 + index * 2,
@@ -309,7 +309,7 @@ const ProjectDetails = () => {
                     {/* Icon and Hours - Top Row */}
                     <div className="flex items-center justify-between mb-auto">
                       <motion.div
-                        className="flex-shrink-0 w-12 h-12 rounded-full border border-neutral-300/60 bg-white/50 backdrop-blur-sm flex items-center justify-center"
+                        className="flex-shrink-0 w-12 h-12 rounded-full border border-border/50 bg-background/50 backdrop-blur-sm flex items-center justify-center"
                         initial={{ opacity: 0, scale: 0.8 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
@@ -317,11 +317,11 @@ const ProjectDetails = () => {
                       >
                         <IconComponent
                           size={20}
-                          className="text-neutral-600"
+                          className="text-muted-foreground"
                         />
                       </motion.div>
                       <motion.div
-                        className="text-sm font-medium text-neutral-600"
+                        className="text-sm font-medium text-muted-foreground"
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
@@ -332,7 +332,7 @@ const ProjectDetails = () => {
                     </div>
 
                     {/* Phase Name - Large Title */}
-                    <h3 className="text-3xl md:text-4xl font-semibold mb-6 mt-8 text-neutral-900">
+                    <h3 className="text-3xl md:text-4xl font-semibold mb-6 mt-8">
                       {phase.phase}
                     </h3>
 
@@ -341,7 +341,7 @@ const ProjectDetails = () => {
                       {phase.tasks.map((task, taskIndex) => (
                         <motion.div
                           key={task}
-                          className="px-4 py-2 border border-neutral-300/60 bg-white/50 backdrop-blur-sm rounded-full text-xs text-neutral-600 font-light hover:bg-white/70 transition-colors"
+                          className="px-4 py-2 border border-border/40 bg-background/40 backdrop-blur-sm rounded-full text-xs text-muted-foreground font-light hover:bg-background/60 transition-colors"
                           initial={{ opacity: 0, scale: 0.8 }}
                           whileInView={{ opacity: 1, scale: 1 }}
                           viewport={{ once: true }}
