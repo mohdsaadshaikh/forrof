@@ -1,11 +1,8 @@
 import {
   motion,
-  useScroll,
-  useTransform,
-  useMotionValueEvent,
   AnimatePresence,
 } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   ExternalLink,
@@ -23,42 +20,54 @@ const ProjectDetails = () => {
   const nextProjectRef = useRef<HTMLElement>(null);
   const [hasNavigated, setHasNavigated] = useState(false);
   const [showHoldTight, setShowHoldTight] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const project = projectsData.find((p) => p.id === id);
   const projectIndex = projectsData.findIndex((p) => p.id === id);
   // Only one project (Bushel), so always loop back to it
   const nextProject = projectsData[0];
 
-  // Scroll-based progress for the next project section
-  const { scrollYProgress } = useScroll({
-    target: nextProjectRef,
-    offset: ["start end", "end start"],
-  });
+  // Manual scroll tracking for reliability
+  const handleScroll = useCallback(() => {
+    if (!nextProjectRef.current || hasNavigated) return;
 
-  // Map full section progress -> 0..100 (more reliable than starting at 0.3)
-  const progress = useTransform(scrollYProgress, [0, 1], [0, 100]);
-  const progressWidth = useTransform(progress, (v) => `${v}%`);
-
-  // Handle navigation when progress reaches ~100
-  useMotionValueEvent(progress, "change", (latest) => {
-    if (latest >= 60 && !showHoldTight) {
+    const section = nextProjectRef.current;
+    const rect = section.getBoundingClientRect();
+    const windowHeight = window.innerHeight;
+    
+    // Calculate how much of the section is scrolled
+    // When section top reaches viewport bottom = 0%
+    // When section top reaches viewport top = 100%
+    const sectionTop = rect.top;
+    const scrollProgress = Math.max(0, Math.min(100, ((windowHeight - sectionTop) / windowHeight) * 100));
+    
+    setProgress(scrollProgress);
+    
+    if (scrollProgress >= 60 && !showHoldTight) {
       setShowHoldTight(true);
-    } else if (latest < 60 && showHoldTight) {
+    } else if (scrollProgress < 60 && showHoldTight) {
       setShowHoldTight(false);
     }
 
-    if (latest >= 99 && !hasNavigated && nextProject) {
+    if (scrollProgress >= 95 && !hasNavigated && nextProject) {
       setHasNavigated(true);
       setTimeout(() => {
         navigate(`/project/${nextProject.id}`);
-      }, 800);
+      }, 500);
     }
-  });
+  }, [hasNavigated, showHoldTight, nextProject, navigate]);
+
+  // Attach scroll listener
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
 
   // Reset state on route change
   useEffect(() => {
     setHasNavigated(false);
     setShowHoldTight(false);
+    setProgress(0);
   }, [id]);
 
   if (!project) {
@@ -523,8 +532,8 @@ const ProjectDetails = () => {
       </section>
 
       {/* Next Project Section - Simple scroll progress */}
-      <section ref={nextProjectRef} className="min-h-[160vh] relative">
-        <div className="sticky top-0 h-screen flex flex-col items-center justify-center px-6">
+      <section ref={nextProjectRef} className="h-screen relative">
+        <div className="h-full flex flex-col items-center justify-center px-6">
           <div className="relative z-10 text-center max-w-[600px]">
             {/* Next Project Title */}
             <motion.h2
@@ -565,9 +574,9 @@ const ProjectDetails = () => {
 
             {/* Progress Bar */}
             <div className="w-full max-w-[400px] h-[2px] bg-border/50 mx-auto overflow-hidden rounded-full">
-              <motion.div
-                className="h-full bg-foreground origin-left"
-                style={{ width: progressWidth }}
+              <div
+                className="h-full bg-foreground origin-left transition-all duration-100"
+                style={{ width: `${progress}%` }}
               />
             </div>
 
