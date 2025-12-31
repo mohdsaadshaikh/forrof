@@ -4,10 +4,10 @@ import { Magnetic, LineReveal } from "./AnimationComponents";
 import Earth3D from "./Earth3D";
 
 const categories = [
+  "Cloud Solutions",
+  "Web and app Developement",
   "Branding and Identity",
-  "UI/UX and Product Design",
-  "Social Media Marketing",
-  "SEO Optimization",
+  "Social Media Marketing & SEO",
 ];
 
 export const HeroSection = () => {
@@ -25,8 +25,12 @@ export const HeroSection = () => {
 
   // Parallax transforms
   const earthOpacity = useTransform(smoothProgress, [0, 0.5], [1, 0]);
-  const earthScale = useTransform(smoothProgress, [0, 0.5], [1, 1.3]);
-  const textY = useTransform(smoothProgress, [0, 1], [0, 150]);
+
+  // Text animations to move to header
+  // Moves up, scales down significantly to match header size
+  const heroTextY = useTransform(smoothProgress, [0, 0.25], ["0vh", "-42vh"]);
+  const heroTextScale = useTransform(smoothProgress, [0, 0.25], [1, 0.15]); // Adjust scale to match ~30px / ~14vw
+  const heroTextOpacity = useTransform(smoothProgress, [0.15, 0.25], [1, 0]); // Fade out as it reaches top
 
   // Twinkling stars effect
   const [stars, setStars] = useState<
@@ -48,7 +52,7 @@ export const HeroSection = () => {
     <section
       id="home"
       ref={containerRef}
-      className="relative min-h-[120vh] flex items-center overflow-hidden bg-background"
+      className="relative min-h-[100vh] flex items-center overflow-hidden bg-background"
     >
       {/* Twinkling Stars Background */}
       <div className="absolute inset-0 z-[1]">
@@ -88,10 +92,12 @@ export const HeroSection = () => {
 
       {/* 3D Earth Globe with Parallax */}
       <motion.div
-        className="absolute -left-[20%] md:-left-[40%] top-[40%] -translate-y-[60%] z-10 w-[100vw] md:w-[80vw] lg:w-[80vw] aspect-square pointer-events-auto"
+        className="absolute -left-[20%] md:-left-[40%] top-[130%] -translate-y-[60%] z-10 w-[100vw] md:w-[80vw] lg:w-[80vw] aspect-square pointer-events-auto"
         style={{
           opacity: earthOpacity,
-          scale: earthScale,
+          willChange: "transform"
+
+          // scale: earthScale,
         }}
       >
         <Suspense
@@ -118,12 +124,11 @@ export const HeroSection = () => {
       {/* Main Content */}
       <motion.div
         className="relative z-20 section-padding w-full"
-        style={{ y: textY }}
       >
         <div className="max-w-[1800px] mx-auto max-[1500px]:mt-28 ">
           {/* Top Label */}
           <motion.div
-            className="flex items-center gap-4 mb-8"
+            className="flex items-center gap-4 mb-8 mt-28"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -151,7 +156,16 @@ export const HeroSection = () => {
           </motion.div>
 
           {/* Main Logo Typography */}
-          <div className="overflow-hidden mb-6">
+          <motion.div
+            className="overflow-hidden mb-6"
+            style={{
+              background: "transparent",
+              y: heroTextY,
+              scale: heroTextScale,
+              opacity: heroTextOpacity,
+              transformOrigin: "left center"
+            }}
+          >
             <motion.h1
               className="text-[18vw] md:text-[14vw] font-bold leading-[0.85] tracking-tighter"
               initial={{ y: "120%" }}
@@ -164,117 +178,90 @@ export const HeroSection = () => {
             >
               Forrof<sup className="text-[4vw]">®</sup>
             </motion.h1>
-          </div>
-
-          {/* Subtitle */}
-          <motion.div
-            className="flex items-start gap-8 mb-16"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-          >
-            <motion.span
-              className="text-sm text-muted-foreground writing-vertical hidden md:block"
-              style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1.2 }}
-            >
-              Full-service Creative Agency
-            </motion.span>
-          </motion.div>
-
-          {/* Categories - Interactive List */}
-          <motion.div
-            className="flex flex-col gap-4 max-w-md"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-          >
-            {categories.map((cat, index) => (
-              <Magnetic key={cat} strength={0.15}>
-                <motion.a
-                  href="#services"
-                  className="group flex items-center gap-4 py-2 cursor-pointer"
-                  initial={{ opacity: 0, x: -30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 1.3 + index * 0.1 }}
-                  whileHover={{ x: 10 }}
-                >
-                  <motion.span className="w-8 h-px bg-muted-foreground group-hover:w-16 group-hover:bg-foreground transition-all duration-500" />
-                  <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-500">
-                    {cat}
-                  </span>
-                </motion.a>
-              </Magnetic>
-            ))}
-          </motion.div>
-
-          {/* Right side description */}
-          <motion.div
-            className="absolute right-0 bottom-[10%] -translate-y-1/2 max-w-[370px] hidden xl:block mr-10"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 1.5, duration: 1 }}
-          >
-            <div className="flex flex-col items-center gap-5">
-              <div className="">
-                <p className="text-lg font-light text-foreground leading-tight">
-                  Whether through robust APIs, scalable cloud solutions, or
-                  seamless integrations,
-                  <span className="font-extralight text-foreground/70">
-                    we build digital products that empower businesses to grow
-                    and innovate.
-                  </span>
-                </p>
-              </div>
-              <div className="flex gap-3 -ml-10">
-                <span className="px-4 py-2 border border-white rounded-full text-xs ">
-                  Frontend
-                </span>
-                <span className="px-4 py-2 border border-white rounded-full text-xs ">
-                  Backend
-                </span>
-                <span className="px-4 py-2 border border-white rounded-full text-xs ">
-                  Cloud
-                </span>
-                <span className="px-5 py-1 border border-white rounded-full text-base ">
-                  +
-                </span>
-              </div>
-            </div>
           </motion.div>
         </div>
-      </motion.div>
 
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-      >
+        {/* Subtitle */}
         <motion.div
-          className="flex flex-col items-center gap-3"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="flex items-start gap-8 mb-16"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
         >
           <motion.span
-            className="text-xs text-muted-foreground tracking-[0.3em] uppercase"
-            animate={{ opacity: [0.5, 1, 0.5] }}
-            transition={{ repeat: Infinity, duration: 2 }}
+            className="text-sm text-muted-foreground writing-vertical hidden md:block"
+            // style={{ writingMode: "vertical-rl", textOrientation: "mixed" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
           >
-            Scroll
+            Full-service Creative Agency
           </motion.span>
-          <motion.div
-            className="w-px h-16 bg-gradient-to-b from-foreground via-foreground/50 to-transparent"
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ delay: 2.2, duration: 1 }}
-            style={{ transformOrigin: "top" }}
-          />
         </motion.div>
+
+        {/* Categories - Interactive List */}
+        <motion.div
+          className="flex flex-col gap-4 max-w-md"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+        >
+          {categories.map((cat, index) => (
+            <Magnetic key={cat} strength={0.15}>
+              <motion.a
+                href="#services"
+                className="group flex items-center gap-4 py-1 cursor-pointer"
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1.3 + index * 0.1 }}
+                whileHover={{ x: 10 }}
+              >
+                <motion.span className="w-8 h-px bg-muted-foreground group-hover:w-16 group-hover:bg-foreground transition-all duration-500" />
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-500">
+                  {cat}
+                </span>
+              </motion.a>
+            </Magnetic>
+          ))}
+        </motion.div>
+
+        {/* Right side description */}
+        <motion.div
+          className="absolute right-0 bottom-[10%] -translate-y-1/2 max-w-[370px] hidden xl:block mr-10"
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.5, duration: 1 }}
+        >
+          <div className="flex flex-col items-center gap-5">
+            <div className="">
+              <p className="text-lg font-light text-foreground leading-tight">
+                Whether through robust APIs, scalable cloud solutions, or
+                seamless integrations,
+                <span className="font-extralight text-foreground/70">
+                  we build digital products that empower businesses to grow
+                  and innovate.
+                </span>
+              </p>
+            </div>
+            <div className="flex gap-3 -ml-10">
+              <span className="px-4 py-2 border border-white rounded-full text-xs ">
+                Frontend
+              </span>
+              <span className="px-4 py-2 border border-white rounded-full text-xs ">
+                Backend
+              </span>
+              <span className="px-4 py-2 border border-white rounded-full text-xs ">
+                Cloud
+              </span>
+              <span className="px-5 py-1 border border-white rounded-full text-base ">
+                +
+              </span>
+            </div>
+          </div>
+        </motion.div>
+
       </motion.div>
-    </section>
+
+    </section >
   );
 };

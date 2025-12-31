@@ -16,14 +16,11 @@ export const OurClientsSection = () => {
     "LoopIQ Logo.jpg",
     "mapmatix logo.jfif",
     "Olio_Logo.jpg",
-    "rally typer logo.svg",
     "Ruhr-Universität logo.jpg",
-    "Screenshot 2025-12-28 163931.png",
+    "Screenshot 2025-12-28 163931.png"
   ];
 
-  // Keep commas intact (some filenames include commas). encodeURI handles spaces
-  // while leaving commas unescaped so the dev server can resolve filenames.
-  const paths = clientFiles.map((name) => `/our-clients/${encodeURI(name)}`);
+  const paths = clientFiles.map((name) => `https://dev.gemseeroo.com/clients/${encodeURI(name)}`);
 
   const firstRow = paths.slice(0, Math.ceil(paths.length / 2));
   const secondRow = paths.slice(Math.ceil(paths.length / 2));

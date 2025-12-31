@@ -110,6 +110,9 @@ export const NavbarMenuIcon = () => {
     stiffness: 100,
     damping: 20,
   });
+
+  const logoTextOpacity = useTransform(scrollY, [100, 250], [0, 1]);
+  const logoTextY = useTransform(scrollY, [100, 250], [20, 0]);
   const menuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
@@ -176,9 +179,12 @@ export const NavbarMenuIcon = () => {
             }}
           >
             <img src="/logo.svg" alt="Logo" className="w-14 h-14" />
-            <span className="text-3xl font-bold tracking-tight">
+            <motion.span
+              className="text-3xl font-bold tracking-tight inline-block"
+              style={{ opacity: logoTextOpacity, y: logoTextY }}
+            >
               Forrof<sup className="text-xs">®</sup>
-            </span>
+            </motion.span>
           </motion.div>
 
           {/* Menu Icon Button */}

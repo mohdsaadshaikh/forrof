@@ -97,8 +97,8 @@ const EarthScene: React.FC = () => {
         scrollTrigger: {
           trigger: document.body,
           start: "top top",
-          end: "+=800",
-          scrub: 1,
+          end: "+=1500",
+          scrub: 1.5,
         },
       });
     });
@@ -115,12 +115,18 @@ const EarthScene: React.FC = () => {
 
     if (earthRef.current) {
       // Continuous rotation
-      earthRef.current.rotation.y = time * p.rotationSpeed;
+      // earthRef.current.rotation.y = time * p.rotationSpeed;
+      earthRef.current.rotation.y += 0.0005;
+      const mouseInfluence = ScrollTrigger.isScrolling() ? 0 : 0.15;
 
+      earthRef.current.position.x =
+        p.positionX + mouse.x * mouseInfluence;
+      earthRef.current.position.y =
+        p.positionY + mouse.y * mouseInfluence;
       // Apply proxy transforms
       earthRef.current.scale.setScalar(p.scale);
-      earthRef.current.position.x = p.positionX + mouse.x * 0.2;
-      earthRef.current.position.y = p.positionY + mouse.y * 0.1;
+      // earthRef.current.position.x = p.positionX + mouse.x * 0.2;
+      // earthRef.current.position.y = p.positionY + mouse.y * 0.1;
       earthRef.current.position.z = p.positionZ;
     }
 
@@ -212,6 +218,7 @@ export const Earth3D: React.FC<{ className?: string }> = ({ className }) => {
         }}
         dpr={[1, 2]}
         style={{ background: "transparent" }}
+        frameloop="always"
       >
         <Suspense fallback={<Loader />}>
           <EarthScene />
